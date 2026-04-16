@@ -1,5 +1,5 @@
 import { createBuiltinAgents } from "../agents";
-import { createSisyphusJuniorAgentWithOverrides } from "../agents/sisyphus-junior";
+import { createJuniorArchitectAgentWithOverrides } from "../agents/junior-architect";
 import type { OhMyOpenCodeConfig } from "../config";
 import { isTaskSystemEnabled, log, migrateAgentConfig } from "../shared";
 import { getAgentRuntimeName } from "../shared/agent-display-names";
@@ -29,7 +29,7 @@ import {
   createProtectedAgentNameSet,
   filterProtectedAgentOverrides,
 } from "./agent-override-protection";
-import { buildPrometheusAgentConfig } from "./prometheus-agent-config-builder";
+import { buildProductManagerAgentConfig } from "./product-manager-agent-config-builder";
 import { buildPlanDemoteConfig } from "./plan-model-inheritance";
 
 type AgentConfigRecord = Record<string, Record<string, unknown> | undefined> & {
@@ -179,53 +179,53 @@ export async function applyAgentConfig(params: {
       Object.entries(agents).filter(([name]) => !disabledAgentNames.has(name.toLowerCase()))
     );
 
-  const isSisyphusEnabled = params.pluginConfig.sisyphus_agent?.disabled !== true;
+  const isArchitectEnabled = params.pluginConfig.architect_agent?.disabled !== true;
   const builderEnabled =
-    params.pluginConfig.sisyphus_agent?.default_builder_enabled ?? false;
-  const plannerEnabled = params.pluginConfig.sisyphus_agent?.planner_enabled ?? true;
-  const replacePlan = params.pluginConfig.sisyphus_agent?.replace_plan ?? true;
+    params.pluginConfig.architect_agent?.default_builder_enabled ?? false;
+  const plannerEnabled = params.pluginConfig.architect_agent?.planner_enabled ?? true;
+  const replacePlan = params.pluginConfig.architect_agent?.replace_plan ?? true;
   const shouldDemotePlan = plannerEnabled && replacePlan;
   const configuredDefaultAgent = getConfiguredDefaultAgent(params.config);
 
-  if (isSisyphusEnabled && builtinAgents.sisyphus) {
+  if (isArchitectEnabled && builtinAgents.openengineer) {
     if (configuredDefaultAgent) {
       (params.config as { default_agent?: string }).default_agent =
         getAgentRuntimeName(configuredDefaultAgent);
     } else {
       (params.config as { default_agent?: string }).default_agent =
-        getAgentRuntimeName("sisyphus");
+        getAgentRuntimeName("architect");
     }
 
-    // Assembly order: Sisyphus -> Hephaestus -> Prometheus -> Atlas
+    // Assembly order: Architect -> Engineer -> ProductManager -> TechnicalLead
     const agentConfig: Record<string, unknown> = {
-      sisyphus: builtinAgents.sisyphus,
+      architect: builtinAgents.openengineer,
     };
 
-    if (builtinAgents.hephaestus) {
-      agentConfig["hephaestus"] = builtinAgents.hephaestus;
+    if (builtinAgents.engineer) {
+      agentConfig["engineer"] = builtinAgents.engineer;
     }
 
     if (plannerEnabled) {
-      const prometheusOverride = params.pluginConfig.agents?.["prometheus"] as
+      const productManagerOverride = params.pluginConfig.agents?.["product-manager"] as
         | (Record<string, unknown> & { prompt_append?: string })
         | undefined;
 
-      agentConfig["prometheus"] = await buildPrometheusAgentConfig({
+      agentConfig["product-manager"] = await buildProductManagerAgentConfig({
         configAgentPlan: configAgent?.plan,
-        pluginPrometheusOverride: prometheusOverride,
+        pluginProductManagerOverride: productManagerOverride,
         userCategories: params.pluginConfig.categories,
         currentModel,
         disabledTools: params.pluginConfig.disabled_tools,
       });
     }
 
-    if (builtinAgents.atlas) {
-      agentConfig["atlas"] = builtinAgents.atlas;
+    if (builtinAgents.technicalLead) {
+      agentConfig["technical-lead"] = builtinAgents["technical-lead"];
     }
 
-    agentConfig["sisyphus-junior"] = createSisyphusJuniorAgentWithOverrides(
-      params.pluginConfig.agents?.["sisyphus-junior"],
-      (builtinAgents.atlas as { model?: string } | undefined)?.model,
+    agentConfig["junior-architect"] = createJuniorArchitectAgentWithOverrides(
+      params.pluginConfig.agents?.["junior-architect"],
+      (builtinAgents.technicalLead as { model?: string } | undefined)?.model,
       useTaskSystem,
     );
 
@@ -267,7 +267,7 @@ export async function applyAgentConfig(params: {
 
     const planDemoteConfig = shouldDemotePlan
       ? buildPlanDemoteConfig(
-          agentConfig["prometheus"] as Record<string, unknown> | undefined,
+          agentConfig["product-manager"] as Record<string, unknown> | undefined,
           params.pluginConfig.agents?.plan as Record<string, unknown> | undefined,
         )
       : undefined;
@@ -309,7 +309,7 @@ export async function applyAgentConfig(params: {
       ...agentConfig,
       ...Object.fromEntries(
         Object.entries(builtinAgents).filter(
-          ([key]) => key !== "sisyphus" && key !== "hephaestus" && key !== "atlas",
+          ([key]) => key !== "architect" && key !== "engineer" && key !== "technical-lead",
         ),
       ),
       // Precedence: later entries override earlier (project > global > user > plugin)

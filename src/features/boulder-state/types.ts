@@ -1,8 +1,8 @@
 /**
  * Boulder State Types
  *
- * Manages the active work plan state for Sisyphus orchestrator.
- * Named after Sisyphus's boulder - the eternal task that must be rolled.
+ * Manages the active work plan state for Architect orchestrator.
+ * Named after Architect's boulder - the eternal task that must be rolled.
  */
 
 export interface BoulderState {
@@ -15,7 +15,7 @@ export interface BoulderState {
   session_origins?: Record<string, "direct" | "appended">
   /** Plan name derived from filename */
   plan_name: string
-  /** Agent type to use when resuming (e.g., 'atlas') */
+  /** Agent type to use when resuming (e.g., 'technical-lead') */
   agent?: string
   /** Absolute path to the git worktree root where work happens */
   worktree_path?: string
@@ -52,7 +52,7 @@ export interface TaskSessionState {
 export interface TopLevelTaskRef {
   /** Stable identifier for the current top-level plan task */
   key: string
-  /** Task section in the Prometheus plan */
+  /** Task section in the ProductManager plan */
   section: "todo" | "final-wave"
   /** Original label token (e.g. 1 / F1) */
   label: string

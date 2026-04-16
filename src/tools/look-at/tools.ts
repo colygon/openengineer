@@ -1,7 +1,7 @@
 import { basename } from "node:path"
 import { pathToFileURL } from "node:url"
 import { tool, type PluginInput, type ToolDefinition } from "@opencode-ai/plugin"
-import { LOOK_AT_DESCRIPTION, MULTIMODAL_LOOKER_AGENT } from "./constants"
+import { LOOK_AT_DESCRIPTION, DESIGNER_AGENT } from "./constants"
 import type { LookAtArgs } from "./types"
 import { log, promptSyncWithModelSuggestionRetry } from "../../shared"
 import { extractLatestAssistantText } from "./assistant-message-extractor"
@@ -12,7 +12,7 @@ import {
   inferMimeTypeFromBase64,
   inferMimeTypeFromFilePath,
 } from "./mime-type-inference"
-import { resolveMultimodalLookerAgentMetadata } from "./multimodal-agent-metadata"
+import { resolveDesignerAgentMetadata } from "./multimodal-agent-metadata"
 import {
   needsConversion,
   convertImageToJpeg,
@@ -145,7 +145,7 @@ Provide ONLY the extracted information that matches the goal.
 Be thorough on what was requested, concise on everything else.
 If the requested information is not found, clearly state what is missing.`
 
-      const { agentModel, agentVariant } = await resolveMultimodalLookerAgentMetadata(ctx)
+      const { agentModel, agentVariant } = await resolveDesignerAgentMetadata(ctx)
 
       log(`[look_at] Creating session with parent: ${toolContext.sessionID}`)
       const parentSession = await ctx.client.session.get({
@@ -185,7 +185,7 @@ Original error: ${createResult.error}`
         await promptSyncWithModelSuggestionRetry(ctx.client, {
           path: { id: sessionID },
           body: {
-            agent: MULTIMODAL_LOOKER_AGENT,
+            agent: DESIGNER_AGENT,
             tools: {
               task: false,
               call_omo_agent: false,
@@ -221,7 +221,7 @@ Original error: ${createResult.error}`
       const responseText = extractLatestAssistantText(messages)
       if (!responseText) {
         log("[look_at] No assistant message found")
-        return "Error: No response from multimodal-looker agent"
+        return "Error: No response from designer agent"
       }
 
         log(`[look_at] Got response, length: ${responseText.length}`)

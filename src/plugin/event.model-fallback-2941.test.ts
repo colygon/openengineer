@@ -84,7 +84,7 @@ describe("createEventHandler - category runtime fallback suppression", () => {
 		readProviderModelsCacheSpy = spyOn(connectedProvidersCache, "readProviderModelsCache").mockReturnValue(null)
 
 		clearPendingModelFallback(sessionID)
-		setSessionAgent(sessionID, "sisyphus-junior")
+		setSessionAgent(sessionID, "junior-architect")
 		setSessionFallbackChain(sessionID, undefined)
 
 		const modelFallback = createModelFallbackHook()
@@ -151,7 +151,7 @@ describe("createEventHandler - category runtime fallback suppression", () => {
 		await chatMessageHandler(
 			{
 				sessionID,
-				agent: "sisyphus-junior",
+				agent: "junior-architect",
 				model: { providerID: "anthropic", modelID: "claude-sonnet-4-6" },
 			},
 			output,

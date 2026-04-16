@@ -363,9 +363,9 @@ describe("executeSyncContinuation - toast cleanup error paths", () => {
       session: {
         messages: async () => ({
           data: [
-            { info: { id: "msg_001", role: "user", time: { created: 1000 }, agent: "oracle" } },
+            { info: { id: "msg_001", role: "user", time: { created: 1000 }, agent: "strategist" } },
             {
-              info: { id: "msg_002", role: "assistant", time: { created: 2000 }, finish: "end_turn", agent: "oracle", providerID: "openai", modelID: "gpt-5.4" },
+              info: { id: "msg_002", role: "assistant", time: { created: 2000 }, finish: "end_turn", agent: "strategist", providerID: "openai", modelID: "gpt-5.4" },
               parts: [{ type: "text", text: "Response" }],
             },
           ],
@@ -397,7 +397,7 @@ describe("executeSyncContinuation - toast cleanup error paths", () => {
     const args = {
       session_id: "ses_test_12345678",
       prompt: "continue working",
-      description: "resume oracle task",
+      description: "resume strategist task",
       load_skills: [],
       run_in_background: false,
     }
@@ -407,7 +407,7 @@ describe("executeSyncContinuation - toast cleanup error paths", () => {
 
     //#then - task_metadata should contain subagent field with the agent name
     expect(result).toContain("<task_metadata>")
-    expect(result).toContain("subagent: oracle")
+    expect(result).toContain("subagent: strategist")
     expect(result).toContain("session_id: ses_test_12345678")
   })
 
@@ -479,7 +479,7 @@ describe("executeSyncContinuation - toast cleanup error paths", () => {
                 role: "assistant",
                 time: { created: 2000 },
                 finish: "end_turn",
-                agent: "explore",
+                agent: "analyst",
               },
               parts: [{ type: "text", text: "Response" }],
             },
@@ -605,8 +605,8 @@ describe("executeSyncContinuation - toast cleanup error paths", () => {
     })
   })
 
-  test("keeps task delegation enabled during prometheus sync continuation", async () => {
-    //#given - a resumed prometheus session should keep plan-family task permission
+  test("keeps task delegation enabled during product-manager sync continuation", async () => {
+    //#given - a resumed productManager session should keep plan-family task permission
     const promptAsyncCalls: Array<{ path: { id: string }; body: Record<string, unknown> }> = []
     const mockClient = {
       session: {
@@ -619,7 +619,7 @@ describe("executeSyncContinuation - toast cleanup error paths", () => {
                 role: "assistant",
                 time: { created: 2000 },
                 finish: "end_turn",
-                agent: "prometheus",
+                agent: "product-manager",
               },
               parts: [{ type: "text", text: "Response" }],
             },
@@ -656,7 +656,7 @@ describe("executeSyncContinuation - toast cleanup error paths", () => {
     const args = {
       session_id: "ses_test_12345678",
       prompt: "continue planning",
-      description: "resume prometheus task",
+      description: "resume product-manager task",
       load_skills: [],
       run_in_background: false,
     }

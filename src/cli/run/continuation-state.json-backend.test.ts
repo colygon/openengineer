@@ -21,12 +21,12 @@ mock.module("../../shared/opencode-message-dir", () => ({
   },
 }))
 
-mock.module("../../hooks/atlas/session-last-agent", () => ({
+mock.module("../../hooks/technical-lead/session-last-agent", () => ({
   getLastAgentFromSession: async (sessionID: string) => {
     return sessionLastAgentBySessionID.get(sessionID) ?? null
   },
 }))
-mock.module("../../hooks/atlas/session-last-agent.ts", () => ({
+mock.module("../../hooks/technical-lead/session-last-agent.ts", () => ({
   getLastAgentFromSession: async (sessionID: string) => {
     return sessionLastAgentBySessionID.get(sessionID) ?? null
   },
@@ -68,12 +68,12 @@ describe("getContinuationState JSON backend descendant coverage", () => {
   test("returns active boulder for explicitly tracked appended descendant on JSON message storage backend", async () => {
     // given
     const directory = createTempDir()
-    const plansDir = join(directory, ".sisyphus", "plans")
+    const plansDir = join(directory, ".openengineer", "plans")
     mkdirSync(plansDir, { recursive: true })
     const planPath = join(plansDir, "json-descendant-plan.md")
     writeFileSync(planPath, "- [ ] unfinished task\n", "utf-8")
-    mkdirSync(join(directory, ".sisyphus"), { recursive: true })
-    writeFileSync(join(directory, ".sisyphus", "boulder.json"), JSON.stringify({
+    mkdirSync(join(directory, ".openengineer"), { recursive: true })
+    writeFileSync(join(directory, ".openengineer", "boulder.json"), JSON.stringify({
       active_plan: planPath,
       started_at: new Date().toISOString(),
       session_ids: ["ses_root_session", "ses_child_session"],
@@ -82,11 +82,11 @@ describe("getContinuationState JSON backend descendant coverage", () => {
         "ses_child_session": "appended",
       },
       plan_name: "json-descendant-plan",
-      agent: "atlas",
+      agent: "technical-lead",
     }), "utf-8")
-    writeJsonMessage("ses_child_session", "msg_001.json", "atlas")
+    writeJsonMessage("ses_child_session", "msg_001.json", "technical-lead")
     writeJsonMessage("ses_child_session", "msg_002.json", "compaction")
-    sessionLastAgentBySessionID.set("ses_child_session", "atlas")
+    sessionLastAgentBySessionID.set("ses_child_session", "technical-lead")
 
     const { getContinuationState } = await import("./continuation-state")
 
@@ -134,23 +134,23 @@ describe("getContinuationState JSON backend descendant coverage", () => {
   test("prefers newest JSON agent by time.created even when filenames look reversed and timestamps tie-break by filename only", async () => {
     // given
     const directory = createTempDir()
-    const plansDir = join(directory, ".sisyphus", "plans")
+    const plansDir = join(directory, ".openengineer", "plans")
     mkdirSync(plansDir, { recursive: true })
     const planPath = join(plansDir, "json-random-id-plan.md")
     writeFileSync(planPath, "- [ ] unfinished task\n", "utf-8")
-    mkdirSync(join(directory, ".sisyphus"), { recursive: true })
-    writeFileSync(join(directory, ".sisyphus", "boulder.json"), JSON.stringify({
+    mkdirSync(join(directory, ".openengineer"), { recursive: true })
+    writeFileSync(join(directory, ".openengineer", "boulder.json"), JSON.stringify({
       active_plan: planPath,
       started_at: new Date().toISOString(),
       session_ids: ["ses_root_random"],
       plan_name: "json-random-id-plan",
-      agent: "atlas",
+      agent: "technical-lead",
     }), "utf-8")
     const sessionID = "ses_child_random"
     const messageDir = join(TEST_MESSAGE_STORAGE, sessionID)
     mkdirSync(messageDir, { recursive: true })
     writeFileSync(join(messageDir, "msg_a91f00ab_000001.json"), JSON.stringify({
-      agent: "atlas",
+      agent: "technical-lead",
       model: { providerID: "openai", modelID: "gpt-5.4" },
       time: { created: 100 },
     }), "utf-8")
@@ -160,11 +160,11 @@ describe("getContinuationState JSON backend descendant coverage", () => {
       time: { created: 200 },
     }), "utf-8")
     writeFileSync(join(messageDir, "msg_d4c3b2a1_000003.json"), JSON.stringify({
-      agent: "sisyphus-junior",
+      agent: "junior-architect",
       model: { providerID: "openai", modelID: "gpt-5.4" },
       time: { created: 100 },
     }), "utf-8")
-    sessionLastAgentBySessionID.set(sessionID, "sisyphus-junior")
+    sessionLastAgentBySessionID.set(sessionID, "junior-architect")
 
     const { getContinuationState } = await import("./continuation-state")
 

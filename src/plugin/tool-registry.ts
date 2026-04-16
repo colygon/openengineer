@@ -172,10 +172,10 @@ export function createToolRegistry(args: {
     pluginConfig.categories,
   )
 
-  const isMultimodalLookerEnabled = !(pluginConfig.disabled_agents ?? []).some(
-    (agent) => agent.toLowerCase() === "multimodal-looker",
+  const isDesignerEnabled = !(pluginConfig.disabled_agents ?? []).some(
+    (agent) => agent.toLowerCase() === "designer",
   )
-  const lookAt = isMultimodalLookerEnabled ? factories.createLookAt(ctx) : null
+  const lookAt = isDesignerEnabled ? factories.createLookAt(ctx) : null
 
   const delegateTask = factories.createDelegateTask({
     manager: managers.backgroundManager,
@@ -184,12 +184,12 @@ export function createToolRegistry(args: {
     userCategories: pluginConfig.categories,
     agentOverrides: pluginConfig.agents,
     gitMasterConfig: pluginConfig.git_master,
-    sisyphusJuniorModel: pluginConfig.agents?.["sisyphus-junior"]?.model,
+    juniorArchitectModel: pluginConfig.agents?.["junior-architect"]?.model,
     browserProvider: skillContext.browserProvider,
     disabledSkills: skillContext.disabledSkills,
     availableCategories,
     availableSkills: skillContext.availableSkills,
-    sisyphusAgentConfig: pluginConfig.sisyphus_agent,
+    architectAgentConfig: pluginConfig.architect_agent,
     syncPollTimeoutMs: pluginConfig.background_task?.syncPollTimeoutMs,
     onSyncSessionCreated: async (event) => {
       log("[index] onSyncSessionCreated callback", {

@@ -4,7 +4,7 @@ import {
   readBoulderState,
   writeBoulderState,
   appendSessionId,
-  findPrometheusPlans,
+  findProductManagerPlans,
   getPlanProgress,
   createBoulderState,
   getPlanName,
@@ -22,7 +22,7 @@ import { buildStartWorkContextInfo } from "./context-info-builder"
 import { createWorktreeActiveBlock } from "./worktree-block"
 
 export const HOOK_NAME = "start-work" as const
-const START_WORK_TEMPLATE_MARKER = "You are starting a Sisyphus work session."
+const START_WORK_TEMPLATE_MARKER = "You are starting a Architect work session."
 
 interface StartWorkHookInput {
   sessionID: string
@@ -79,9 +79,9 @@ export function createStartWorkHook(ctx: PluginInput) {
     }
 
     log(`[${HOOK_NAME}] Processing start-work command`, { sessionID: input.sessionID })
-    const activeAgent = isAgentRegistered("atlas")
-      ? "atlas"
-      : "sisyphus"
+    const activeAgent = isAgentRegistered("technical-lead")
+      ? "technical-lead"
+      : "architect"
     updateSessionAgent(input.sessionID, activeAgent)
     if (output.message) {
       output.message["agent"] = resolveRegisteredAgentName(activeAgent) ?? activeAgent

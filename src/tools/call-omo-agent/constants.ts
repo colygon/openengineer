@@ -1,11 +1,11 @@
 export const ALLOWED_AGENTS = [
-  "explore",
+  "analyst",
   "librarian",
-  "oracle",
-  "hephaestus",
-  "metis",
-  "momus",
-  "multimodal-looker",
+  "strategist",
+  "engineer",
+  "consultant",
+  "qa-engineer",
+  "designer",
 ] as const
 
 export const CALL_OMO_AGENT_DESCRIPTION = `Spawn explore/librarian agent or custom agents. run_in_background REQUIRED (true=async with task_id, false=sync).

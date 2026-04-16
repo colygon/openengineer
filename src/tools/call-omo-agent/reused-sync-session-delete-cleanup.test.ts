@@ -46,7 +46,7 @@ function createMinimalEventHandler() {
       stopContinuationGuard: { event: async () => {}, isStopped: () => false },
       compactionTodoPreserver: { event: async () => {} },
       writeExistingFileGuard: { event: async () => {} },
-      atlasHook: { handler: async () => {} },
+      technicalLeadHook: { handler: async () => {} },
     } as never,
   })
 }

@@ -27,7 +27,7 @@ You are working on VISUAL/UI tasks.
    - Typography scale (heading levels, body, caption - how many? What font stack?)
    - Component composition patterns (slots? children? compound components?)
 
-**DO NOT proceed to Phase 2 until you can answer ALL of these. If you cannot, you have not explored enough. EXPLORE MORE.**
+**DO NOT proceed to Phase 2 until you can answer ALL of these. If you cannot, you have not explored enough. ANALYST MORE.**
 
 ### PHASE 2: NO DESIGN SYSTEM? BUILD ONE. NOW.
 

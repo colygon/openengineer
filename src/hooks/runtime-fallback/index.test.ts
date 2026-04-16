@@ -2378,7 +2378,7 @@ describe("runtime-fallback", () => {
       const input = createMockPluginInput()
       const hook = createRuntimeFallbackHook(input, {
         config: createMockConfig({ notify_on_fallback: false }),
-        pluginConfig: createMockPluginConfigWithAgentFallback("oracle", ["openai/gpt-5.4", "google/gemini-3.1-pro"]),
+        pluginConfig: createMockPluginConfigWithAgentFallback("strategist", ["openai/gpt-5.4", "google/gemini-3.1-pro"]),
       })
       const sessionID = "test-agent-fallback"
 
@@ -2386,7 +2386,7 @@ describe("runtime-fallback", () => {
       await hook.event({
         event: {
           type: "session.created",
-          properties: { info: { id: sessionID, model: "anthropic/claude-opus-4-5", agent: "oracle" } },
+          properties: { info: { id: sessionID, model: "anthropic/claude-opus-4-5", agent: "strategist" } },
         },
       })
 
@@ -2394,7 +2394,7 @@ describe("runtime-fallback", () => {
       await hook.event({
         event: {
           type: "session.error",
-          properties: { sessionID, error: { statusCode: 503 }, agent: "oracle" },
+          properties: { sessionID, error: { statusCode: 503 }, agent: "strategist" },
         },
       })
 
@@ -2407,9 +2407,9 @@ describe("runtime-fallback", () => {
     test("should detect agent from sessionID pattern", async () => {
       const hook = createRuntimeFallbackHook(createMockPluginInput(), {
         config: createMockConfig({ notify_on_fallback: false }),
-        pluginConfig: createMockPluginConfigWithAgentFallback("sisyphus", ["openai/gpt-5.4"]),
+        pluginConfig: createMockPluginConfigWithAgentFallback("architect", ["openai/gpt-5.4"]),
       })
-      const sessionID = "sisyphus-session-123"
+      const sessionID = "architect-session-123"
 
       await hook.event({
         event: {
@@ -2425,7 +2425,7 @@ describe("runtime-fallback", () => {
         },
       })
 
-      //#then - should detect sisyphus from sessionID and use its fallback
+      //#then - should detect architect from sessionID and use its fallback
       const fallbackLog = logCalls.find((c) => c.msg.includes("Preparing fallback"))
       expect(fallbackLog).toBeDefined()
       expect(fallbackLog?.data).toMatchObject({ to: "openai/gpt-5.4" })
@@ -2452,7 +2452,7 @@ describe("runtime-fallback", () => {
         }),
         {
           config: createMockConfig({ notify_on_fallback: false }),
-          pluginConfig: createMockPluginConfigWithAgentFallback("prometheus", ["github-copilot/claude-opus-4.6"]),
+          pluginConfig: createMockPluginConfigWithAgentFallback("product-manager", ["github-copilot/claude-opus-4.6"]),
         },
       )
       const sessionID = "test-preserve-agent-on-retry"
@@ -2464,14 +2464,14 @@ describe("runtime-fallback", () => {
             sessionID,
             model: "anthropic/claude-opus-4-6",
             error: { statusCode: 503, message: "Service unavailable" },
-            agent: "prometheus",
+            agent: "product-manager",
           },
         },
       })
 
       expect(promptCalls.length).toBe(1)
       const callBody = promptCalls[0]?.body as Record<string, unknown>
-      expect(callBody?.agent).toBe("prometheus")
+      expect(callBody?.agent).toBe("product-manager")
       expect(callBody?.model).toEqual({ providerID: "github-copilot", modelID: "claude-opus-4.6" })
     })
   })

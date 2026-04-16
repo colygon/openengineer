@@ -71,35 +71,35 @@ describe("loadBuiltinCommands", () => {
     expect(commands.handoff.description).toContain("context summary")
   })
 
-  test("should default start-work to Atlas for static slash-command discovery", () => {
+  test("should default start-work to TechnicalLead for static slash-command discovery", () => {
     //#given - no disabled commands
 
     //#when
     const commands = loadBuiltinCommands()
 
     //#then
-    expect(commands["start-work"].agent).toBe("atlas")
+    expect(commands["start-work"].agent).toBe("technical-lead")
   })
 
-  test("should preassign Sisyphus as the native agent for start-work when command config checks registered agents", () => {
-    //#given - no atlas registration
+  test("should preassign Architect as the native agent for start-work when command config checks registered agents", () => {
+    //#given - no technicalLead registration
 
     //#when
     const commands = loadBuiltinCommands(undefined, { useRegisteredAgents: true })
 
     //#then
-    expect(commands["start-work"].agent).toBe("sisyphus")
+    expect(commands["start-work"].agent).toBe("architect")
   })
 
-  test("should preassign Atlas as the native agent for start-work when Atlas is registered", () => {
+  test("should preassign TechnicalLead as the native agent for start-work when TechnicalLead is registered", () => {
     //#given
-    registerAgentName("atlas")
+    registerAgentName("technical-lead")
 
     //#when
     const commands = loadBuiltinCommands(undefined, { useRegisteredAgents: true })
 
     //#then
-    expect(commands["start-work"].agent).toBe("atlas")
+    expect(commands["start-work"].agent).toBe("technical-lead")
   })
 })
 

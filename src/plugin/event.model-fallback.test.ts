@@ -92,8 +92,8 @@ describe("createEventHandler - model fallback", () => {
             parentID: "msg_user_1",
             modelID: "claude-opus-4-6-thinking",
             providerID: "anthropic",
-            mode: "Sisyphus - Ultraworker",
-            agent: "Sisyphus - Ultraworker",
+            mode: "Architect - Ultraworker",
+            agent: "Architect - Ultraworker",
             path: { cwd: "/tmp", root: "/tmp" },
             cost: 0,
             tokens: { input: 0, output: 0, reasoning: 0, cache: { read: 0, write: 0 } },
@@ -184,7 +184,7 @@ describe("createEventHandler - model fallback", () => {
             content: [],
             modelID: "claude-opus-4-6-thinking",
             providerID: "anthropic",
-            agent: "Sisyphus - Ultraworker",
+            agent: "Architect - Ultraworker",
             path: { cwd: "/tmp", root: "/tmp" },
           },
         },
@@ -212,7 +212,7 @@ describe("createEventHandler - model fallback", () => {
     await chatMessageHandler(
       {
         sessionID,
-        agent: "sisyphus",
+        agent: "architect",
         model: { providerID: "anthropic", modelID: "claude-opus-4-6-thinking" },
       },
       output,
@@ -246,7 +246,7 @@ describe("createEventHandler - model fallback", () => {
             role: "user",
             modelID: "claude-opus-4-6-thinking",
             providerID: "anthropic",
-            agent: "Sisyphus - Ultraworker",
+            agent: "Architect - Ultraworker",
           },
         },
       },
@@ -314,7 +314,7 @@ describe("createEventHandler - model fallback", () => {
             role: "user",
             modelID: "claude-opus-4-6",
             providerID: "quotio",
-            agent: "Sisyphus - Ultraworker",
+            agent: "Architect - Ultraworker",
           },
         },
       },
@@ -351,7 +351,7 @@ describe("createEventHandler - model fallback", () => {
     const modelFallback = createModelFallbackHook()
     const pluginConfig = {
       agents: {
-        sisyphus: {
+        architect: {
           fallback_models: ["quotio/gpt-5.2", "quotio/kimi-k2.5"],
         },
       },
@@ -395,7 +395,7 @@ describe("createEventHandler - model fallback", () => {
             content: [],
             modelID: "claude-opus-4-6",
             providerID: "quotio",
-            agent: "Sisyphus - Ultraworker",
+            agent: "Architect - Ultraworker",
             path: { cwd: "/tmp", root: "/tmp" },
           },
         },
@@ -423,7 +423,7 @@ describe("createEventHandler - model fallback", () => {
     await chatMessageHandler(
       {
         sessionID,
-        agent: "sisyphus",
+        agent: "architect",
         model: { providerID: "quotio", modelID: "claude-opus-4-6" },
       },
       output,
@@ -538,7 +538,7 @@ describe("createEventHandler - model fallback", () => {
       await chatMessageHandler(
         {
           sessionID,
-          agent: "sisyphus",
+          agent: "architect",
           model: { providerID: "anthropic", modelID: "claude-opus-4-6-thinking" },
         },
         output,
@@ -597,7 +597,7 @@ describe("createEventHandler - model fallback", () => {
             parentID: "msg_user_disabled_1",
             modelID: "claude-opus-4-6-thinking",
             providerID: "anthropic",
-            agent: "Sisyphus - Ultraworker",
+            agent: "Architect - Ultraworker",
             path: { cwd: "/tmp", root: "/tmp" },
             cost: 0,
             tokens: { input: 0, output: 0, reasoning: 0, cache: { read: 0, write: 0 } },

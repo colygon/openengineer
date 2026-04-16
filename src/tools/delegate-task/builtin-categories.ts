@@ -1,15 +1,9 @@
 import type { CategoryConfig } from "../../config/schema"
-import { ANTHROPIC_CATEGORIES } from "./anthropic-categories"
 import type { BuiltinCategoryDefinition } from "./builtin-category-definition"
-import { GOOGLE_CATEGORIES } from "./google-categories"
-import { KIMI_CATEGORIES } from "./kimi-categories"
-import { OPENAI_CATEGORIES } from "./openai-categories"
+import { NEBIUS_CATEGORIES } from "./nebius-categories"
 
 const BUILTIN_CATEGORIES: BuiltinCategoryDefinition[] = [
-  ...GOOGLE_CATEGORIES,
-  ...OPENAI_CATEGORIES,
-  ...ANTHROPIC_CATEGORIES,
-  ...KIMI_CATEGORIES,
+  ...NEBIUS_CATEGORIES,
 ]
 
 function buildCategoryRecord<TValue>(

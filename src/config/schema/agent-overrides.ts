@@ -58,20 +58,20 @@ export const AgentOverrideConfigSchema = z.object({
 export const AgentOverridesSchema = z.object({
   build: AgentOverrideConfigSchema.optional(),
   plan: AgentOverrideConfigSchema.optional(),
-  sisyphus: AgentOverrideConfigSchema.optional(),
-  hephaestus: AgentOverrideConfigSchema.extend({
+  architect: AgentOverrideConfigSchema.optional(),
+  engineer: AgentOverrideConfigSchema.extend({
     allow_non_gpt_model: z.boolean().optional(),
   }).optional(),
-  "sisyphus-junior": AgentOverrideConfigSchema.optional(),
+  "junior-architect": AgentOverrideConfigSchema.optional(),
   "OpenCode-Builder": AgentOverrideConfigSchema.optional(),
-  prometheus: AgentOverrideConfigSchema.optional(),
-  metis: AgentOverrideConfigSchema.optional(),
-  momus: AgentOverrideConfigSchema.optional(),
-  oracle: AgentOverrideConfigSchema.optional(),
+  "product-manager": AgentOverrideConfigSchema.optional(),
+  consultant: AgentOverrideConfigSchema.optional(),
+  "qa-engineer": AgentOverrideConfigSchema.optional(),
+  strategist: AgentOverrideConfigSchema.optional(),
   librarian: AgentOverrideConfigSchema.optional(),
-  explore: AgentOverrideConfigSchema.optional(),
-  "multimodal-looker": AgentOverrideConfigSchema.optional(),
-  atlas: AgentOverrideConfigSchema.optional(),
+  analyst: AgentOverrideConfigSchema.optional(),
+  "designer": AgentOverrideConfigSchema.optional(),
+  "technical-lead": AgentOverrideConfigSchema.optional(),
 })
 
 export type AgentOverrideConfig = z.infer<typeof AgentOverrideConfigSchema>

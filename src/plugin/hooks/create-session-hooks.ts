@@ -18,10 +18,10 @@ import {
   createDelegateTaskRetryHook,
   createTaskResumeInfoHook,
   createStartWorkHook,
-  createPrometheusMdOnlyHook,
-  createSisyphusJuniorNotepadHook,
-  createNoSisyphusGptHook,
-  createNoHephaestusNonGptHook,
+  createProductManagerMdOnlyHook,
+  createJuniorArchitectNotepadHook,
+  createNoArchitectGptHook,
+  createNoEngineerNonGptHook,
   createQuestionLabelTruncatorHook,
   createPreemptiveCompactionHook,
   createRuntimeFallbackHook,
@@ -54,10 +54,10 @@ export type SessionHooks = {
   editErrorRecovery: ReturnType<typeof createEditErrorRecoveryHook> | null
   delegateTaskRetry: ReturnType<typeof createDelegateTaskRetryHook> | null
   startWork: ReturnType<typeof createStartWorkHook> | null
-  prometheusMdOnly: ReturnType<typeof createPrometheusMdOnlyHook> | null
-  sisyphusJuniorNotepad: ReturnType<typeof createSisyphusJuniorNotepadHook> | null
-  noSisyphusGpt: ReturnType<typeof createNoSisyphusGptHook> | null
-  noHephaestusNonGpt: ReturnType<typeof createNoHephaestusNonGptHook> | null
+  productManagerMdOnly: ReturnType<typeof createProductManagerMdOnlyHook> | null
+  juniorArchitectNotepad: ReturnType<typeof createJuniorArchitectNotepadHook> | null
+  noArchitectGpt: ReturnType<typeof createNoArchitectGptHook> | null
+  noEngineerNonGpt: ReturnType<typeof createNoEngineerNonGptHook> | null
   questionLabelTruncator: ReturnType<typeof createQuestionLabelTruncatorHook> | null
   taskResumeInfo: ReturnType<typeof createTaskResumeInfoHook> | null
   anthropicEffort: ReturnType<typeof createAnthropicEffortHook> | null
@@ -183,7 +183,7 @@ export function createSessionHooks(args: {
     ? safeHook("auto-update-checker", () =>
         createAutoUpdateCheckerHook(ctx, {
           showStartupToast: isHookEnabled("startup-toast"),
-          isSisyphusEnabled: pluginConfig.sisyphus_agent?.disabled !== true,
+          isArchitectEnabled: pluginConfig.architect_agent?.disabled !== true,
           autoUpdate: pluginConfig.auto_update ?? true,
           modelCapabilities: pluginConfig.model_capabilities,
         }))
@@ -223,22 +223,22 @@ export function createSessionHooks(args: {
     ? safeHook("start-work", () => createStartWorkHook(ctx))
     : null
 
-  const prometheusMdOnly = isHookEnabled("prometheus-md-only")
-    ? safeHook("prometheus-md-only", () => createPrometheusMdOnlyHook(ctx))
+  const productManagerMdOnly = isHookEnabled("product-manager-md-only")
+    ? safeHook("product-manager-md-only", () => createProductManagerMdOnlyHook(ctx))
     : null
 
-  const sisyphusJuniorNotepad = isHookEnabled("sisyphus-junior-notepad")
-    ? safeHook("sisyphus-junior-notepad", () => createSisyphusJuniorNotepadHook(ctx))
+  const juniorArchitectNotepad = isHookEnabled("junior-architect-notepad")
+    ? safeHook("junior-architect-notepad", () => createJuniorArchitectNotepadHook(ctx))
     : null
 
-  const noSisyphusGpt = isHookEnabled("no-sisyphus-gpt")
-    ? safeHook("no-sisyphus-gpt", () => createNoSisyphusGptHook(ctx))
+  const noArchitectGpt = isHookEnabled("no-architect-gpt")
+    ? safeHook("no-architect-gpt", () => createNoArchitectGptHook(ctx))
     : null
 
-  const noHephaestusNonGpt = isHookEnabled("no-hephaestus-non-gpt")
-    ? safeHook("no-hephaestus-non-gpt", () =>
-      createNoHephaestusNonGptHook(ctx, {
-        allowNonGptModel: pluginConfig.agents?.hephaestus?.allow_non_gpt_model,
+  const noEngineerNonGpt = isHookEnabled("no-engineer-non-gpt")
+    ? safeHook("no-engineer-non-gpt", () =>
+      createNoEngineerNonGptHook(ctx, {
+        allowNonGptModel: pluginConfig.agents?.engineer?.allow_non_gpt_model,
       }))
     : null
 
@@ -286,10 +286,10 @@ export function createSessionHooks(args: {
     editErrorRecovery,
     delegateTaskRetry,
     startWork,
-    prometheusMdOnly,
-    sisyphusJuniorNotepad,
-    noSisyphusGpt,
-    noHephaestusNonGpt,
+    productManagerMdOnly,
+    juniorArchitectNotepad,
+    noArchitectGpt,
+    noEngineerNonGpt,
     questionLabelTruncator,
     taskResumeInfo,
     anthropicEffort,

@@ -136,9 +136,9 @@ export async function handleWriteExistingFileGuardToolExecuteBefore(params: {
     return
   }
 
-  const isSisyphusPath = canonicalPath.includes("/.sisyphus/")
-  if (isSisyphusPath) {
-    log("[write-existing-file-guard] Allowing .sisyphus/** overwrite", {
+  const isArchitectPath = canonicalPath.includes("/.openengineer/")
+  if (isArchitectPath) {
+    log("[write-existing-file-guard] Allowing .openengineer/** overwrite", {
       sessionID: input.sessionID,
       filePath,
     })

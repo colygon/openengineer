@@ -260,7 +260,7 @@ export function createEventHandler(args: {
     await runEventHookSafely("compactionContextInjector", hooks.compactionContextInjector?.event, input);
     await runEventHookSafely("compactionTodoPreserver", hooks.compactionTodoPreserver?.event, input);
     await runEventHookSafely("writeExistingFileGuard", hooks.writeExistingFileGuard?.event, input);
-    await runEventHookSafely("atlasHook", hooks.atlasHook?.handler, input);
+    await runEventHookSafely("technicalLeadHook", hooks.technicalLeadHook?.handler, input);
     await runEventHookSafely("autoSlashCommand", hooks.autoSlashCommand?.event, input);
   };
 
@@ -502,11 +502,11 @@ export function createEventHandler(args: {
               let agentName = agent ?? getSessionAgent(sessionID);
               if (!agentName && sessionID === getMainSessionID()) {
                 if (errorMessage.includes("claude-opus") || errorMessage.includes("opus")) {
-                  agentName = "sisyphus";
+                  agentName = "architect";
                 } else if (errorMessage.includes("gpt-5")) {
-                  agentName = "hephaestus";
+                  agentName = "engineer";
                 } else {
-                  agentName = "sisyphus";
+                  agentName = "architect";
                 }
               }
 
@@ -566,11 +566,11 @@ export function createEventHandler(args: {
             let agentName = getSessionAgent(sessionID);
             if (!agentName && sessionID === getMainSessionID()) {
               if (retryMessage.includes("claude-opus") || retryMessage.includes("opus")) {
-                agentName = "sisyphus";
+                agentName = "architect";
               } else if (retryMessage.includes("gpt-5")) {
-                agentName = "hephaestus";
+                agentName = "engineer";
               } else {
-                agentName = "sisyphus";
+                agentName = "architect";
               }
             }
 
@@ -650,11 +650,11 @@ export function createEventHandler(args: {
 
           if (!agentName && sessionID === getMainSessionID()) {
             if (errorMessage.includes("claude-opus") || errorMessage.includes("opus")) {
-              agentName = "sisyphus";
+              agentName = "architect";
             } else if (errorMessage.includes("gpt-5")) {
-              agentName = "hephaestus";
+              agentName = "engineer";
             } else {
-              agentName = "sisyphus";
+              agentName = "architect";
             }
           }
 

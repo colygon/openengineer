@@ -19,7 +19,7 @@ describe("ralph-loop continuation prompt injector", () => {
       client: {
         session: {
           messages: async () => ({
-            data: [{ info: { agent: "sisyphus", model } }],
+            data: [{ info: { agent: "architect", model } }],
           }),
           promptAsync: async (input: {
             body: {

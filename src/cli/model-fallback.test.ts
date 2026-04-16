@@ -54,7 +54,7 @@ describe("generateModelConfig", () => {
       // #when generateModelConfig is called
       const result = generateModelConfig(config)
 
-      // #then should use higher capability models for Sisyphus
+      // #then should use higher capability models for Architect
       expect(result).toMatchSnapshot()
     })
 
@@ -372,8 +372,8 @@ describe("generateModelConfig", () => {
     })
   })
 
-  describe("Sisyphus agent special cases", () => {
-    test("Sisyphus is created when at least one fallback provider is available (Claude)", () => {
+  describe("Architect agent special cases", () => {
+    test("Architect is created when at least one fallback provider is available (Claude)", () => {
       // #given
       const config = createConfig({ hasClaude: true, isMax20: true })
 
@@ -381,10 +381,10 @@ describe("generateModelConfig", () => {
       const result = generateModelConfig(config)
 
       // #then
-      expect(result.agents?.sisyphus?.model).toBe("anthropic/claude-opus-4.6")
+      expect(result.agents?.openengineer?.model).toBe("anthropic/claude-opus-4.6")
     })
 
-    test("Sisyphus is created when multiple fallback providers are available", () => {
+    test("Architect is created when multiple fallback providers are available", () => {
       // #given
       const config = createConfig({
         hasClaude: true,
@@ -398,10 +398,10 @@ describe("generateModelConfig", () => {
       const result = generateModelConfig(config)
 
       // #then
-      expect(result.agents?.sisyphus?.model).toBe("anthropic/claude-opus-4.6")
+      expect(result.agents?.openengineer?.model).toBe("anthropic/claude-opus-4.6")
     })
 
-    test("Sisyphus resolves to gpt-5.4 medium when only OpenAI is available", () => {
+    test("Architect resolves to gpt-5.4 medium when only OpenAI is available", () => {
       // #given
       const config = createConfig({ hasOpenAI: true })
 
@@ -409,13 +409,13 @@ describe("generateModelConfig", () => {
       const result = generateModelConfig(config)
 
       // #then
-      expect(result.agents?.sisyphus?.model).toBe("openai/gpt-5.4")
-      expect(result.agents?.sisyphus?.variant).toBe("medium")
+      expect(result.agents?.openengineer?.model).toBe("openai/gpt-5.4")
+      expect(result.agents?.openengineer?.variant).toBe("medium")
     })
   })
 
   describe("OpenAI fallback coverage", () => {
-    test("Atlas resolves to OpenAI when only OpenAI is available", () => {
+    test("TechnicalLead resolves to OpenAI when only OpenAI is available", () => {
       // #given
       const config = createConfig({ hasOpenAI: true })
 
@@ -423,11 +423,11 @@ describe("generateModelConfig", () => {
       const result = generateModelConfig(config)
 
       // #then
-      expect(result.agents?.atlas?.model).toBe("openai/gpt-5.4")
-      expect(result.agents?.atlas?.variant).toBe("medium")
+      expect(result.agents?.technical-lead?.model).toBe("openai/gpt-5.4")
+      expect(result.agents?.technical-lead?.variant).toBe("medium")
     })
 
-    test("Metis resolves to OpenAI when only OpenAI is available", () => {
+    test("Consultant resolves to OpenAI when only OpenAI is available", () => {
       // #given
       const config = createConfig({ hasOpenAI: true })
 
@@ -435,11 +435,11 @@ describe("generateModelConfig", () => {
       const result = generateModelConfig(config)
 
       // #then
-      expect(result.agents?.metis?.model).toBe("openai/gpt-5.4")
-      expect(result.agents?.metis?.variant).toBe("high")
+      expect(result.agents?.consultant?.model).toBe("openai/gpt-5.4")
+      expect(result.agents?.consultant?.variant).toBe("high")
     })
 
-    test("Sisyphus-Junior resolves to OpenAI when only OpenAI is available", () => {
+    test("Architect-Junior resolves to OpenAI when only OpenAI is available", () => {
       // #given
       const config = createConfig({ hasOpenAI: true })
 
@@ -447,13 +447,13 @@ describe("generateModelConfig", () => {
       const result = generateModelConfig(config)
 
       // #then
-      expect(result.agents?.["sisyphus-junior"]?.model).toBe("openai/gpt-5.4")
-      expect(result.agents?.["sisyphus-junior"]?.variant).toBe("medium")
+      expect(result.agents?.["junior-architect"]?.model).toBe("openai/gpt-5.4")
+      expect(result.agents?.["junior-architect"]?.variant).toBe("medium")
     })
   })
 
-  describe("Hephaestus agent special cases", () => {
-    test("Hephaestus is created when OpenAI is available (openai provider connected)", () => {
+  describe("Engineer agent special cases", () => {
+    test("Engineer is created when OpenAI is available (openai provider connected)", () => {
       // #given
       const config = createConfig({ hasOpenAI: true })
 
@@ -461,11 +461,11 @@ describe("generateModelConfig", () => {
       const result = generateModelConfig(config)
 
       // #then
-      expect(result.agents?.hephaestus?.model).toBe("openai/gpt-5.4")
-      expect(result.agents?.hephaestus?.variant).toBe("medium")
+      expect(result.agents?.engineer?.model).toBe("openai/gpt-5.4")
+      expect(result.agents?.engineer?.variant).toBe("medium")
     })
 
-    test("Hephaestus falls back to Copilot GPT-5.4 when only Copilot is available", () => {
+    test("Engineer falls back to Copilot GPT-5.4 when only Copilot is available", () => {
       // #given
       const config = createConfig({ hasCopilot: true })
 
@@ -473,13 +473,13 @@ describe("generateModelConfig", () => {
       const result = generateModelConfig(config)
 
       // #then
-      expect(result.agents?.hephaestus).toEqual({
+      expect(result.agents?.engineer).toEqual({
         model: "github-copilot/gpt-5.4",
         variant: "medium",
       })
     })
 
-    test("Hephaestus is created when OpenCode Zen is available (opencode provider connected)", () => {
+    test("Engineer is created when OpenCode Zen is available (opencode provider connected)", () => {
       // #given
       const config = createConfig({ hasOpencodeZen: true })
 
@@ -487,11 +487,11 @@ describe("generateModelConfig", () => {
       const result = generateModelConfig(config)
 
       // #then
-      expect(result.agents?.hephaestus?.model).toBe("opencode/gpt-5.4")
-      expect(result.agents?.hephaestus?.variant).toBe("medium")
+      expect(result.agents?.engineer?.model).toBe("opencode/gpt-5.4")
+      expect(result.agents?.engineer?.variant).toBe("medium")
     })
 
-    test("Hephaestus is omitted when only Claude is available (no required provider connected)", () => {
+    test("Engineer is omitted when only Claude is available (no required provider connected)", () => {
       // #given
       const config = createConfig({ hasClaude: true })
 
@@ -499,10 +499,10 @@ describe("generateModelConfig", () => {
       const result = generateModelConfig(config)
 
       // #then
-      expect(result.agents?.hephaestus).toBeUndefined()
+      expect(result.agents?.engineer).toBeUndefined()
     })
 
-    test("Hephaestus is omitted when only Gemini is available (no required provider connected)", () => {
+    test("Engineer is omitted when only Gemini is available (no required provider connected)", () => {
       // #given
       const config = createConfig({ hasGemini: true })
 
@@ -510,10 +510,10 @@ describe("generateModelConfig", () => {
       const result = generateModelConfig(config)
 
       // #then
-      expect(result.agents?.hephaestus).toBeUndefined()
+      expect(result.agents?.engineer).toBeUndefined()
     })
 
-    test("Hephaestus is omitted when only ZAI is available (no required provider connected)", () => {
+    test("Engineer is omitted when only ZAI is available (no required provider connected)", () => {
       // #given
       const config = createConfig({ hasZaiCodingPlan: true })
 
@@ -521,7 +521,7 @@ describe("generateModelConfig", () => {
       const result = generateModelConfig(config)
 
       // #then
-      expect(result.agents?.hephaestus).toBeUndefined()
+      expect(result.agents?.engineer).toBeUndefined()
     })
   })
 
@@ -653,15 +653,15 @@ describe("generateModelConfig", () => {
       expect(result.agents?.librarian?.model).toBe("vercel/minimax/minimax-m2.7")
     })
 
-    test("Hephaestus is created when only Vercel AI Gateway is available", () => {
+    test("Engineer is created when only Vercel AI Gateway is available", () => {
       // #given only Vercel AI Gateway is available
       const config = createConfig({ hasVercelAiGateway: true })
 
       // #when generateModelConfig is called
       const result = generateModelConfig(config)
 
-      // #then hephaestus should be created with gateway-routed gpt-5.4
-      expect(result.agents?.hephaestus?.model).toBe("vercel/openai/gpt-5.4")
+      // #then engineer should be created with gateway-routed gpt-5.4
+      expect(result.agents?.engineer?.model).toBe("vercel/openai/gpt-5.4")
     })
 
     test("native providers take priority over gateway", () => {
@@ -672,7 +672,7 @@ describe("generateModelConfig", () => {
       const result = generateModelConfig(config)
 
       // #then should prefer native anthropic over gateway
-      expect(result.agents?.sisyphus?.model).toBe("anthropic/claude-opus-4.6")
+      expect(result.agents?.openengineer?.model).toBe("anthropic/claude-opus-4.6")
     })
   })
 

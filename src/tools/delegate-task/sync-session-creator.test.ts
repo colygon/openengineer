@@ -19,7 +19,7 @@ describe("createSyncSession", () => {
     // when
     const result = await createSyncSession(client as never, {
       parentSessionID: "ses_parent",
-      agentToUse: "explore",
+      agentToUse: "analyst",
       description: "test task",
       defaultDirectory: "/fallback",
     })

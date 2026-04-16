@@ -72,7 +72,7 @@ export async function runTuiInstaller(args: InstallArgs, version: string): Promi
 
   if (!config.hasClaude) {
     p.log.info(
-      `${color.bold("Note:")} Sisyphus agent performs best with Claude Opus 4.5+.\n` +
+      `${color.bold("Note:")} Architect agent performs best with Claude Opus 4.5+.\n` +
         `Other models work but may have reduced orchestration quality.`,
     )
   }

@@ -1,4 +1,4 @@
-export const START_WORK_TEMPLATE = `You are starting a Sisyphus work session.
+export const START_WORK_TEMPLATE = `You are starting a Architect work session.
 
 ## ARGUMENTS
 
@@ -11,12 +11,12 @@ export const START_WORK_TEMPLATE = `You are starting a Sisyphus work session.
 
 ## WHAT TO DO
 
-1. **Find available plans**: Search for Prometheus-generated plan files at \`.sisyphus/plans/\`
+1. **Find available plans**: Search for ProductManager-generated plan files at \`.openengineer/plans/\`
 
-2. **Check for active boulder state**: Read \`.sisyphus/boulder.json\` if it exists
+2. **Check for active boulder state**: Read \`.openengineer/boulder.json\` if it exists
 
 3. **Decision logic**:
-   - If \`.sisyphus/boulder.json\` exists AND plan is NOT complete (has unchecked boxes):
+   - If \`.openengineer/boulder.json\` exists AND plan is NOT complete (has unchecked boxes):
      - **APPEND** current session to session_ids
      - Continue work on existing plan
    - If no active plan OR plan is complete:
@@ -41,7 +41,7 @@ export const START_WORK_TEMPLATE = `You are starting a Sisyphus work session.
    }
    \`\`\`
 
-6. **Read the plan file** and start executing tasks according to atlas workflow
+6. **Read the plan file** and start executing tasks according to technicalLead workflow
 
 ## OUTPUT FORMAT
 
@@ -88,7 +88,7 @@ Reading plan and beginning execution...
 - Always update boulder.json BEFORE starting work
 - If worktree_path is set in boulder.json, all work happens inside that worktree directory
 - Read the FULL plan file before delegating any tasks
-- Follow atlas delegation protocols (7-section format)
+- Follow technicalLead delegation protocols (7-section format)
 
 ## TASK BREAKDOWN (MANDATORY)
 
@@ -115,10 +115,10 @@ Register these as task/todo items so progress is tracked and visible throughout 
 
 When working in a worktree (\`worktree_path\` is set in boulder.json) and ALL plan tasks are complete:
 1. Commit all remaining changes in the worktree
-2. **Sync .sisyphus state back**: Copy \`.sisyphus/\` from the worktree to the main repo before removal.
-   This is CRITICAL when \`.sisyphus/\` is gitignored - state written during worktree execution would otherwise be lost.
+2. **Sync .openengineer state back**: Copy \`.openengineer/\` from the worktree to the main repo before removal.
+   This is CRITICAL when \`.openengineer/\` is gitignored - state written during worktree execution would otherwise be lost.
    \`\`\`bash
-   cp -r <worktree-path>/.sisyphus/* <main-repo>/.sisyphus/ 2>/dev/null || true
+   cp -r <worktree-path>/.openengineer/* <main-repo>/.openengineer/ 2>/dev/null || true
    \`\`\`
 3. Switch to the main working directory (the original repo, NOT the worktree)
 4. Merge the worktree branch into the current branch: \`git merge <worktree-branch>\`

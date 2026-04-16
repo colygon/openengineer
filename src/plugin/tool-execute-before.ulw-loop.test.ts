@@ -7,7 +7,7 @@ import { createToolExecuteBeforeHandler } from "./tool-execute-before"
 import { ULTRAWORK_VERIFICATION_PROMISE } from "../hooks/ralph-loop/constants"
 import { clearState, readState, writeState } from "../hooks/ralph-loop/storage"
 
-describe("tool.execute.before ultrawork oracle verification", () => {
+describe("tool.execute.before ultrawork strategist verification", () => {
 	function createCtx(directory: string) {
 		return {
 			directory,
@@ -19,9 +19,9 @@ describe("tool.execute.before ultrawork oracle verification", () => {
 		}
 	}
 
-	function createOracleTaskArgs(prompt: string): Record<string, unknown> {
+	function createStrategistTaskArgs(prompt: string): Record<string, unknown> {
 		return {
-			subagent_type: "oracle",
+			subagent_type: "strategist",
 			run_in_background: true,
 			prompt,
 		}
@@ -33,14 +33,14 @@ describe("tool.execute.before ultrawork oracle verification", () => {
 	): Record<string, unknown> {
 		return {
 			prompt: args.prompt,
-			agent: "oracle",
+			agent: "strategist",
 			run_in_background: args.run_in_background,
 			sessionId,
 			sync: true,
 		}
 	}
 
-	test("#given ulw loop is awaiting verification #when oracle task runs #then oracle prompt is enforced and sync", async () => {
+	test("#given ulw loop is awaiting verification #when strategist task runs #then strategist prompt is enforced and sync", async () => {
 		const directory = join(tmpdir(), `tool-before-ulw-${Date.now()}`)
 		mkdirSync(directory, { recursive: true })
 		writeState(directory, {
@@ -59,7 +59,7 @@ describe("tool.execute.before ultrawork oracle verification", () => {
 			ctx: createCtx(directory) as unknown as Parameters<typeof createToolExecuteBeforeHandler>[0]["ctx"],
 			hooks: {} as Parameters<typeof createToolExecuteBeforeHandler>[0]["hooks"],
 		})
-		const output = { args: createOracleTaskArgs("Check it") }
+		const output = { args: createStrategistTaskArgs("Check it") }
 
 		await handler({ tool: "task", sessionID: "ses-main", callID: "call-1" }, output)
 
@@ -74,14 +74,14 @@ describe("tool.execute.before ultrawork oracle verification", () => {
 		rmSync(directory, { recursive: true, force: true })
 	})
 
-	test("#given ulw loop is not awaiting verification #when oracle task runs #then prompt is unchanged", async () => {
+	test("#given ulw loop is not awaiting verification #when strategist task runs #then prompt is unchanged", async () => {
 		const directory = join(tmpdir(), `tool-before-ulw-${Date.now()}-plain`)
 		mkdirSync(directory, { recursive: true })
 		const handler = createToolExecuteBeforeHandler({
 			ctx: createCtx(directory) as unknown as Parameters<typeof createToolExecuteBeforeHandler>[0]["ctx"],
 			hooks: {} as Parameters<typeof createToolExecuteBeforeHandler>[0]["hooks"],
 		})
-		const output = { args: createOracleTaskArgs("Check it") }
+		const output = { args: createStrategistTaskArgs("Check it") }
 
 		await handler({ tool: "task", sessionID: "ses-main", callID: "call-1" }, output)
 
@@ -132,7 +132,7 @@ describe("tool.execute.before ultrawork oracle verification", () => {
 		rmSync(directory, { recursive: true, force: true })
 	})
 
-	test("#given ulw loop is awaiting verification #when oracle sync task metadata is persisted #then oracle session id is stored", async () => {
+	test("#given ulw loop is awaiting verification #when strategist sync task metadata is persisted #then strategist session id is stored", async () => {
 		const directory = join(tmpdir(), `tool-after-ulw-${Date.now()}`)
 		mkdirSync(directory, { recursive: true })
 		writeState(directory, {
@@ -151,9 +151,9 @@ describe("tool.execute.before ultrawork oracle verification", () => {
 			ctx: createCtx(directory) as unknown as Parameters<typeof createToolExecuteBeforeHandler>[0]["ctx"],
 			hooks: {} as Parameters<typeof createToolExecuteBeforeHandler>[0]["hooks"],
 		})
-		const beforeOutput = { args: createOracleTaskArgs("Check it") }
+		const beforeOutput = { args: createStrategistTaskArgs("Check it") }
 		await beforeHandler({ tool: "task", sessionID: "ses-main", callID: "call-1" }, beforeOutput)
-		const metadataFromSyncTask = createSyncTaskMetadata(beforeOutput.args, "ses-oracle")
+		const metadataFromSyncTask = createSyncTaskMetadata(beforeOutput.args, "ses-strategist")
 
 		const handler = createToolExecuteAfterHandler({
 			ctx: createCtx(directory) as unknown as Parameters<typeof createToolExecuteAfterHandler>[0]["ctx"],
@@ -163,19 +163,19 @@ describe("tool.execute.before ultrawork oracle verification", () => {
 		await handler(
 			{ tool: "task", sessionID: "ses-main", callID: "call-1" },
 			{
-				title: "oracle task",
+				title: "strategist task",
 				output: "done",
 				metadata: metadataFromSyncTask,
 			},
 		)
 
-		expect(readState(directory)?.verification_session_id).toBe("ses-oracle")
+		expect(readState(directory)?.verification_session_id).toBe("ses-strategist")
 
 		clearState(directory)
 		rmSync(directory, { recursive: true, force: true })
 	})
 
-	test("#given ulw loop is awaiting verification #when oracle metadata prompt is missing #then oracle session fallback is stored", async () => {
+	test("#given ulw loop is awaiting verification #when strategist metadata prompt is missing #then strategist session fallback is stored", async () => {
 		const directory = join(tmpdir(), `tool-after-ulw-fallback-${Date.now()}`)
 		mkdirSync(directory, { recursive: true })
 		writeState(directory, {
@@ -198,23 +198,23 @@ describe("tool.execute.before ultrawork oracle verification", () => {
 		await handler(
 			{ tool: "task", sessionID: "ses-main", callID: "call-1" },
 			{
-				title: "oracle task",
+				title: "strategist task",
 				output: "done",
 				metadata: {
-					agent: "oracle",
-					sessionId: "ses-oracle-fallback",
+					agent: "strategist",
+					sessionId: "ses-strategist-fallback",
 					sync: true,
 				},
 			},
 		)
 
-		expect(readState(directory)?.verification_session_id).toBe("ses-oracle-fallback")
+		expect(readState(directory)?.verification_session_id).toBe("ses-strategist-fallback")
 
 		clearState(directory)
 		rmSync(directory, { recursive: true, force: true })
 	})
 
-	test("#given ulw loop is awaiting verification #when oracle metadata uses sessionID #then oracle session id is stored", async () => {
+	test("#given ulw loop is awaiting verification #when strategist metadata uses sessionID #then strategist session id is stored", async () => {
 		const directory = join(tmpdir(), `tool-after-ulw-sessionid-${Date.now()}`)
 		mkdirSync(directory, { recursive: true })
 		writeState(directory, {
@@ -237,23 +237,23 @@ describe("tool.execute.before ultrawork oracle verification", () => {
 		await handler(
 			{ tool: "task", sessionID: "ses-main", callID: "call-1" },
 			{
-				title: "oracle task",
+				title: "strategist task",
 				output: "done",
 				metadata: {
-					agent: "oracle",
-					sessionID: "ses-oracle-alt",
+					agent: "strategist",
+					sessionID: "ses-strategist-alt",
 					sync: true,
 				},
 			},
 		)
 
-		expect(readState(directory)?.verification_session_id).toBe("ses-oracle-alt")
+		expect(readState(directory)?.verification_session_id).toBe("ses-strategist-alt")
 
 		clearState(directory)
 		rmSync(directory, { recursive: true, force: true })
 	})
 
-	test("#given newer oracle attempt exists #when older oracle task finishes #then old session does not overwrite active verification", async () => {
+	test("#given newer strategist attempt exists #when older strategist task finishes #then old session does not overwrite active verification", async () => {
 		const directory = join(tmpdir(), `tool-race-ulw-${Date.now()}`)
 		mkdirSync(directory, { recursive: true })
 		writeState(directory, {
@@ -277,11 +277,11 @@ describe("tool.execute.before ultrawork oracle verification", () => {
 			hooks: {} as Parameters<typeof createToolExecuteAfterHandler>[0]["hooks"],
 		})
 
-		const firstOutput = { args: createOracleTaskArgs("Check it") }
+		const firstOutput = { args: createStrategistTaskArgs("Check it") }
 		await beforeHandler({ tool: "task", sessionID: "ses-main", callID: "call-1" }, firstOutput)
 		const firstAttemptId = readState(directory)?.verification_attempt_id
 
-		const secondOutput = { args: createOracleTaskArgs("Check it again") }
+		const secondOutput = { args: createStrategistTaskArgs("Check it again") }
 		await beforeHandler({ tool: "task", sessionID: "ses-main", callID: "call-2" }, secondOutput)
 		const secondAttemptId = readState(directory)?.verification_attempt_id
 
@@ -292,12 +292,12 @@ describe("tool.execute.before ultrawork oracle verification", () => {
 		await afterHandler(
 			{ tool: "task", sessionID: "ses-main", callID: "call-1" },
 			{
-				title: "oracle task",
+				title: "strategist task",
 				output: "done",
 				metadata: {
-					agent: "oracle",
+					agent: "strategist",
 					prompt: String(firstOutput.args.prompt),
-					sessionId: "ses-oracle-old",
+					sessionId: "ses-strategist-old",
 				},
 			},
 		)
@@ -307,17 +307,17 @@ describe("tool.execute.before ultrawork oracle verification", () => {
 		await afterHandler(
 			{ tool: "task", sessionID: "ses-main", callID: "call-2" },
 			{
-				title: "oracle task",
+				title: "strategist task",
 				output: "done",
 				metadata: {
-					agent: "oracle",
+					agent: "strategist",
 					prompt: String(secondOutput.args.prompt),
-					sessionId: "ses-oracle-new",
+					sessionId: "ses-strategist-new",
 				},
 			},
 		)
 
-		expect(readState(directory)?.verification_session_id).toBe("ses-oracle-new")
+		expect(readState(directory)?.verification_session_id).toBe("ses-strategist-new")
 
 		clearState(directory)
 		rmSync(directory, { recursive: true, force: true })

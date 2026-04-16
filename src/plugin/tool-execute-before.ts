@@ -31,7 +31,7 @@ export function createToolExecuteBeforeHandler(args: {
 ) => Promise<void> {
   const { ctx, hooks } = args
 
-  function buildUltraworkOracleVerificationPrompt(prompt: string, originalTask: string, verificationAttemptId: string): string {
+  function buildUltraworkStrategistVerificationPrompt(prompt: string, originalTask: string, verificationAttemptId: string): string {
     const verificationPrompt = [
       "You are verifying the active ULTRAWORK loop result for this session.",
       "",
@@ -73,9 +73,9 @@ export function createToolExecuteBeforeHandler(args: {
     await hooks.rulesInjector?.["tool.execute.before"]?.(input, output)
     await hooks.tasksTodowriteDisabler?.["tool.execute.before"]?.(input, output)
     await hooks.webfetchRedirectGuard?.["tool.execute.before"]?.(input, output)
-    await hooks.prometheusMdOnly?.["tool.execute.before"]?.(input, output)
-    await hooks.sisyphusJuniorNotepad?.["tool.execute.before"]?.(input, output)
-    await hooks.atlasHook?.["tool.execute.before"]?.(input, output)
+    await hooks.productManagerMdOnly?.["tool.execute.before"]?.(input, output)
+    await hooks.juniorArchitectNotepad?.["tool.execute.before"]?.(input, output)
+    await hooks.technicalLeadHook?.["tool.execute.before"]?.(input, output)
 
     const normalizedToolName = input.tool.toLowerCase()
     if (
@@ -103,7 +103,7 @@ export function createToolExecuteBeforeHandler(args: {
       const sessionId = typeof argsObject.session_id === "string" ? argsObject.session_id : undefined
 
       if (category) {
-        argsObject.subagent_type = "sisyphus-junior"
+        argsObject.subagent_type = "junior-architect"
       } else if (!subagentType && sessionId) {
         const resolvedAgent = await resolveSessionAgent(ctx.client, sessionId)
         argsObject.subagent_type = resolvedAgent ?? "continue"
@@ -113,16 +113,16 @@ export function createToolExecuteBeforeHandler(args: {
         typeof argsObject.subagent_type === "string" ? stripInvisibleAgentCharacters(argsObject.subagent_type) : undefined
       const prompt = typeof argsObject.prompt === "string" ? argsObject.prompt : ""
       const loopState = typeof ctx.directory === "string" ? readState(ctx.directory) : null
-      const shouldInjectOracleVerification =
-        normalizedSubagentType === "oracle"
+      const shouldInjectStrategistVerification =
+        normalizedSubagentType === "strategist"
         && loopState?.active === true
         && loopState.ultrawork === true
         && loopState.verification_pending === true
         && loopState.session_id === input.sessionID
 
-      if (shouldInjectOracleVerification) {
+      if (shouldInjectStrategistVerification) {
         const verificationAttemptId = randomUUID()
-        log("[tool-execute-before] Injecting ULW oracle verification attempt", {
+        log("[tool-execute-before] Injecting ULW strategist verification attempt", {
           sessionID: input.sessionID,
           callID: input.callID,
           verificationAttemptId,
@@ -134,7 +134,7 @@ export function createToolExecuteBeforeHandler(args: {
           verification_session_id: undefined,
         })
         argsObject.run_in_background = false
-        argsObject.prompt = buildUltraworkOracleVerificationPrompt(
+        argsObject.prompt = buildUltraworkStrategistVerificationPrompt(
           prompt,
           loopState.prompt,
           verificationAttemptId,

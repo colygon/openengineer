@@ -10,7 +10,7 @@ function makeMockCtx(): ToolContextWithMetadata & { captured: any[] } {
   return {
     sessionID: "ses_parent",
     messageID: "msg_parent",
-    agent: "sisyphus",
+    agent: "architect",
     abort: new AbortController().signal,
     callID: "call_001",
     metadata: async (input: any) => { captured.push(input) },
@@ -21,7 +21,7 @@ function makeMockCtx(): ToolContextWithMetadata & { captured: any[] } {
 const parentContext: ParentContext = {
   sessionID: "ses_parent",
   messageID: "msg_parent",
-  agent: "sisyphus",
+  agent: "architect",
   model: MODEL,
 }
 
@@ -47,7 +47,7 @@ describe("metadata model unification", () => {
           client: { session: { create: async () => ({ data: { id: "ses_sync" } }) } },
           directory: "/tmp",
           onSyncSessionCreated: null,
-        }, parentContext, "explore", MODEL, undefined, undefined, undefined, deps)
+        }, parentContext, "analyst", MODEL, undefined, undefined, undefined, deps)
 
         const meta = ctx.captured.find((m: any) => m.metadata?.sessionId)
         expect(meta).toBeDefined()
@@ -59,18 +59,18 @@ describe("metadata model unification", () => {
         const ctx = makeMockCtx()
         const args: DelegateTaskArgs = {
           description: "test", prompt: "do it",
-          load_skills: [], run_in_background: true, subagent_type: "explore",
+          load_skills: [], run_in_background: true, subagent_type: "analyst",
         }
 
         await executeBackgroundTask(args, ctx, {
           manager: {
             launch: async () => ({
-              id: "bg_1", description: "test", agent: "explore",
+              id: "bg_1", description: "test", agent: "analyst",
               status: "pending", sessionID: "ses_bg", model: MODEL,
             }),
             getTask: () => undefined,
           },
-        } as any, parentContext, "explore", MODEL, undefined)
+        } as any, parentContext, "analyst", MODEL, undefined)
 
         const meta = ctx.captured.find((m: any) => m.metadata?.sessionId)
         expect(meta).toBeDefined()
@@ -86,7 +86,7 @@ describe("metadata model unification", () => {
         }
 
         const launchedTask = {
-          id: "bg_unstable", description: "test", agent: "explore",
+          id: "bg_unstable", description: "test", agent: "analyst",
           status: "completed", sessionID: "ses_unstable", model: MODEL,
         }
         const result = await executeUnstableAgentTask(
@@ -109,7 +109,7 @@ describe("metadata model unification", () => {
             },
             syncPollTimeoutMs: 100,
           } as any,
-          parentContext, "explore", MODEL, undefined, "anthropic/claude-sonnet-4-6",
+          parentContext, "analyst", MODEL, undefined, "anthropic/claude-sonnet-4-6",
         )
 
         const meta = ctx.captured.find((m: any) => m.metadata?.sessionId)
@@ -128,7 +128,7 @@ describe("metadata model unification", () => {
         await executeBackgroundContinuation(args, ctx, {
           manager: {
             resume: async () => ({
-              id: "bg_2", description: "continue", agent: "explore",
+              id: "bg_2", description: "continue", agent: "analyst",
               status: "running", sessionID: "ses_resumed", model: MODEL,
             }),
           },
@@ -156,7 +156,7 @@ describe("metadata model unification", () => {
           client: {
             session: {
               messages: async () => ({
-                data: [{ info: { agent: "explore", model: MODEL, providerID: "anthropic", modelID: "claude-sonnet-4-6" } }],
+                data: [{ info: { agent: "analyst", model: MODEL, providerID: "anthropic", modelID: "claude-sonnet-4-6" } }],
               }),
               prompt: async () => ({}),
             },

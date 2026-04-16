@@ -19,7 +19,7 @@ function createWorkdir(): string {
 function createLegacyConfig(): Record<string, unknown> {
   return {
     agents: {
-      prometheus: { model: "anthropic/claude-opus-4-5" },
+      "product-manager": { model: "anthropic/claude-opus-4-5" },
     },
   }
 }
@@ -45,13 +45,13 @@ describe("migrateConfigFile sidecar write ordering", () => {
     // then
     expect(needsWrite).toBe(true)
     expect(rawConfig._migrations).toBeUndefined()
-    expect((rawConfig.agents as Record<string, Record<string, unknown>>).prometheus.model).toBe(
+    expect((rawConfig.agents as Record<string, Record<string, unknown>>).productManager.model).toBe(
       "anthropic/claude-opus-4-6",
     )
 
     const persistedConfig = JSON.parse(readFileSync(configPath, "utf-8")) as Record<string, unknown>
     expect(persistedConfig._migrations).toBeUndefined()
-    expect((persistedConfig.agents as Record<string, Record<string, unknown>>).prometheus.model).toBe(
+    expect((persistedConfig.agents as Record<string, Record<string, unknown>>).productManager.model).toBe(
       "anthropic/claude-opus-4-6",
     )
 
@@ -86,7 +86,7 @@ describe("migrateConfigFile sidecar write ordering", () => {
     // then
     expect(retriedNeedsWrite).toBe(true)
     expect(retriedConfig._migrations).toBeUndefined()
-    expect((retriedConfig.agents as Record<string, Record<string, unknown>>).prometheus.model).toBe(
+    expect((retriedConfig.agents as Record<string, Record<string, unknown>>).productManager.model).toBe(
       "anthropic/claude-opus-4-6",
     )
     expect(existsSync(getSidecarPath(configPath))).toBe(true)
@@ -107,13 +107,13 @@ describe("migrateConfigFile sidecar write ordering", () => {
     // then
     expect(needsWrite).toBe(true)
     expect(rawConfig._migrations).toEqual([MIGRATION_KEY])
-    expect((rawConfig.agents as Record<string, Record<string, unknown>>).prometheus.model).toBe(
+    expect((rawConfig.agents as Record<string, Record<string, unknown>>).productManager.model).toBe(
       "anthropic/claude-opus-4-6",
     )
 
     const persistedConfig = JSON.parse(readFileSync(configPath, "utf-8")) as Record<string, unknown>
     expect(persistedConfig._migrations).toEqual([MIGRATION_KEY])
-    expect((persistedConfig.agents as Record<string, Record<string, unknown>>).prometheus.model).toBe(
+    expect((persistedConfig.agents as Record<string, Record<string, unknown>>).productManager.model).toBe(
       "anthropic/claude-opus-4-6",
     )
     expect(statSync(getSidecarPath(configPath)).isDirectory()).toBe(true)
@@ -152,7 +152,7 @@ describe("migrateConfigFile backup skipping", () => {
     const configPath = join(workdir, "oh-my-opencode.json")
     const rawConfig = {
       agents: {
-        prometheus: { model: "anthropic/claude-opus-4-5" },
+        "product-manager": { model: "anthropic/claude-opus-4-5" },
       },
     }
 

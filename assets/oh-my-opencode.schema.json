@@ -792,7 +792,7 @@
           },
           "additionalProperties": false
         },
-        "sisyphus": {
+        "architect": {
           "type": "object",
           "properties": {
             "model": {
@@ -1142,7 +1142,7 @@
           },
           "additionalProperties": false
         },
-        "hephaestus": {
+        "engineer": {
           "type": "object",
           "properties": {
             "model": {
@@ -1495,7 +1495,7 @@
           },
           "additionalProperties": false
         },
-        "sisyphus-junior": {
+        "junior-architect": {
           "type": "object",
           "properties": {
             "model": {
@@ -2195,7 +2195,7 @@
           },
           "additionalProperties": false
         },
-        "prometheus": {
+        "product-manager": {
           "type": "object",
           "properties": {
             "model": {
@@ -2545,7 +2545,7 @@
           },
           "additionalProperties": false
         },
-        "metis": {
+        "consultant": {
           "type": "object",
           "properties": {
             "model": {
@@ -2895,7 +2895,7 @@
           },
           "additionalProperties": false
         },
-        "momus": {
+        "qa-engineer": {
           "type": "object",
           "properties": {
             "model": {
@@ -3245,7 +3245,7 @@
           },
           "additionalProperties": false
         },
-        "oracle": {
+        "strategist": {
           "type": "object",
           "properties": {
             "model": {
@@ -3945,7 +3945,7 @@
           },
           "additionalProperties": false
         },
-        "explore": {
+        "analyst": {
           "type": "object",
           "properties": {
             "model": {
@@ -4295,7 +4295,7 @@
           },
           "additionalProperties": false
         },
-        "multimodal-looker": {
+        "designer": {
           "type": "object",
           "properties": {
             "model": {
@@ -4645,7 +4645,7 @@
           },
           "additionalProperties": false
         },
-        "atlas": {
+        "technical-lead": {
           "type": "object",
           "properties": {
             "model": {
@@ -5268,7 +5268,7 @@
       },
       "additionalProperties": false
     },
-    "sisyphus_agent": {
+    "architect_agent": {
       "type": "object",
       "properties": {
         "disabled": {
@@ -6030,7 +6030,7 @@
       ],
       "additionalProperties": false
     },
-    "sisyphus": {
+    "architect": {
       "type": "object",
       "properties": {
         "tasks": {

@@ -10,8 +10,8 @@ Agent factories following `createXXXAgent(model) → AgentConfig` pattern. Each 
 
 | Agent | Model | Temp | Mode | Fallback Chain | Purpose |
 |-------|-------|------|------|----------------|---------|
-| **Sisyphus** | claude-opus-4-6 max | 0.1 | all | k2p5 -> kimi-k2.5 -> gpt-5.4 medium -> glm-5 -> big-pickle | Main orchestrator, plans + delegates |
-| **Hephaestus** | gpt-5.4 medium | 0.1 | all | — | Autonomous deep worker |
+| **Architect** | claude-opus-4-6 max | 0.1 | all | k2p5 -> kimi-k2.5 -> gpt-5.4 medium -> glm-5 -> big-pickle | Main orchestrator, plans + delegates |
+| **Engineer** | gpt-5.4 medium | 0.1 | all | — | Autonomous deep worker |
 | **Oracle** | gpt-5.4 high | 0.1 | subagent | gemini-3.1-pro high -> claude-opus-4-6 max | Read-only consultation |
 | **Librarian** | minimax-m2.7 | 0.1 | subagent | minimax-m2.7-highspeed -> claude-haiku-4-5 -> gpt-5-nano | External docs/code search |
 | **Explore** | grok-code-fast-1 | 0.1 | subagent | minimax-m2.7-highspeed -> minimax-m2.7 -> claude-haiku-4-5 -> gpt-5-nano | Contextual grep |
@@ -19,8 +19,8 @@ Agent factories following `createXXXAgent(model) → AgentConfig` pattern. Each 
 | **Metis** | claude-opus-4-6 max | **0.3** | subagent | gpt-5.4 high -> gemini-3.1-pro high | Pre-planning consultant |
 | **Momus** | gpt-5.4 xhigh | 0.1 | subagent | claude-opus-4-6 max -> gemini-3.1-pro high | Plan reviewer |
 | **Atlas** | claude-sonnet-4-6 | 0.1 | primary | gpt-5.4 medium | Todo-list orchestrator |
-| **Prometheus** | claude-opus-4-6 max | 0.1 | — | internal planner | Strategic planner (internal) |
-| **Sisyphus-Junior** | claude-sonnet-4-6 | 0.1 | all | user-configurable | Category-spawned executor |
+| **ProductManager** | claude-opus-4-6 max | 0.1 | — | internal planner | Strategic planner (internal) |
+| **Architect-Junior** | claude-sonnet-4-6 | 0.1 | all | user-configurable | Category-spawned executor |
 
 ## TOOL RESTRICTIONS
 
@@ -37,15 +37,15 @@ Agent factories following `createXXXAgent(model) → AgentConfig` pattern. Each 
 
 ```
 agents/
-├── sisyphus.ts            # 559 LOC, main orchestrator
-├── hephaestus.ts          # 507 LOC, autonomous worker
-├── oracle.ts              # Read-only consultant
+├── architect.ts            # 559 LOC, main orchestrator
+├── engineer.ts          # 507 LOC, autonomous worker
+├── strategist.ts              # Read-only consultant
 ├── librarian.ts           # External search
 ├── explore.ts             # Codebase grep
 ├── multimodal-looker.ts   # Vision/PDF
-├── metis.ts               # Pre-planning
-├── momus.ts               # Plan review
-├── atlas/agent.ts         # Todo orchestrator
+├── consultant.ts               # Pre-planning
+├── qa-engineer.ts               # Plan review
+├── technical-lead/agent.ts         # Todo orchestrator
 ├── types.ts               # AgentFactory, AgentMode
 ├── agent-builder.ts       # buildAgent() composition
 ├── utils.ts               # Agent utilities
@@ -58,9 +58,9 @@ agents/
 ├── custom-agent-summaries.ts        # Custom agent summaries
 ├── env-context.ts                   # Environment context
 └── builtin-agents/        # maybeCreateXXXConfig conditional factories
-    ├── sisyphus-agent.ts
-    ├── hephaestus-agent.ts
-    ├── atlas-agent.ts
+    ├── architect-agent.ts
+    ├── engineer-agent.ts
+    ├── technical-lead-agent.ts
     ├── general-agents.ts  # collectPendingBuiltinAgents
     └── available-skills.ts
 ```
@@ -83,4 +83,4 @@ Model resolution: 4-step: override → category-default → provider-fallback �
 
 - **primary**: Respects UI-selected model, uses fallback chain
 - **subagent**: Uses own fallback chain, ignores UI selection
-- **all**: Available in both contexts (Sisyphus-Junior)
+- **all**: Available in both contexts (Architect-Junior)

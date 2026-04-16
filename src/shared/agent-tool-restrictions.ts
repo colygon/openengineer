@@ -18,30 +18,30 @@ const AGENT_RESTRICTIONS: Record<string, Record<string, boolean>> = {
 
   librarian: EXPLORATION_AGENT_DENYLIST,
 
-  oracle: {
+  strategist: {
     write: false,
     edit: false,
     task: false,
     call_omo_agent: false,
   },
 
-  metis: {
+  consultant: {
     write: false,
     edit: false,
     task: false,
   },
 
-  momus: {
+  "qa-engineer": {
     write: false,
     edit: false,
     task: false,
   },
 
-  "multimodal-looker": {
+  "designer": {
     read: true,
   },
 
-  "sisyphus-junior": {
+  "junior-architect": {
     task: false,
   },
 }

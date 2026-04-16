@@ -1,21 +1,21 @@
 import { describe, test, expect } from "bun:test"
-import { createOracleAgent } from "./oracle"
+import { createStrategistAgent } from "./strategist"
 import { createLibrarianAgent } from "./librarian"
-import { createExploreAgent } from "./explore"
-import { createMomusAgent } from "./momus"
-import { createMetisAgent } from "./metis"
-import { createAtlasAgent } from "./atlas"
-import { createSisyphusAgent } from "./sisyphus"
+import { createAnalystAgent } from "./analyst"
+import { createQaEngineerAgent } from "./qa-engineer"
+import { createConsultantAgent } from "./consultant"
+import { createTechnicalLeadAgent } from "./technical-lead"
+import { createArchitectAgent } from "./architect"
 
 const TEST_MODEL = "anthropic/claude-sonnet-4-5"
 
 describe("read-only agent tool restrictions", () => {
   const FILE_WRITE_TOOLS = ["write", "edit", "apply_patch"]
 
-  describe("Oracle", () => {
+  describe("Strategist", () => {
     test("denies all file-writing tools", () => {
       // given
-      const agent = createOracleAgent(TEST_MODEL)
+      const agent = createStrategistAgent(TEST_MODEL)
 
       // when
       const permission = agent.permission as Record<string, string>
@@ -28,7 +28,7 @@ describe("read-only agent tool restrictions", () => {
 
     test("denies task but allows call_omo_agent for research", () => {
       // given
-      const agent = createOracleAgent(TEST_MODEL)
+      const agent = createStrategistAgent(TEST_MODEL)
 
       // when
       const permission = agent.permission as Record<string, string>
@@ -57,7 +57,7 @@ describe("read-only agent tool restrictions", () => {
   describe("Explore", () => {
     test("denies all file-writing tools", () => {
       // given
-      const agent = createExploreAgent(TEST_MODEL)
+      const agent = createAnalystAgent(TEST_MODEL)
 
       // when
       const permission = agent.permission as Record<string, string>
@@ -69,10 +69,10 @@ describe("read-only agent tool restrictions", () => {
     })
   })
 
-  describe("Momus", () => {
+  describe("QaEngineer", () => {
     test("denies all file-writing tools", () => {
       // given
-      const agent = createMomusAgent(TEST_MODEL)
+      const agent = createQaEngineerAgent(TEST_MODEL)
 
       // when
       const permission = agent.permission as Record<string, string>
@@ -84,10 +84,10 @@ describe("read-only agent tool restrictions", () => {
     })
   })
 
-  describe("Metis", () => {
+  describe("Consultant", () => {
     test("denies all file-writing tools", () => {
       // given
-      const agent = createMetisAgent(TEST_MODEL)
+      const agent = createConsultantAgent(TEST_MODEL)
 
       // when
       const permission = agent.permission as Record<string, string>
@@ -99,10 +99,10 @@ describe("read-only agent tool restrictions", () => {
     })
   })
 
-  describe("Atlas", () => {
+  describe("TechnicalLead", () => {
     test("allows delegation tools for orchestration", () => {
       // given
-      const agent = createAtlasAgent({ model: TEST_MODEL })
+      const agent = createTechnicalLeadAgent({ model: TEST_MODEL })
 
       // when
       const permission = (agent.permission ?? {}) as Record<string, string>
@@ -113,12 +113,12 @@ describe("read-only agent tool restrictions", () => {
     })
   })
 
-  describe("Sisyphus GPT variants", () => {
+  describe("Architect GPT variants", () => {
     test("deny apply_patch for GPT models but not Claude models", () => {
       // given
-      const gpt54Agent = createSisyphusAgent("openai/gpt-5.4")
-      const gptGenericAgent = createSisyphusAgent("openai/gpt-5.2")
-      const claudeAgent = createSisyphusAgent(TEST_MODEL)
+      const gpt54Agent = createArchitectAgent("openai/gpt-5.4")
+      const gptGenericAgent = createArchitectAgent("openai/gpt-5.2")
+      const claudeAgent = createArchitectAgent(TEST_MODEL)
 
       // when
       const gpt54Permission = (gpt54Agent.permission ?? {}) as Record<string, string>

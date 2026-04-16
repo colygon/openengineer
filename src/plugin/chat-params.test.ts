@@ -40,14 +40,14 @@ describe("createChatParamsHandler", () => {
     const handler = createChatParamsHandler({
       anthropicEffort: {
         "chat.params": async (input) => {
-          called = input.agent.name === "sisyphus"
+          called = input.agent.name === "architect"
         },
       },
     })
 
     const input = {
       sessionID: "ses_chat_params",
-      agent: { name: "sisyphus" },
+      agent: { name: "architect" },
       model: { providerID: "opencode", modelID: "claude-opus-4-6" },
       provider: { id: "opencode" },
       message: {},
@@ -79,7 +79,7 @@ describe("createChatParamsHandler", () => {
     const message = { variant: "max" }
     const input = {
       sessionID: "ses_chat_params",
-      agent: { name: "sisyphus" },
+      agent: { name: "architect" },
       model: { providerID: "opencode", modelID: "claude-sonnet-4-6" },
       provider: { id: "opencode" },
       message,
@@ -136,7 +136,7 @@ describe("createChatParamsHandler", () => {
 
     const input = {
       sessionID: "ses_chat_params_temperature",
-      agent: { name: "oracle" },
+      agent: { name: "strategist" },
       model: { providerID: "openai", modelID: "gpt-5.4" },
       provider: { id: "openai" },
       message: {},
@@ -188,7 +188,7 @@ describe("createChatParamsHandler", () => {
 
     const input = {
       sessionID: "ses_chat_params_temperature",
-      agent: { name: "oracle" },
+      agent: { name: "strategist" },
       model: { providerID: "openai", modelID: "gpt-5.4" },
       provider: { id: "openai" },
       message: {},
@@ -229,7 +229,7 @@ describe("createChatParamsHandler", () => {
 
     const input = {
       sessionID: "ses_chat_params",
-      agent: { name: "oracle" },
+      agent: { name: "strategist" },
       model: { providerID: "openai", modelID: "gpt-4.1" },
       provider: { id: "openai" },
       message: {},

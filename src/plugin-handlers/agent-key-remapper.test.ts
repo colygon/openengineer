@@ -6,17 +6,17 @@ describe("remapAgentKeysToDisplayNames", () => {
   it("remaps known agent keys to display names", () => {
     // given agents with lowercase keys
     const agents = {
-      sisyphus: { prompt: "test", mode: "primary" },
-      oracle: { prompt: "test", mode: "subagent" },
+      architect: { prompt: "test", mode: "primary" },
+      strategist: { prompt: "test", mode: "subagent" },
     }
 
     // when remapping
     const result = remapAgentKeysToDisplayNames(agents)
 
     // then known agents get display name keys only
-    expect(result[getAgentListDisplayName("sisyphus")]).toBeDefined()
-    expect(result["oracle"]).toBeDefined()
-    expect(result["sisyphus"]).toBeUndefined()
+    expect(result[getAgentListDisplayName("architect")]).toBeDefined()
+    expect(result["strategist"]).toBeDefined()
+    expect(result["architect"]).toBeUndefined()
   })
 
   it("preserves unknown agent keys unchanged", () => {
@@ -35,60 +35,60 @@ describe("remapAgentKeysToDisplayNames", () => {
   it("remaps all core agents to display names", () => {
     // given all core agents
     const agents = {
-      sisyphus: {},
-      hephaestus: {},
-      prometheus: {},
-      atlas: {},
+      architect: {},
+      engineer: {},
+      "product-manager": {},
+      "technical-lead": {},
       athena: {},
-      metis: {},
-      momus: {},
-      "sisyphus-junior": {},
+      consultant: {},
+      "qa-engineer": {},
+      "junior-architect": {},
     }
 
     // when remapping
     const result = remapAgentKeysToDisplayNames(agents)
 
     // then all get display name keys
-    expect(result[getAgentListDisplayName("sisyphus")]).toBeDefined()
-    expect(result["sisyphus"]).toBeUndefined()
-    expect(result[getAgentListDisplayName("hephaestus")]).toBeDefined()
-    expect(result["hephaestus"]).toBeUndefined()
-    expect(result[getAgentListDisplayName("prometheus")]).toBeDefined()
-    expect(result["prometheus"]).toBeUndefined()
-    expect(result[getAgentListDisplayName("atlas")]).toBeDefined()
-    expect(result["atlas"]).toBeUndefined()
+    expect(result[getAgentListDisplayName("architect")]).toBeDefined()
+    expect(result["architect"]).toBeUndefined()
+    expect(result[getAgentListDisplayName("engineer")]).toBeDefined()
+    expect(result["engineer"]).toBeUndefined()
+    expect(result[getAgentListDisplayName("product-manager")]).toBeDefined()
+    expect(result["product-manager"]).toBeUndefined()
+    expect(result[getAgentListDisplayName("technical-lead")]).toBeDefined()
+    expect(result["technical-lead"]).toBeUndefined()
     expect(result[getAgentDisplayName("athena")]).toBeDefined()
     expect(result["athena"]).toBeUndefined()
-    expect(result[getAgentDisplayName("metis")]).toBeDefined()
-    expect(result["metis"]).toBeUndefined()
-    expect(result[getAgentDisplayName("momus")]).toBeDefined()
-    expect(result["momus"]).toBeUndefined()
-    expect(result[getAgentDisplayName("sisyphus-junior")]).toBeDefined()
-    expect(result["sisyphus-junior"]).toBeUndefined()
+    expect(result[getAgentDisplayName("consultant")]).toBeDefined()
+    expect(result["consultant"]).toBeUndefined()
+    expect(result[getAgentDisplayName("qa-engineer")]).toBeDefined()
+    expect(result["qa-engineer"]).toBeUndefined()
+    expect(result[getAgentDisplayName("junior-architect")]).toBeDefined()
+    expect(result["junior-architect"]).toBeUndefined()
   })
 
   it("does not emit both config and display keys for remapped agents", () => {
     // given one remapped agent
     const agents = {
-      sisyphus: { prompt: "test", mode: "primary" },
+      architect: { prompt: "test", mode: "primary" },
     }
 
     // when remapping
     const result = remapAgentKeysToDisplayNames(agents)
 
     // then only display key is emitted
-    expect(Object.keys(result)).toEqual([getAgentListDisplayName("sisyphus")])
-    expect(result[getAgentListDisplayName("sisyphus")]).toBeDefined()
-    expect(result["sisyphus"]).toBeUndefined()
+    expect(Object.keys(result)).toEqual([getAgentListDisplayName("architect")])
+    expect(result[getAgentListDisplayName("architect")]).toBeDefined()
+    expect(result["architect"]).toBeUndefined()
   })
 
   it("returns runtime core agent list names in canonical order", () => {
     // given
     const result = remapAgentKeysToDisplayNames({
-      atlas: {},
-      prometheus: {},
-      hephaestus: {},
-      sisyphus: {},
+      "technical-lead": {},
+      "product-manager": {},
+      engineer: {},
+      architect: {},
     })
 
     // when
@@ -96,21 +96,21 @@ describe("remapAgentKeysToDisplayNames", () => {
 
     // then
     expect(remappedNames).toEqual([
-      getAgentListDisplayName("atlas"),
-      getAgentListDisplayName("prometheus"),
-      getAgentListDisplayName("hephaestus"),
-      getAgentListDisplayName("sisyphus"),
+      getAgentListDisplayName("technical-lead"),
+      getAgentListDisplayName("product-manager"),
+      getAgentListDisplayName("engineer"),
+      getAgentListDisplayName("architect"),
     ])
   })
 
   it("keeps remapped core agent name fields aligned with OpenCode list ordering", () => {
     // given agents with raw config-key names
     const agents = {
-      sisyphus: { name: "sisyphus", prompt: "test", mode: "primary" },
-      hephaestus: { name: "hephaestus", prompt: "test", mode: "primary" },
-      prometheus: { name: "prometheus", prompt: "test", mode: "primary" },
-      atlas: { name: "atlas", prompt: "test", mode: "primary" },
-      oracle: { name: "oracle", prompt: "test", mode: "subagent" },
+      architect: { name: "architect", prompt: "test", mode: "primary" },
+      engineer: { name: "engineer", prompt: "test", mode: "primary" },
+      "product-manager": { name: "product-manager", prompt: "test", mode: "primary" },
+      "technical-lead": { name: "technical-lead", prompt: "test", mode: "primary" },
+      strategist: { name: "strategist", prompt: "test", mode: "subagent" },
     }
 
     // when remapping
@@ -118,64 +118,64 @@ describe("remapAgentKeysToDisplayNames", () => {
 
     // then keys and names both use the same runtime-facing list names
     expect(Object.keys(result).slice(0, 4)).toEqual([
-      getAgentListDisplayName("sisyphus"),
-      getAgentListDisplayName("hephaestus"),
-      getAgentListDisplayName("prometheus"),
-      getAgentListDisplayName("atlas"),
+      getAgentListDisplayName("architect"),
+      getAgentListDisplayName("engineer"),
+      getAgentListDisplayName("product-manager"),
+      getAgentListDisplayName("technical-lead"),
     ])
-    expect(result[getAgentListDisplayName("sisyphus")]).toEqual({
-      name: getAgentRuntimeName("sisyphus"),
+    expect(result[getAgentListDisplayName("architect")]).toEqual({
+      name: getAgentRuntimeName("architect"),
       prompt: "test",
       mode: "primary",
     })
-    expect(result[getAgentListDisplayName("hephaestus")]).toEqual({
-      name: getAgentRuntimeName("hephaestus"),
+    expect(result[getAgentListDisplayName("engineer")]).toEqual({
+      name: getAgentRuntimeName("engineer"),
       prompt: "test",
       mode: "primary",
     })
-    expect(result[getAgentListDisplayName("prometheus")]).toEqual({
-      name: getAgentRuntimeName("prometheus"),
+    expect(result[getAgentListDisplayName("product-manager")]).toEqual({
+      name: getAgentRuntimeName("product-manager"),
       prompt: "test",
       mode: "primary",
     })
-    expect(result[getAgentListDisplayName("atlas")]).toEqual({
-      name: getAgentRuntimeName("atlas"),
+    expect(result[getAgentListDisplayName("technical-lead")]).toEqual({
+      name: getAgentRuntimeName("technical-lead"),
       prompt: "test",
       mode: "primary",
     })
-    expect(result.oracle).toEqual({ name: "oracle", prompt: "test", mode: "subagent" })
+    expect(result.strategist).toEqual({ name: "strategist", prompt: "test", mode: "subagent" })
   })
 
   it("backfills runtime names for core agents when builtin configs omit name", () => {
     // given builtin-style configs without name fields
     const agents = {
-      sisyphus: { prompt: "test", mode: "primary" },
-      hephaestus: { prompt: "test", mode: "primary" },
-      prometheus: { prompt: "test", mode: "primary" },
-      atlas: { prompt: "test", mode: "primary" },
+      architect: { prompt: "test", mode: "primary" },
+      engineer: { prompt: "test", mode: "primary" },
+      "product-manager": { prompt: "test", mode: "primary" },
+      "technical-lead": { prompt: "test", mode: "primary" },
     }
 
     // when remapping
     const result = remapAgentKeysToDisplayNames(agents)
 
     // then runtime-facing names stay aligned even when builtin configs omit name
-    expect(result[getAgentListDisplayName("sisyphus")]).toEqual({
-      name: getAgentRuntimeName("sisyphus"),
+    expect(result[getAgentListDisplayName("architect")]).toEqual({
+      name: getAgentRuntimeName("architect"),
       prompt: "test",
       mode: "primary",
     })
-    expect(result[getAgentListDisplayName("hephaestus")]).toEqual({
-      name: getAgentRuntimeName("hephaestus"),
+    expect(result[getAgentListDisplayName("engineer")]).toEqual({
+      name: getAgentRuntimeName("engineer"),
       prompt: "test",
       mode: "primary",
     })
-    expect(result[getAgentListDisplayName("prometheus")]).toEqual({
-      name: getAgentRuntimeName("prometheus"),
+    expect(result[getAgentListDisplayName("product-manager")]).toEqual({
+      name: getAgentRuntimeName("product-manager"),
       prompt: "test",
       mode: "primary",
     })
-    expect(result[getAgentListDisplayName("atlas")]).toEqual({
-      name: getAgentRuntimeName("atlas"),
+    expect(result[getAgentListDisplayName("technical-lead")]).toEqual({
+      name: getAgentRuntimeName("technical-lead"),
       prompt: "test",
       mode: "primary",
     })

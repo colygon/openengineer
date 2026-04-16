@@ -35,11 +35,11 @@ describe("category-skill-reminder hook", () => {
   }
 
   describe("target agent detection", () => {
-    test("should inject reminder for sisyphus agent after 3 tool calls", async () => {
-      // given - sisyphus agent session with multiple tool calls
+    test("should inject reminder for architect agent after 3 tool calls", async () => {
+      // given - architect agent session with multiple tool calls
       const hook = createHook()
-      const sessionID = "sisyphus-session"
-      updateSessionAgent(sessionID, "Sisyphus")
+      const sessionID = "architect-session"
+      updateSessionAgent(sessionID, "Architect")
 
       const output = { title: "", output: "file content", metadata: {} }
 
@@ -55,11 +55,11 @@ describe("category-skill-reminder hook", () => {
       clearSessionAgent(sessionID)
     })
 
-    test("should inject reminder for atlas agent", async () => {
-      // given - atlas agent session
+    test("should inject reminder for technical-lead agent", async () => {
+      // given - technicalLead agent session
       const hook = createHook()
-      const sessionID = "atlas-session"
-      updateSessionAgent(sessionID, "Atlas")
+      const sessionID = "technical-lead-session"
+      updateSessionAgent(sessionID, "TechnicalLead")
 
       const output = { title: "", output: "result", metadata: {} }
 
@@ -74,11 +74,11 @@ describe("category-skill-reminder hook", () => {
       clearSessionAgent(sessionID)
     })
 
-    test("should inject reminder for sisyphus-junior agent", async () => {
-      // given - sisyphus-junior agent session
+    test("should inject reminder for junior-architect agent", async () => {
+      // given - juniorArchitect agent session
       const hook = createHook()
       const sessionID = "junior-session"
-      updateSessionAgent(sessionID, "sisyphus-junior")
+      updateSessionAgent(sessionID, "junior-architect")
 
       const output = { title: "", output: "result", metadata: {} }
 
@@ -120,9 +120,9 @@ describe("category-skill-reminder hook", () => {
       const output = { title: "", output: "result", metadata: {} }
 
       // when - 3 tool calls with agent in input
-      await hook["tool.execute.after"]({ tool: "edit", sessionID, callID: "1", agent: "Sisyphus" }, output)
-      await hook["tool.execute.after"]({ tool: "edit", sessionID, callID: "2", agent: "Sisyphus" }, output)
-      await hook["tool.execute.after"]({ tool: "edit", sessionID, callID: "3", agent: "Sisyphus" }, output)
+      await hook["tool.execute.after"]({ tool: "edit", sessionID, callID: "1", agent: "Architect" }, output)
+      await hook["tool.execute.after"]({ tool: "edit", sessionID, callID: "2", agent: "Architect" }, output)
+      await hook["tool.execute.after"]({ tool: "edit", sessionID, callID: "3", agent: "Architect" }, output)
 
       // then - reminder should be injected
       expect(output.output).toContain("[Category+Skill Reminder]")
@@ -131,10 +131,10 @@ describe("category-skill-reminder hook", () => {
 
   describe("delegation tool tracking", () => {
     test("should NOT inject reminder if task is used", async () => {
-      // given - sisyphus agent that uses task
+      // given - architect agent that uses task
       const hook = createHook()
       const sessionID = "delegation-session"
-      updateSessionAgent(sessionID, "Sisyphus")
+      updateSessionAgent(sessionID, "Architect")
 
       const output = { title: "", output: "result", metadata: {} }
 
@@ -151,10 +151,10 @@ describe("category-skill-reminder hook", () => {
     })
 
     test("should NOT inject reminder if call_omo_agent is used", async () => {
-      // given - sisyphus agent that uses call_omo_agent
+      // given - architect agent that uses call_omo_agent
       const hook = createHook()
       const sessionID = "omo-agent-session"
-      updateSessionAgent(sessionID, "Sisyphus")
+      updateSessionAgent(sessionID, "Architect")
 
       const output = { title: "", output: "result", metadata: {} }
 
@@ -171,10 +171,10 @@ describe("category-skill-reminder hook", () => {
     })
 
     test("should NOT inject reminder if task tool is used", async () => {
-      // given - sisyphus agent that uses task tool
+      // given - architect agent that uses task tool
       const hook = createHook()
       const sessionID = "task-session"
-      updateSessionAgent(sessionID, "Sisyphus")
+      updateSessionAgent(sessionID, "Architect")
 
       const output = { title: "", output: "result", metadata: {} }
 
@@ -193,10 +193,10 @@ describe("category-skill-reminder hook", () => {
 
   describe("tool call counting", () => {
     test("should NOT inject reminder before 3 tool calls", async () => {
-      // given - sisyphus agent with only 2 tool calls
+      // given - architect agent with only 2 tool calls
       const hook = createHook()
       const sessionID = "few-calls-session"
-      updateSessionAgent(sessionID, "Sisyphus")
+      updateSessionAgent(sessionID, "Architect")
 
       const output = { title: "", output: "result", metadata: {} }
 
@@ -211,10 +211,10 @@ describe("category-skill-reminder hook", () => {
     })
 
     test("should only inject reminder once per session", async () => {
-      // given - sisyphus agent session
+      // given - architect agent session
       const hook = createHook()
       const sessionID = "once-session"
-      updateSessionAgent(sessionID, "Sisyphus")
+      updateSessionAgent(sessionID, "Architect")
 
       const output1 = { title: "", output: "result1", metadata: {} }
       const output2 = { title: "", output: "result2", metadata: {} }
@@ -235,10 +235,10 @@ describe("category-skill-reminder hook", () => {
     })
 
     test("should only count delegatable work tools", async () => {
-      // given - sisyphus agent with mixed tool calls
+      // given - architect agent with mixed tool calls
       const hook = createHook()
       const sessionID = "mixed-tools-session"
-      updateSessionAgent(sessionID, "Sisyphus")
+      updateSessionAgent(sessionID, "Architect")
 
       const output = { title: "", output: "result", metadata: {} }
 
@@ -256,10 +256,10 @@ describe("category-skill-reminder hook", () => {
 
   describe("event handling", () => {
     test("should reset state on session.deleted event", async () => {
-      // given - sisyphus agent with reminder already shown
+      // given - architect agent with reminder already shown
       const hook = createHook()
       const sessionID = "delete-session"
-      updateSessionAgent(sessionID, "Sisyphus")
+      updateSessionAgent(sessionID, "Architect")
 
       const output1 = { title: "", output: "result1", metadata: {} }
       await hook["tool.execute.after"]({ tool: "edit", sessionID, callID: "1" }, output1)
@@ -282,10 +282,10 @@ describe("category-skill-reminder hook", () => {
     })
 
     test("should reset state on session.compacted event", async () => {
-      // given - sisyphus agent with reminder already shown
+      // given - architect agent with reminder already shown
       const hook = createHook()
       const sessionID = "compact-session"
-      updateSessionAgent(sessionID, "Sisyphus")
+      updateSessionAgent(sessionID, "Architect")
 
       const output1 = { title: "", output: "result1", metadata: {} }
       await hook["tool.execute.after"]({ tool: "edit", sessionID, callID: "1" }, output1)
@@ -310,10 +310,10 @@ describe("category-skill-reminder hook", () => {
 
   describe("case insensitivity", () => {
     test("should handle tool names case-insensitively", async () => {
-      // given - sisyphus agent with mixed case tool names
+      // given - architect agent with mixed case tool names
       const hook = createHook()
       const sessionID = "case-session"
-      updateSessionAgent(sessionID, "Sisyphus")
+      updateSessionAgent(sessionID, "Architect")
 
       const output = { title: "", output: "result", metadata: {} }
 
@@ -329,10 +329,10 @@ describe("category-skill-reminder hook", () => {
     })
 
     test("should handle delegation tool names case-insensitively", async () => {
-      // given - sisyphus agent using TASK in uppercase
+      // given - architect agent using TASK in uppercase
       const hook = createHook()
       const sessionID = "case-delegate-session"
-      updateSessionAgent(sessionID, "Sisyphus")
+      updateSessionAgent(sessionID, "Architect")
 
       const output = { title: "", output: "result", metadata: {} }
 
@@ -359,7 +359,7 @@ describe("category-skill-reminder hook", () => {
       ]
       const hook = createHook(availableSkills)
       const sessionID = "builtins-only"
-      updateSessionAgent(sessionID, "Sisyphus")
+      updateSessionAgent(sessionID, "Architect")
       const output = { title: "", output: "result", metadata: {} }
 
       // when
@@ -383,7 +383,7 @@ describe("category-skill-reminder hook", () => {
       ]
       const hook = createHook(availableSkills)
       const sessionID = "user-skills"
-      updateSessionAgent(sessionID, "Atlas")
+      updateSessionAgent(sessionID, "TechnicalLead")
       const output = { title: "", output: "result", metadata: {} }
 
       // when
@@ -402,7 +402,7 @@ describe("category-skill-reminder hook", () => {
       // given
       const hook = createHook([])
       const sessionID = "no-skills"
-      updateSessionAgent(sessionID, "Sisyphus")
+      updateSessionAgent(sessionID, "Architect")
       const output = { title: "", output: "result", metadata: {} }
 
       // when

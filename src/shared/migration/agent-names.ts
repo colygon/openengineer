@@ -1,62 +1,62 @@
 export const AGENT_NAME_MAP: Record<string, string> = {
-  // Sisyphus variants → "sisyphus"
-  omo: "sisyphus",
-  OmO: "sisyphus",
-  Sisyphus: "sisyphus",
-  "Sisyphus (Ultraworker)": "sisyphus",
-  sisyphus: "sisyphus",
+  // Architect variants → "architect"
+  omo: "architect",
+  OmO: "architect",
+  Architect: "architect",
+  "Architect (Ultraworker)": "architect",
+  architect: "architect",
 
-  // Hephaestus variants → "hephaestus"
-  "Hephaestus (Deep Agent)": "hephaestus",
+  // Engineer variants → "engineer"
+  "Engineer (Deep Agent)": "engineer",
 
-  // Prometheus variants → "prometheus"
-  "OmO-Plan": "prometheus",
-  "omo-plan": "prometheus",
-  "Planner-Sisyphus": "prometheus",
-  "planner-sisyphus": "prometheus",
-  "Prometheus - Plan Builder": "prometheus",
-  "Prometheus (Plan Builder)": "prometheus",
-  prometheus: "prometheus",
+  // ProductManager variants → "product-manager"
+  "OmO-Plan": "product-manager",
+  "omo-plan": "product-manager",
+  "Planner-Architect": "product-manager",
+  "planner-architect": "product-manager",
+  "ProductManager - Plan Builder": "product-manager",
+  "ProductManager (Plan Builder)": "product-manager",
+  "product-manager": "product-manager",
 
-  // Atlas variants → "atlas"
-  "orchestrator-sisyphus": "atlas",
-  Atlas: "atlas",
-  "Atlas (Plan Executor)": "atlas",
-  atlas: "atlas",
+  // TechnicalLead variants → "technical-lead"
+  "orchestrator-architect": "technical-lead",
+  TechnicalLead: "technical-lead",
+  "TechnicalLead (Plan Executor)": "technical-lead",
+  "technical-lead": "technical-lead",
 
-  // Metis variants → "metis"
-  "plan-consultant": "metis",
-  "Metis - Plan Consultant": "metis",
-  "Metis (Plan Consultant)": "metis",
-  metis: "metis",
+  // Consultant variants → "consultant"
+  "plan-consultant": "consultant",
+  "Consultant - Plan Consultant": "consultant",
+  "Consultant (Plan Consultant)": "consultant",
+  consultant: "consultant",
 
-  // Momus variants → "momus"
-  "Momus - Plan Critic": "momus",
-  "Momus (Plan Critic)": "momus",
-  momus: "momus",
+  // QaEngineer variants → "qa-engineer"
+  "QaEngineer - Plan Critic": "qa-engineer",
+  "QaEngineer (Plan Critic)": "qa-engineer",
+  "qa-engineer": "qa-engineer",
 
-  // Sisyphus-Junior → "sisyphus-junior"
-  "Sisyphus-Junior": "sisyphus-junior",
-  "sisyphus-junior": "sisyphus-junior",
+  // Architect-Junior → "junior-architect"
+  "Architect-Junior": "junior-architect",
+  "junior-architect": "junior-architect",
 
   // Already lowercase - passthrough
   build: "build",
-  oracle: "oracle",
+  strategist: "strategist",
   librarian: "librarian",
-  explore: "explore",
-  "multimodal-looker": "multimodal-looker",
+  explore: "analyst",
+  "designer": "designer",
 }
 
 export const BUILTIN_AGENT_NAMES = new Set([
-  "sisyphus", // was "Sisyphus"
-  "oracle",
+  "architect", // was "Architect"
+  "strategist",
   "librarian",
-  "explore",
-  "multimodal-looker",
-  "metis", // was "Metis - Plan Consultant"
-  "momus", // was "Momus - Plan Critic"
-  "prometheus", // was "Prometheus - Plan Builder"
-  "atlas", // was "Atlas"
+  "analyst",
+  "designer",
+  "consultant", // was "Consultant - Plan Consultant"
+  "qa-engineer", // was "QaEngineer - Plan Critic"
+  "product-manager", // was "ProductManager - Plan Builder"
+  "technical-lead", // was "TechnicalLead"
   "build",
 ])
 

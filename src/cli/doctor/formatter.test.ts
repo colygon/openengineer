@@ -61,7 +61,7 @@ function createDoctorResultWithDetails(): DoctorResult {
       name: "Models",
       status: "pass",
       message: "2 agents, 1 category, 0 overrides",
-      details: ["Available models: openai/gpt-5.4", "Agent sisyphus -> openai/gpt-5.4"],
+      details: ["Available models: openai/gpt-5.4", "Agent architect -> openai/gpt-5.4"],
       issues: [],
     },
   ]
@@ -168,7 +168,7 @@ describe("formatDoctorOutput", () => {
       //#then
       expect(output).toContain("Models")
       expect(output).toContain("Available models: openai/gpt-5.4")
-      expect(output).toContain("Agent sisyphus -> openai/gpt-5.4")
+      expect(output).toContain("Agent architect -> openai/gpt-5.4")
     })
   })
 

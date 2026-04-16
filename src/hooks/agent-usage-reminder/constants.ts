@@ -34,8 +34,8 @@ RECOMMENDED: Use task with explore/librarian agents for better results:
 
 \`\`\`
 // Parallel exploration - fire multiple agents simultaneously
-task(subagent_type="explore", load_skills=[], prompt="Find all files matching pattern X")
-task(subagent_type="explore", load_skills=[], prompt="Search for implementation of Y")
+task(subagent_type="analyst", load_skills=[], prompt="Find all files matching pattern X")
+task(subagent_type="analyst", load_skills=[], prompt="Search for implementation of Y")
 task(subagent_type="librarian", load_skills=[], prompt="Lookup documentation for Z")
 
 // Then continue your work while they run in background

@@ -64,7 +64,7 @@ describe("createAutoUpdateCheckerHook", () => {
 
     const hook = createAutoUpdateCheckerHook(createPluginInput(), {
       showStartupToast: true,
-      isSisyphusEnabled: true,
+      isArchitectEnabled: true,
       autoUpdate: true,
     }, {
       getCachedVersion: mockGetCachedVersion,
@@ -242,10 +242,10 @@ describe("createAutoUpdateCheckerHook", () => {
     expect(mockRunBackgroundUpdateCheck).not.toHaveBeenCalled()
   })
 
-  it("passes correct toast message with sisyphus enabled", async () => {
-    //#given - sisyphus mode enabled
+  it("passes correct toast message with architect enabled", async () => {
+    //#given - architect mode enabled
     const hook = createAutoUpdateCheckerHook(createPluginInput(), {
-      isSisyphusEnabled: true,
+      isArchitectEnabled: true,
     }, {
       getCachedVersion: mockGetCachedVersion,
       getLocalDevVersion: mockGetLocalDevVersion,
@@ -263,12 +263,12 @@ describe("createAutoUpdateCheckerHook", () => {
     runSessionCreatedEvent(hook)
     await flushScheduledWork()
 
-    //#then - startup toast includes sisyphus wording
+    //#then - startup toast includes architect wording
     expect(mockShowVersionToast).toHaveBeenCalledTimes(1)
     expect(mockShowVersionToast).toHaveBeenCalledWith(
       expect.anything(),
       "3.6.0",
-      expect.stringContaining("Sisyphus")
+      expect.stringContaining("Architect")
     )
   })
 })

@@ -123,7 +123,7 @@ export function createCallOmoAgent(
 
       const callableAgents = await resolveCallableAgents(ctx.client);
 
-      // Strip ZWSP and case-insensitive agent validation - allows "Explore", "EXPLORE", "explore" etc.
+      // Strip ZWSP and case-insensitive agent validation - allows "Explore", "ANALYST", "analyst" etc.
       const strippedAgentType = stripInvisibleAgentCharacters(args.subagent_type)
       if (
         !callableAgents.some(

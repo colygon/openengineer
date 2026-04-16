@@ -63,14 +63,14 @@ export function applyToolConfig(params: {
   if (librarian) {
     librarian.permission = { ...librarian.permission, "grep_app_*": "allow" };
   }
-  const looker = agentByKey(params.agentResult, "multimodal-looker");
+  const looker = agentByKey(params.agentResult, "designer");
   if (looker) {
     looker.permission = { ...looker.permission, task: "deny", look_at: "deny" };
   }
-  const atlas = agentByKey(params.agentResult, "atlas");
-  if (atlas) {
-    atlas.permission = {
-      ...atlas.permission,
+  const technicalLead = agentByKey(params.agentResult, "technical-lead");
+  if (technicalLead) {
+    technicalLead.permission = {
+      ...technicalLead.permission,
       task: "allow",
       call_omo_agent: "deny",
       "task_*": "allow",
@@ -78,10 +78,10 @@ export function applyToolConfig(params: {
       ...denyTodoTools,
     };
   }
-  const sisyphus = agentByKey(params.agentResult, "sisyphus");
-  if (sisyphus) {
-    sisyphus.permission = {
-      ...sisyphus.permission,
+  const architect = agentByKey(params.agentResult, "architect");
+  if (architect) {
+    architect.permission = {
+      ...architect.permission,
       call_omo_agent: "deny",
       task: "allow",
       question: questionPermission,
@@ -90,20 +90,20 @@ export function applyToolConfig(params: {
       ...denyTodoTools,
     };
   }
-  const hephaestus = agentByKey(params.agentResult, "hephaestus");
-  if (hephaestus) {
-    hephaestus.permission = {
-      ...hephaestus.permission,
+  const engineer = agentByKey(params.agentResult, "engineer");
+  if (engineer) {
+    engineer.permission = {
+      ...engineer.permission,
       call_omo_agent: "deny",
       task: "allow",
       question: questionPermission,
       ...denyTodoTools,
     };
   }
-  const prometheus = agentByKey(params.agentResult, "prometheus");
-  if (prometheus) {
-    prometheus.permission = {
-      ...prometheus.permission,
+  const productManager = agentByKey(params.agentResult, "product-manager");
+  if (productManager) {
+    productManager.permission = {
+      ...productManager.permission,
       call_omo_agent: "deny",
       task: "allow",
       question: questionPermission,
@@ -112,7 +112,7 @@ export function applyToolConfig(params: {
       ...denyTodoTools,
     };
   }
-  const junior = agentByKey(params.agentResult, "sisyphus-junior");
+  const junior = agentByKey(params.agentResult, "junior-architect");
   if (junior) {
     junior.permission = {
       ...junior.permission,

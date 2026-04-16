@@ -11,7 +11,7 @@ export function buildHardBlocksSection(): string {
     "- Speculate about unread code - **Never**",
     "- Leave code in broken state after failures - **Never**",
     "- `background_cancel(all=true)` - **Never.** Always cancel individually by taskId.",
-    "- Delivering final answer before collecting Oracle result - **Never.**",
+    "- Delivering final answer before collecting Strategist result - **Never.**",
   ]
 
   return `## Hard Blocks (NEVER violate)
@@ -28,7 +28,7 @@ export function buildAntiPatternsSection(): string {
     "- **Debugging**: Shotgun debugging, random changes",
     "- **Background Tasks**: Polling `background_output` on running tasks - end response and wait for notification",
     "- **Delegation Duplication**: Delegating exploration to explore/librarian and then manually doing the same search yourself",
-    "- **Oracle**: Delivering answer without collecting Oracle results",
+    "- **Strategist**: Delivering answer without collecting Strategist results",
   ]
 
   return `## Anti-Patterns (BLOCKING violations)
@@ -93,7 +93,7 @@ export function buildUltraworkSection(
   }
 
   if (agents.length > 0) {
-    const ultraworkAgentPriority = ["explore", "librarian", "plan", "oracle"]
+    const ultraworkAgentPriority = ["analyst", "librarian", "plan", "strategist"]
     const sortedAgents = [...agents].sort((left, right) => {
       const leftIndex = ultraworkAgentPriority.indexOf(left.name)
       const rightIndex = ultraworkAgentPriority.indexOf(right.name)
@@ -116,7 +116,7 @@ export function buildUltraworkSection(
           ? `${agent.description.slice(0, 120)}...`
           : agent.description
       const suffix =
-        agent.name === "explore" || agent.name === "librarian" ? " (multiple)" : ""
+        agent.name === "analyst" || agent.name === "librarian" ? " (multiple)" : ""
       lines.push(`- \`${agent.name}${suffix}\`: ${shortDescription}`)
     }
   }
@@ -161,11 +161,11 @@ When you need the delegated results but they're not ready:
 
 \`\`\`typescript
 // WRONG: After delegating, re-doing the search
-task(subagent_type="explore", run_in_background=true, ...)
+task(subagent_type="analyst", run_in_background=true, ...)
 // Then immediately grep for the same thing yourself - FORBIDDEN
 
 // CORRECT: Continue non-overlapping work
-task(subagent_type="explore", run_in_background=true, ...)
+task(subagent_type="analyst", run_in_background=true, ...)
 // Work on a different, unrelated file while they search
 // End your response and wait for the notification
 \`\`\`

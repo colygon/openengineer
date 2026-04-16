@@ -1,0 +1,22 @@
+import { buildTechnicalLeadPrompt } from "./shared-prompt"
+import {
+  GPT_TECHNICAL_LEAD_INTRO,
+  GPT_TECHNICAL_LEAD_WORKFLOW,
+  GPT_TECHNICAL_LEAD_PARALLEL_EXECUTION,
+  GPT_TECHNICAL_LEAD_VERIFICATION_RULES,
+  GPT_TECHNICAL_LEAD_BOUNDARIES,
+  GPT_TECHNICAL_LEAD_CRITICAL_RULES,
+} from "./gpt-prompt-sections"
+
+export const TECHNICAL_LEAD_GPT_SYSTEM_PROMPT = buildTechnicalLeadPrompt({
+  intro: GPT_TECHNICAL_LEAD_INTRO,
+  workflow: GPT_TECHNICAL_LEAD_WORKFLOW,
+  parallelExecution: GPT_TECHNICAL_LEAD_PARALLEL_EXECUTION,
+  verificationRules: GPT_TECHNICAL_LEAD_VERIFICATION_RULES,
+  boundaries: GPT_TECHNICAL_LEAD_BOUNDARIES,
+  criticalRules: GPT_TECHNICAL_LEAD_CRITICAL_RULES,
+})
+
+export function getGptTechnicalLeadPrompt(): string {
+  return TECHNICAL_LEAD_GPT_SYSTEM_PROMPT
+}

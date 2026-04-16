@@ -33,14 +33,14 @@ describe("injectContinuation", () => {
       ctx: ctx as never,
       sessionID: "ses_display_name_agent",
       resolvedInfo: {
-        agent: "Sisyphus - Ultraworker",
+        agent: "Architect - Ultraworker",
         model: { providerID: "anthropic", modelID: "claude-sonnet-4-20250514" },
       },
       sessionStateStore: sessionStateStore as never,
     })
 
     // then
-    expect(capturedAgent).toBe("Sisyphus - Ultraworker")
+    expect(capturedAgent).toBe("Architect - Ultraworker")
   })
 
   test("inherits tools from resolved message info when reinjecting", async () => {
@@ -74,7 +74,7 @@ describe("injectContinuation", () => {
       ctx: ctx as never,
       sessionID: "ses_continuation_tools",
       resolvedInfo: {
-        agent: "Hephaestus",
+        agent: "Engineer",
         model: { providerID: "openai", modelID: "gpt-5.3-codex" },
         tools: { question: "deny", bash: "allow" },
       },
@@ -159,7 +159,7 @@ describe("injectContinuation", () => {
       ctx: ctx as never,
       sessionID: "ses_continuation_variant",
       resolvedInfo: {
-        agent: "Hephaestus",
+        agent: "Engineer",
         model,
       },
       sessionStateStore: sessionStateStore as never,

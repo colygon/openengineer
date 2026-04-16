@@ -61,7 +61,7 @@ export function createToolExecuteAfterHandler(args: {
       const verificationAttemptId = prompt?.match(VERIFICATION_ATTEMPT_PATTERN)?.[1]?.trim()
       const loopState = directory ? readState(directory) : null
       const isVerificationContext =
-        (agent ? stripInvisibleAgentCharacters(agent) : agent) === "oracle"
+        (agent ? stripInvisibleAgentCharacters(agent) : agent) === "strategist"
         && !!sessionId
         && !!directory
         && loopState?.active === true
@@ -73,7 +73,7 @@ export function createToolExecuteAfterHandler(args: {
         tool: input.tool,
         agent,
         parentSessionID: input.sessionID,
-        oracleSessionID: sessionId,
+        strategistSessionID: sessionId,
         hasPromptInMetadata: typeof prompt === "string",
         extractedVerificationAttemptId: verificationAttemptId,
       })
@@ -87,9 +87,9 @@ export function createToolExecuteAfterHandler(args: {
           ...loopState,
           verification_session_id: sessionId,
         })
-        log("[tool-execute-after] Stored oracle verification session via attempt match", {
+        log("[tool-execute-after] Stored strategist verification session via attempt match", {
           parentSessionID: input.sessionID,
-          oracleSessionID: sessionId,
+          strategistSessionID: sessionId,
           verificationAttemptId,
         })
       } else if (isVerificationContext && !verificationAttemptId) {
@@ -97,9 +97,9 @@ export function createToolExecuteAfterHandler(args: {
           ...loopState,
           verification_session_id: sessionId,
         })
-        log("[tool-execute-after] Fallback: stored oracle verification session without attempt match", {
+        log("[tool-execute-after] Fallback: stored strategist verification session without attempt match", {
           parentSessionID: input.sessionID,
-          oracleSessionID: sessionId,
+          strategistSessionID: sessionId,
           hasPromptInMetadata: typeof prompt === "string",
           expectedAttemptId: loopState.verification_attempt_id,
           extractedAttemptId: verificationAttemptId,
@@ -122,7 +122,7 @@ export function createToolExecuteAfterHandler(args: {
       await hooks.interactiveBashSession?.["tool.execute.after"]?.(input, output)
       await hooks.editErrorRecovery?.["tool.execute.after"]?.(input, output)
       await hooks.delegateTaskRetry?.["tool.execute.after"]?.(input, output)
-      await hooks.atlasHook?.["tool.execute.after"]?.(input, output)
+      await hooks.technicalLeadHook?.["tool.execute.after"]?.(input, output)
       await hooks.taskResumeInfo?.["tool.execute.after"]?.(input, output)
       await hooks.readImageResizer?.["tool.execute.after"]?.(input, output)
       await hooks.hashlineReadEnhancer?.["tool.execute.after"]?.(input, output)

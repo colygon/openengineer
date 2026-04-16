@@ -3,7 +3,7 @@ import {
   appendSessionId,
   clearBoulderState,
   createBoulderState,
-  findPrometheusPlans,
+  findProductManagerPlans,
   getPlanName,
   getPlanProgress,
   readBoulderState,
@@ -95,7 +95,7 @@ Ask the user which plan to work on.`
 ## Plan Not Found
 
  Could not find a plan matching "${explicitPlanName}".
- No incomplete plans available. Create a new plan using the Prometheus agent.`
+ No incomplete plans available. Create a new plan using the ProductManager agent.`
 }
 
 function buildExplicitPlanContext(params: {
@@ -111,7 +111,7 @@ function buildExplicitPlanContext(params: {
   const { explicitPlanName, existingState, sessionId, timestamp, activeAgent, worktreePath, worktreeBlock, directory } = params
   log(`[${HOOK_NAME}] Explicit plan name requested: ${explicitPlanName}`, { sessionID: sessionId })
 
-  const allPlans = findPrometheusPlans(directory)
+  const allPlans = findProductManagerPlans(directory)
   const matchedPlan = findPlanByName(allPlans, explicitPlanName)
   if (!matchedPlan) {
     return buildMissingPlanContext(explicitPlanName, allPlans)
@@ -123,7 +123,7 @@ function buildExplicitPlanContext(params: {
 ## Plan Already Complete
 
  The requested plan "${getPlanName(matchedPlan)}" has been completed.
- All ${progress.total} tasks are done. Create a new plan using the Prometheus agent.`
+ All ${progress.total} tasks are done. Create a new plan using the ProductManager agent.`
   }
 
   if (existingState) {
@@ -214,15 +214,15 @@ function buildPlanDiscoveryContext(params: {
   directory: string
 }): string {
   const { contextInfo, sessionId, timestamp, activeAgent, worktreePath, worktreeBlock, directory } = params
-  const plans = findPrometheusPlans(directory)
+  const plans = findProductManagerPlans(directory)
   const incompletePlans = plans.filter((p) => !getPlanProgress(p).isComplete)
 
   if (plans.length === 0) {
     return contextInfo + `
 ## No Plans Found
 
- No Prometheus plan files found in the .sisyphus plans directory.
- Use the Prometheus agent to create a work plan first.`
+ No ProductManager plan files found in the .openengineer plans directory.
+ Use the ProductManager agent to create a work plan first.`
   }
 
   if (incompletePlans.length === 0) {
@@ -230,7 +230,7 @@ function buildPlanDiscoveryContext(params: {
 
 ## All Plans Complete
 
- All ${plans.length} plan(s) are complete. Create a new plan using the Prometheus agent.`
+ All ${plans.length} plan(s) are complete. Create a new plan using the ProductManager agent.`
   }
 
   if (incompletePlans.length === 1) {

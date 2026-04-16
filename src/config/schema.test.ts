@@ -471,12 +471,12 @@ describe("HookNameSchema", () => {
   })
 })
 
-describe("Sisyphus-Junior agent override", () => {
-  test("schema accepts agents['Sisyphus-Junior'] and retains the key after parsing", () => {
+describe("Architect-Junior agent override", () => {
+  test("schema accepts agents['Architect-Junior'] and retains the key after parsing", () => {
     // given
     const config = {
       agents: {
-        "sisyphus-junior": {
+        "junior-architect": {
           model: "openai/gpt-5.4",
           temperature: 0.2,
         },
@@ -489,18 +489,18 @@ describe("Sisyphus-Junior agent override", () => {
     // then
     expect(result.success).toBe(true)
     if (result.success) {
-      expect(result.data.agents?.["sisyphus-junior"]).toBeDefined()
-      expect(result.data.agents?.["sisyphus-junior"]?.model).toBe("openai/gpt-5.4")
-      expect(result.data.agents?.["sisyphus-junior"]?.temperature).toBe(0.2)
+      expect(result.data.agents?.["junior-architect"]).toBeDefined()
+      expect(result.data.agents?.["junior-architect"]?.model).toBe("openai/gpt-5.4")
+      expect(result.data.agents?.["junior-architect"]?.temperature).toBe(0.2)
     }
   })
 
-  test("schema accepts sisyphus-junior with prompt_append", () => {
+  test("schema accepts junior-architect with prompt_append", () => {
     // given
     const config = {
       agents: {
-        "sisyphus-junior": {
-          prompt_append: "Additional instructions for sisyphus-junior",
+        "junior-architect": {
+          prompt_append: "Additional instructions for junior-architect",
         },
       },
     }
@@ -511,17 +511,17 @@ describe("Sisyphus-Junior agent override", () => {
     // then
     expect(result.success).toBe(true)
     if (result.success) {
-      expect(result.data.agents?.["sisyphus-junior"]?.prompt_append).toBe(
-        "Additional instructions for sisyphus-junior"
+      expect(result.data.agents?.["junior-architect"]?.prompt_append).toBe(
+        "Additional instructions for junior-architect"
       )
     }
   })
 
-  test("schema accepts sisyphus-junior with tools override", () => {
+  test("schema accepts junior-architect with tools override", () => {
     // given
     const config = {
       agents: {
-        "sisyphus-junior": {
+        "junior-architect": {
           tools: {
             read: true,
             write: false,
@@ -536,24 +536,24 @@ describe("Sisyphus-Junior agent override", () => {
     // then
     expect(result.success).toBe(true)
     if (result.success) {
-      expect(result.data.agents?.["sisyphus-junior"]?.tools).toEqual({
+      expect(result.data.agents?.["junior-architect"]?.tools).toEqual({
         read: true,
         write: false,
       })
     }
   })
 
-  test("schema accepts lowercase agent names (sisyphus, atlas, prometheus)", () => {
+  test("schema accepts lowercase agent names (architect, technical-lead, product-manager)", () => {
     // given
     const config = {
       agents: {
-        sisyphus: {
+        architect: {
           temperature: 0.1,
         },
-        atlas: {
+        "technical-lead": {
           temperature: 0.2,
         },
-        prometheus: {
+        "product-manager": {
           temperature: 0.3,
         },
       },
@@ -565,20 +565,20 @@ describe("Sisyphus-Junior agent override", () => {
     // then
     expect(result.success).toBe(true)
     if (result.success) {
-      expect(result.data.agents?.sisyphus?.temperature).toBe(0.1)
-      expect(result.data.agents?.atlas?.temperature).toBe(0.2)
-      expect(result.data.agents?.prometheus?.temperature).toBe(0.3)
+      expect(result.data.agents?.openengineer?.temperature).toBe(0.1)
+      expect(result.data.agents?.technicalLead?.temperature).toBe(0.2)
+      expect(result.data.agents?.productManager?.temperature).toBe(0.3)
     }
   })
 
-  test("schema accepts lowercase metis and momus agent names", () => {
+  test("schema accepts lowercase consultant and qa-engineer agent names", () => {
     // given
     const config = {
       agents: {
-        metis: {
+        consultant: {
           category: "ultrabrain",
         },
-        momus: {
+        "qa-engineer": {
           category: "quick",
         },
       },
@@ -590,8 +590,8 @@ describe("Sisyphus-Junior agent override", () => {
     // then
     expect(result.success).toBe(true)
     if (result.success) {
-      expect(result.data.agents?.metis?.category).toBe("ultrabrain")
-      expect(result.data.agents?.momus?.category).toBe("quick")
+      expect(result.data.agents?.consultant?.category).toBe("ultrabrain")
+      expect(result.data.agents?.qa-engineer?.category).toBe("quick")
     }
   })
 })

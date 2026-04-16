@@ -54,7 +54,7 @@ describe("writeOmoConfig", () => {
     // given
     const existingConfig = {
       agents: {
-        sisyphus: {
+        architect: {
           model: "custom/provider-model",
         },
       },
@@ -72,8 +72,8 @@ describe("writeOmoConfig", () => {
 
     const savedConfig = parseJsonc<Record<string, unknown>>(readFileSync(testConfigPath, "utf-8"))
     const savedAgents = getRecord(savedConfig.agents)
-    const savedSisyphus = getRecord(savedAgents.sisyphus)
-    expect(savedSisyphus.model).toBe("custom/provider-model")
+    const savedArchitect = getRecord(savedAgents.openengineer)
+    expect(savedArchitect.model).toBe("custom/provider-model")
     expect(savedConfig.disabled_hooks).toEqual(["comment-checker"])
 
     for (const defaultKey of Object.keys(generatedDefaults)) {

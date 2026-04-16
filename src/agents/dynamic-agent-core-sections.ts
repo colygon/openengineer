@@ -69,13 +69,13 @@ export function buildToolSelectionTable(
   }
 
   rows.push("")
-  rows.push("**Default flow**: explore/librarian (background) + tools → oracle (if required)")
+  rows.push("**Default flow**: explore/librarian (background) + tools → strategist (if required)")
 
   return rows.join("\n")
 }
 
 export function buildExploreSection(agents: AvailableAgent[]): string {
-  const exploreAgent = agents.find((agent) => agent.name === "explore")
+  const exploreAgent = agents.find((agent) => agent.name === "analyst")
   if (!exploreAgent) {
     return ""
   }
@@ -127,21 +127,21 @@ export function buildDelegationTable(agents: AvailableAgent[]): string {
   return rows.join("\n")
 }
 
-export function buildOracleSection(agents: AvailableAgent[]): string {
-  const oracleAgent = agents.find((agent) => agent.name === "oracle")
-  if (!oracleAgent) {
+export function buildStrategistSection(agents: AvailableAgent[]): string {
+  const strategistAgent = agents.find((agent) => agent.name === "strategist")
+  if (!strategistAgent) {
     return ""
   }
 
-  const useWhen = oracleAgent.metadata.useWhen || []
-  const avoidWhen = oracleAgent.metadata.avoidWhen || []
+  const useWhen = strategistAgent.metadata.useWhen || []
+  const avoidWhen = strategistAgent.metadata.avoidWhen || []
 
-  return `<Oracle_Usage>
-## Oracle - Read-Only High-IQ Consultant
+  return `<Strategist_Usage>
+## Strategist - Read-Only High-IQ Consultant
 
-Oracle is a read-only, expensive, high-quality reasoning model for debugging and architecture. Consultation only.
+Strategist is a read-only, expensive, high-quality reasoning model for debugging and architecture. Consultation only.
 
-### WHEN to Consult (Oracle FIRST, then implement):
+### WHEN to Consult (Strategist FIRST, then implement):
 
 ${useWhen.map((entry) => `- ${entry}`).join("\n")}
 
@@ -150,24 +150,24 @@ ${useWhen.map((entry) => `- ${entry}`).join("\n")}
 ${avoidWhen.map((entry) => `- ${entry}`).join("\n")}
 
 ### Usage Pattern:
-Briefly announce "Consulting Oracle for [reason]" before invocation.
+Briefly announce "Consulting Strategist for [reason]" before invocation.
 
 **Exception**: This is the ONLY case where you announce before acting. For all other work, start immediately without status updates.
 
-### Oracle Background Task Policy:
+### Strategist Background Task Policy:
 
-**Collect Oracle results before your final answer. No exceptions.**
+**Collect Strategist results before your final answer. No exceptions.**
 
-**Oracle-dependent implementation is BLOCKED until Oracle finishes.**
+**Strategist-dependent implementation is BLOCKED until Strategist finishes.**
 
-- If you asked Oracle for architecture/debugging direction that affects the fix, do not implement before Oracle result arrives.
-- While waiting, only do non-overlapping prep work. Never ship implementation decisions Oracle was asked to decide.
-- Never "time out and continue anyway" for Oracle-dependent tasks.
+- If you asked Strategist for architecture/debugging direction that affects the fix, do not implement before Strategist result arrives.
+- While waiting, only do non-overlapping prep work. Never ship implementation decisions Strategist was asked to decide.
+- Never "time out and continue anyway" for Strategist-dependent tasks.
 
-- Oracle takes minutes. When done with your own work: **end your response** - wait for the \`<system-reminder>\`.
-- Do NOT poll \`background_output\` on a running Oracle. The notification will come.
-- Never cancel Oracle.
-</Oracle_Usage>`
+- Strategist takes minutes. When done with your own work: **end your response** - wait for the \`<system-reminder>\`.
+- Do NOT poll \`background_output\` on a running Strategist. The notification will come.
+- Never cancel Strategist.
+</Strategist_Usage>`
 }
 
 export function buildNonClaudePlannerSection(model: string): string {

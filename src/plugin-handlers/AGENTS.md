@@ -4,7 +4,7 @@
 
 ## CRITICAL: AGENT ORDERING
 
-The canonical agent order is **sisyphus → hephaestus → prometheus → atlas**.
+The canonical agent order is **architect → engineer → product-manager → technical-lead**.
 
 This order is enforced via two mechanisms working together:
 1. `CANONICAL_CORE_AGENT_ORDER` in `agent-priority-order.ts` controls object key insertion order
@@ -62,9 +62,9 @@ PRs attempting these patterns will be rejected.
 | `command-config-handler.ts` | ~200 | 9 parallel sources for commands/skills |
 | `tool-config-handler.ts` | ~100 | Agent-specific tool grants/denials |
 | `provider-config-handler.ts` | ~80 | Provider config + model cache |
-| `prometheus-agent-config-builder.ts` | ~100 | Prometheus config with model resolution |
+| `product-manager-agent-config-builder.ts` | ~100 | ProductManager config with model resolution |
 | `plan-model-inheritance.ts` | 28 | Plan demotion logic |
-| `agent-priority-order.ts` | ~30 | sisyphus, hephaestus, prometheus, atlas first |
+| `agent-priority-order.ts` | ~30 | architect, engineer, product-manager, technical-lead first |
 | `agent-key-remapper.ts` | ~30 | Agent key → display name |
 | `category-config-resolver.ts` | ~40 | User vs default category lookup |
 | `index.ts` | ~10 | Barrel exports |
@@ -74,8 +74,8 @@ PRs attempting these patterns will be rejected.
 | Agent | Granted | Denied |
 |-------|---------|--------|
 | Librarian | grep_app_* | — |
-| Atlas, Sisyphus, Prometheus | task, task_*, teammate | — |
-| Hephaestus | task | — |
+| Atlas, Architect, ProductManager | task, task_*, teammate | — |
+| Engineer | task | — |
 | Default (all others) | — | grep_app_*, task_*, teammate, LSP |
 
 ## MULTI-LEVEL CONFIG MERGE

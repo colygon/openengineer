@@ -10,7 +10,7 @@ import {
   getPlanProgress,
   getPlanName,
   createBoulderState,
-  findPrometheusPlans,
+  findProductManagerPlans,
   getTaskSessionState,
   upsertTaskSessionState,
 } from "./storage"
@@ -19,14 +19,14 @@ import { readCurrentTopLevelTask } from "./top-level-task"
 
 describe("boulder-state", () => {
   const TEST_DIR = join(tmpdir(), "boulder-state-test-" + Date.now())
-  const SISYPHUS_DIR = join(TEST_DIR, ".sisyphus")
+  const ARCHITECT_DIR = join(TEST_DIR, ".openengineer")
 
   beforeEach(() => {
     if (!existsSync(TEST_DIR)) {
       mkdirSync(TEST_DIR, { recursive: true })
     }
-    if (!existsSync(SISYPHUS_DIR)) {
-      mkdirSync(SISYPHUS_DIR, { recursive: true })
+    if (!existsSync(ARCHITECT_DIR)) {
+      mkdirSync(ARCHITECT_DIR, { recursive: true })
     }
     clearBoulderState(TEST_DIR)
   })
@@ -48,7 +48,7 @@ describe("boulder-state", () => {
 
     test("should return null for JSON null value", () => {
       //#given - boulder.json containing null
-      const boulderFile = join(SISYPHUS_DIR, "boulder.json")
+      const boulderFile = join(ARCHITECT_DIR, "boulder.json")
       writeFileSync(boulderFile, "null")
 
       //#when
@@ -60,7 +60,7 @@ describe("boulder-state", () => {
 
     test("should return null for JSON primitive value", () => {
       //#given - boulder.json containing a string
-      const boulderFile = join(SISYPHUS_DIR, "boulder.json")
+      const boulderFile = join(ARCHITECT_DIR, "boulder.json")
       writeFileSync(boulderFile, '"just a string"')
 
       //#when
@@ -72,7 +72,7 @@ describe("boulder-state", () => {
 
     test("should default session_ids to [] when missing from JSON", () => {
       //#given - boulder.json without session_ids field
-      const boulderFile = join(SISYPHUS_DIR, "boulder.json")
+      const boulderFile = join(ARCHITECT_DIR, "boulder.json")
       writeFileSync(boulderFile, JSON.stringify({
         active_plan: "/path/to/plan.md",
         started_at: "2026-01-01T00:00:00Z",
@@ -89,7 +89,7 @@ describe("boulder-state", () => {
 
     test("should default session_ids to [] when not an array", () => {
       //#given - boulder.json with session_ids as a string
-      const boulderFile = join(SISYPHUS_DIR, "boulder.json")
+      const boulderFile = join(ARCHITECT_DIR, "boulder.json")
       writeFileSync(boulderFile, JSON.stringify({
         active_plan: "/path/to/plan.md",
         started_at: "2026-01-01T00:00:00Z",
@@ -107,7 +107,7 @@ describe("boulder-state", () => {
 
     test("should default session_ids to [] for empty object", () => {
       //#given - boulder.json with empty object
-      const boulderFile = join(SISYPHUS_DIR, "boulder.json")
+      const boulderFile = join(ARCHITECT_DIR, "boulder.json")
       writeFileSync(boulderFile, JSON.stringify({}))
 
       //#when
@@ -120,7 +120,7 @@ describe("boulder-state", () => {
 
     test("should backfill missing origin as direct only for a single tracked session", () => {
       // given
-      const boulderFile = join(SISYPHUS_DIR, "boulder.json")
+      const boulderFile = join(ARCHITECT_DIR, "boulder.json")
       writeFileSync(boulderFile, JSON.stringify({
         active_plan: "/path/to/plan.md",
         started_at: "2026-01-01T00:00:00Z",
@@ -137,7 +137,7 @@ describe("boulder-state", () => {
 
     test("should keep missing origins empty when multiple sessions are tracked", () => {
       // given
-      const boulderFile = join(SISYPHUS_DIR, "boulder.json")
+      const boulderFile = join(ARCHITECT_DIR, "boulder.json")
       writeFileSync(boulderFile, JSON.stringify({
         active_plan: "/path/to/plan.md",
         started_at: "2026-01-01T00:00:00Z",
@@ -173,7 +173,7 @@ describe("boulder-state", () => {
 
     test("should default task_sessions to empty object when missing from JSON", () => {
       // given - boulder.json without task_sessions field
-      const boulderFile = join(SISYPHUS_DIR, "boulder.json")
+      const boulderFile = join(ARCHITECT_DIR, "boulder.json")
       writeFileSync(boulderFile, JSON.stringify({
         active_plan: "/path/to/plan.md",
         started_at: "2026-01-01T00:00:00Z",
@@ -191,7 +191,7 @@ describe("boulder-state", () => {
   })
 
   describe("writeBoulderState", () => {
-    test("should write state and create .sisyphus directory if needed", () => {
+    test("should write state and create .openengineer directory if needed", () => {
       // given - state to write
       const state: BoulderState = {
         active_plan: "/test/plan.md",
@@ -258,7 +258,7 @@ describe("boulder-state", () => {
 
     test("should not crash when boulder.json has no session_ids field", () => {
       //#given - boulder.json without session_ids
-      const boulderFile = join(SISYPHUS_DIR, "boulder.json")
+      const boulderFile = join(ARCHITECT_DIR, "boulder.json")
       writeFileSync(boulderFile, JSON.stringify({
         active_plan: "/plan.md",
         started_at: "2026-01-01T00:00:00Z",
@@ -340,7 +340,7 @@ describe("boulder-state", () => {
         taskLabel: "1",
         taskTitle: "Implement auth flow",
         sessionId: "ses_task_123",
-        agent: "sisyphus-junior",
+        agent: "junior-architect",
         category: "deep",
       })
       const result = getTaskSessionState(TEST_DIR, "todo:1")
@@ -349,7 +349,7 @@ describe("boulder-state", () => {
       expect(result).not.toBeNull()
       expect(result?.session_id).toBe("ses_task_123")
       expect(result?.task_title).toBe("Implement auth flow")
-      expect(result?.agent).toBe("sisyphus-junior")
+      expect(result?.agent).toBe("junior-architect")
       expect(result?.category).toBe("deep")
     })
 
@@ -714,7 +714,7 @@ describe("boulder-state", () => {
   describe("getPlanName", () => {
     test("should extract plan name from path", () => {
       // given
-      const path = "/home/user/.sisyphus/plans/project/my-feature.md"
+      const path = "/home/user/.openengineer/plans/project/my-feature.md"
       // when
       const name = getPlanName(path)
       // then
@@ -742,13 +742,13 @@ describe("boulder-state", () => {
       //#given - plan path, session id, and agent type
       const planPath = "/path/to/feature.md"
       const sessionId = "ses-xyz789"
-      const agent = "atlas"
+      const agent = "technical-lead"
 
       //#when - createBoulderState is called with agent
       const state = createBoulderState(planPath, sessionId, agent)
 
       //#then - state should include the agent field
-      expect(state.agent).toBe("atlas")
+      expect(state.agent).toBe("technical-lead")
       expect(state.active_plan).toBe(planPath)
       expect(state.session_ids).toEqual([sessionId])
       expect(state.plan_name).toBe("feature")

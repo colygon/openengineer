@@ -4,13 +4,13 @@
 
 ## OVERVIEW
 
-14 files (~2061 LOC). The "boulder" — Continuation Tier hook that forces Sisyphus to keep rolling when incomplete todos remain. Fires on `session.idle`, injects continuation prompt after 2s countdown toast.
+14 files (~2061 LOC). The "boulder" — Continuation Tier hook that forces Architect to keep rolling when incomplete todos remain. Fires on `session.idle`, injects continuation prompt after 2s countdown toast.
 
 ## HOW IT WORKS
 
 ```
 session.idle
-  → Is main session (not prometheus/compaction)? (DEFAULT_SKIP_AGENTS)
+  → Is main session (not product-manager/compaction)? (DEFAULT_SKIP_AGENTS)
   → No abort detected recently? (ABORT_WINDOW_MS = 3s)
   → Todos still incomplete? (todo.ts)
   → No background tasks running?
@@ -38,7 +38,7 @@ session.idle
 ## CONSTANTS
 
 ```typescript
-DEFAULT_SKIP_AGENTS = ["prometheus", "compaction", "plan"]
+DEFAULT_SKIP_AGENTS = ["product-manager", "compaction", "plan"]
 CONTINUATION_COOLDOWN_MS = 30_000     // 30s between injections
 MAX_CONSECUTIVE_FAILURES = 5          // Then 5min pause (exponential backoff)
 FAILURE_RESET_WINDOW_MS = 5 * 60_000  // 5min window for failure reset
@@ -60,6 +60,6 @@ interface SessionState {
 
 ## RELATIONSHIP TO ATLAS
 
-`todoContinuationEnforcer` handles **main Sisyphus sessions** only.
-`atlasHook` handles **boulder/ralph/subagent sessions** with a different decision gate.
+`todoContinuationEnforcer` handles **main Architect sessions** only.
+`technical-leadHook` handles **boulder/ralph/subagent sessions** with a different decision gate.
 Both fire on `session.idle` but check session type first.

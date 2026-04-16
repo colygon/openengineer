@@ -7,7 +7,7 @@
 import { existsSync, readFileSync, writeFileSync, mkdirSync, readdirSync } from "node:fs"
 import { dirname, join, basename } from "node:path"
 import type { BoulderState, PlanProgress, TaskSessionState } from "./types"
-import { BOULDER_DIR, BOULDER_FILE, PROMETHEUS_PLANS_DIR } from "./constants"
+import { BOULDER_DIR, BOULDER_FILE, PRODUCT_MANAGER_PLANS_DIR } from "./constants"
 
 const RESERVED_KEYS = new Set(["__proto__", "prototype", "constructor"])
 
@@ -170,11 +170,11 @@ export function upsertTaskSessionState(
 }
 
 /**
- * Find Prometheus plan files for this project.
- * Prometheus stores plans at: {project}/.sisyphus/plans/{name}.md
+ * Find ProductManager plan files for this project.
+ * ProductManager stores plans at: {project}/.openengineer/plans/{name}.md
  */
-export function findPrometheusPlans(directory: string): string[] {
-  const plansDir = join(directory, PROMETHEUS_PLANS_DIR)
+export function findProductManagerPlans(directory: string): string[] {
+  const plansDir = join(directory, PRODUCT_MANAGER_PLANS_DIR)
 
   if (!existsSync(plansDir)) {
     return []

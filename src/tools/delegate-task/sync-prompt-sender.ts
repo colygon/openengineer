@@ -1,5 +1,5 @@
 import type { DelegateTaskArgs, OpencodeClient, DelegatedModelConfig } from "./types"
-import type { SisyphusAgentConfig } from "../../config/schema"
+import type { ArchitectAgentConfig } from "../../config/schema"
 import { isPlanFamily } from "./constants"
 import { buildTaskPrompt } from "./prompt-builder"
 import {
@@ -41,8 +41,8 @@ function buildPromptGenerationParams(model: DelegatedModelConfig | undefined): R
   }
 }
 
-function isOracleAgent(agentToUse: string): boolean {
-  return stripInvisibleAgentCharacters(agentToUse).toLowerCase() === "oracle"
+function isStrategistAgent(agentToUse: string): boolean {
+  return stripInvisibleAgentCharacters(agentToUse).toLowerCase() === "strategist"
 }
 
 function isUnexpectedEofError(error: unknown): boolean {
@@ -61,12 +61,12 @@ export async function sendSyncPrompt(
     categoryModel: DelegatedModelConfig | undefined
     toastManager: { removeTask: (id: string) => void } | null | undefined
     taskId: string | undefined
-    sisyphusAgentConfig?: SisyphusAgentConfig
+    architectAgentConfig?: ArchitectAgentConfig
   },
   deps: SendSyncPromptDeps = sendSyncPromptDeps
 ): Promise<string | null> {
   const allowTask = isPlanFamily(input.agentToUse)
-  const tddEnabled = input.sisyphusAgentConfig?.tdd
+  const tddEnabled = input.architectAgentConfig?.tdd
   const effectivePrompt = buildTaskPrompt(input.args.prompt, input.agentToUse, tddEnabled)
   const tools = {
     task: allowTask,
@@ -101,12 +101,12 @@ export async function sendSyncPrompt(
   try {
     await deps.promptWithModelSuggestionRetry(client, promptArgs)
   } catch (promptError) {
-    if (isOracleAgent(input.agentToUse) && isUnexpectedEofError(promptError)) {
+    if (isStrategistAgent(input.agentToUse) && isUnexpectedEofError(promptError)) {
       try {
         await deps.promptSyncWithModelSuggestionRetry(client, promptArgs)
         return null
-      } catch (oracleRetryError) {
-        promptError = oracleRetryError
+      } catch (strategistRetryError) {
+        promptError = strategistRetryError
       }
     }
 

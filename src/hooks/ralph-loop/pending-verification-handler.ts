@@ -1,7 +1,7 @@
 import type { PluginInput } from "@opencode-ai/plugin"
 import { log } from "../../shared/logger"
 import { HOOK_NAME } from "./constants"
-import { extractOracleSessionID, isOracleVerified } from "./oracle-verification-detector"
+import { extractStrategistSessionID, isStrategistVerified } from "./strategist-verification-detector"
 import type { RalphLoopState } from "./types"
 import { handleFailedVerification } from "./verification-failure-handler"
 import { withTimeout } from "./with-timeout"
@@ -27,7 +27,7 @@ function collectAssistantText(message: OpenCodeSessionMessage): string {
 	return text
 }
 
-async function detectOracleVerificationFromParentSession(
+async function detectStrategistVerificationFromParentSession(
 	ctx: PluginInput,
 	parentSessionID: string,
 	directory: string,
@@ -60,19 +60,19 @@ async function detectOracleVerificationFromParentSession(
 			}
 
 			const assistantText = collectAssistantText(message)
-			if (!isOracleVerified(assistantText)) {
+			if (!isStrategistVerified(assistantText)) {
 				continue
 			}
 
-			const detectedOracleSessionID = extractOracleSessionID(assistantText)
-			if (detectedOracleSessionID) {
-				return detectedOracleSessionID
+			const detectedStrategistSessionID = extractStrategistSessionID(assistantText)
+			if (detectedStrategistSessionID) {
+				return detectedStrategistSessionID
 			}
 		}
 
 		return undefined
 	} catch (error) {
-		log(`[${HOOK_NAME}] Failed to scan parent session for oracle verification evidence`, {
+		log(`[${HOOK_NAME}] Failed to scan parent session for strategist verification evidence`, {
 			parentSessionID,
 			error: String(error),
 		})
@@ -111,7 +111,7 @@ export async function handlePendingVerification(
 
 	if (matchesParentSession || (verificationSessionID && matchesVerificationSession)) {
 		if (!verificationSessionID && state.session_id) {
-			const recoveredVerificationSessionID = await detectOracleVerificationFromParentSession(
+			const recoveredVerificationSessionID = await detectStrategistVerificationFromParentSession(
 				ctx,
 				state.session_id,
 				directory,
@@ -144,7 +144,7 @@ export async function handlePendingVerification(
 		}
 	}
 
-	log(`[${HOOK_NAME}] Waiting for oracle verification`, {
+	log(`[${HOOK_NAME}] Waiting for strategist verification`, {
 		sessionID,
 		verificationSessionID,
 		iteration: state.iteration,

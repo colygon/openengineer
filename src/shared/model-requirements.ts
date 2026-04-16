@@ -17,167 +17,105 @@ export type ModelRequirement = {
   requiresProvider?: string[]; // If set, only activates when any of these providers is connected
 };
 
+/**
+ * Open Engineer agent model requirements - all using open-source models via Nebius/Token Factory
+ * Diverse model selection across 12 makers for maximum resilience and capability coverage
+ */
 export const AGENT_MODEL_REQUIREMENTS: Record<string, ModelRequirement> = {
-  sisyphus: {
+  architect: {
     fallbackChain: [
-      {
-        providers: ["anthropic", "github-copilot", "opencode", "vercel"],
-        model: "claude-opus-4-6",
-        variant: "max",
-      },
-      { providers: ["opencode-go", "vercel"], model: "kimi-k2.5" },
-      { providers: ["kimi-for-coding"], model: "k2p5" },
-      {
-        providers: [
-          "opencode",
-          "moonshotai",
-          "moonshotai-cn",
-          "firmware",
-          "ollama-cloud",
-          "aihubmix",
-          "vercel",
-        ],
-        model: "kimi-k2.5",
-      },
-      { providers: ["openai", "github-copilot", "opencode", "vercel"], model: "gpt-5.4", variant: "medium" },
-      { providers: ["zai-coding-plan", "opencode", "vercel"], model: "glm-5" },
-      { providers: ["opencode"], model: "big-pickle" },
+      { providers: ["nebius"], model: "Qwen/Qwen3-Coder-480B-A35B-Instruct" },
+      { providers: ["nebius"], model: "moonshot-ai/Kimi-K2.5" },
+      { providers: ["nebius"], model: "zai-org/GLM-4.5" },
+      { providers: ["nebius"], model: "deepseek-ai/DeepSeek-R1-0528" },
+      { providers: ["nebius"], model: "deepseek-ai/DeepSeek-V3.2" },
     ],
     requiresAnyModel: true,
   },
-  hephaestus: {
+  engineer: {
     fallbackChain: [
-      {
-        providers: ["openai", "github-copilot", "venice", "opencode", "vercel"],
-        model: "gpt-5.4",
-        variant: "medium",
-      },
+      { providers: ["nebius"], model: "deepseek-ai/DeepSeek-V3.2" },
+      { providers: ["nebius"], model: "meta-llama/Llama-3.3-70B-Instruct" },
+      { providers: ["nebius"], model: "Qwen/Qwen3-Coder-480B-A35B-Instruct" },
+      { providers: ["nebius"], model: "openai/gpt-oss-120b" },
+      { providers: ["nebius"], model: "moonshot-ai/Kimi-K2-Instruct" },
     ],
-    requiresProvider: ["openai", "github-copilot", "venice", "opencode", "vercel"],
   },
-  oracle: {
+  strategist: {
     fallbackChain: [
-      {
-        providers: ["openai", "github-copilot", "opencode", "vercel"],
-        model: "gpt-5.4",
-        variant: "high",
-      },
-      {
-        providers: ["google", "github-copilot", "opencode", "vercel"],
-        model: "gemini-3.1-pro",
-        variant: "high",
-      },
-      {
-        providers: ["anthropic", "github-copilot", "opencode", "vercel"],
-        model: "claude-opus-4-6",
-        variant: "max",
-      },
-      { providers: ["opencode-go", "vercel"], model: "glm-5" },
+      { providers: ["nebius"], model: "deepseek-ai/DeepSeek-R1-0528" },
+      { providers: ["nebius"], model: "Qwen/Qwen3-235B-A22B-Thinking-2507" },
+      { providers: ["nebius"], model: "moonshot-ai/Kimi-K2-Thinking" },
+      { providers: ["nebius"], model: "NousResearch/Hermes-4-405B" },
+      { providers: ["nebius"], model: "zai-org/GLM-4.7" },
     ],
   },
   librarian: {
     fallbackChain: [
-      { providers: ["opencode-go", "vercel"], model: "minimax-m2.7" },
-      { providers: ["opencode", "vercel"], model: "minimax-m2.7-highspeed" },
-      { providers: ["anthropic", "opencode", "vercel"], model: "claude-haiku-4-5" },
-      { providers: ["opencode", "vercel"], model: "gpt-5-nano" },
+      { providers: ["nebius"], model: "Qwen/Qwen3-30B-A3B-Instruct-2507" },
+      { providers: ["nebius"], model: "google/Gemma-3-27b-it" },
+      { providers: ["nebius"], model: "nvidia/Nemotron-3-Nano-30B-A3B" },
     ],
   },
-  explore: {
+  analyst: {
     fallbackChain: [
-      { providers: ["github-copilot", "xai", "vercel"], model: "grok-code-fast-1" },
-      { providers: ["opencode-go", "vercel"], model: "minimax-m2.7-highspeed" },
-      { providers: ["opencode", "vercel"], model: "minimax-m2.7" },
-      { providers: ["anthropic", "opencode", "vercel"], model: "claude-haiku-4-5" },
-      { providers: ["opencode", "vercel"], model: "gpt-5-nano" },
+      { providers: ["nebius"], model: "openai/gpt-oss-20b" },
+      { providers: ["nebius"], model: "Qwen/Qwen3-Next-80B-A3B-Thinking" },
+      { providers: ["nebius"], model: "google/Gemma-3-27b-it" },
+      { providers: ["nebius"], model: "nvidia/Nemotron-Nano-V2-12b" },
     ],
   },
-  "multimodal-looker": {
+  "designer": {
     fallbackChain: [
-      { providers: ["openai", "opencode", "vercel"], model: "gpt-5.4", variant: "medium" },
-      { providers: ["opencode-go", "vercel"], model: "kimi-k2.5" },
-      { providers: ["zai-coding-plan", "vercel"], model: "glm-4.6v" },
-      { providers: ["openai", "github-copilot", "opencode", "vercel"], model: "gpt-5-nano" },
+      { providers: ["nebius"], model: "Qwen/Qwen2.5-VL-72B-Instruct" },
+      { providers: ["nebius"], model: "deepseek-ai/DeepSeek-V3.2" },
+      { providers: ["nebius"], model: "zai-org/GLM-4.5-Air" },
+      { providers: ["nebius"], model: "minimax/MiniMax-M2.5" },
     ],
   },
-  prometheus: {
+  "product-manager": {
     fallbackChain: [
-      {
-        providers: ["anthropic", "github-copilot", "opencode", "vercel"],
-        model: "claude-opus-4-6",
-        variant: "max",
-      },
-      {
-        providers: ["openai", "github-copilot", "opencode", "vercel"],
-        model: "gpt-5.4",
-        variant: "high",
-      },
-      { providers: ["opencode-go", "vercel"], model: "glm-5" },
-      {
-        providers: ["google", "github-copilot", "opencode", "vercel"],
-        model: "gemini-3.1-pro",
-      },
+      { providers: ["nebius"], model: "moonshot-ai/Kimi-K2.5" },
+      { providers: ["nebius"], model: "Qwen/Qwen3.5-397B-A17B" },
+      { providers: ["nebius"], model: "NousResearch/Hermes-4-405B" },
+      { providers: ["nebius"], model: "deepseek-ai/DeepSeek-R1-0528" },
+      { providers: ["nebius"], model: "zai-org/GLM-5" },
     ],
   },
-  metis: {
+  consultant: {
     fallbackChain: [
-      {
-        providers: ["anthropic", "github-copilot", "opencode", "vercel"],
-        model: "claude-opus-4-6",
-        variant: "max",
-      },
-      {
-        providers: ["openai", "github-copilot", "opencode", "vercel"],
-        model: "gpt-5.4",
-        variant: "high",
-      },
-      { providers: ["opencode-go", "vercel"], model: "glm-5" },
-      { providers: ["kimi-for-coding"], model: "k2p5" },
+      { providers: ["nebius"], model: "zai-org/GLM-5" },
+      { providers: ["nebius"], model: "moonshot-ai/Kimi-K2.5" },
+      { providers: ["nebius"], model: "deepseek-ai/DeepSeek-R1-0528" },
+      { providers: ["nebius"], model: "Qwen/Qwen3.5-397B-A17B" },
+      { providers: ["nebius"], model: "NousResearch/Hermes-4-405B" },
     ],
   },
-  momus: {
+  "qa-engineer": {
     fallbackChain: [
-      {
-        providers: ["openai", "github-copilot", "opencode", "vercel"],
-        model: "gpt-5.4",
-        variant: "xhigh",
-      },
-      {
-        providers: ["anthropic", "github-copilot", "opencode", "vercel"],
-        model: "claude-opus-4-6",
-        variant: "max",
-      },
-      {
-        providers: ["google", "github-copilot", "opencode", "vercel"],
-        model: "gemini-3.1-pro",
-        variant: "high",
-      },
-      { providers: ["opencode-go", "vercel"], model: "glm-5" },
+      { providers: ["nebius"], model: "NousResearch/Hermes-4-405B" },
+      { providers: ["nebius"], model: "deepseek-ai/DeepSeek-R1-0528" },
+      { providers: ["nebius"], model: "Qwen/Qwen3-235B-A22B-Thinking-2507" },
+      { providers: ["nebius"], model: "zai-org/GLM-4.5" },
+      { providers: ["nebius"], model: "moonshot-ai/Kimi-K2-Thinking" },
     ],
   },
-  atlas: {
+  "technical-lead": {
     fallbackChain: [
-      { providers: ["anthropic", "github-copilot", "opencode", "vercel"], model: "claude-sonnet-4-6" },
-      { providers: ["opencode-go", "vercel"], model: "kimi-k2.5" },
-      {
-        providers: ["openai", "github-copilot", "opencode", "vercel"],
-        model: "gpt-5.4",
-        variant: "medium",
-      },
-      { providers: ["opencode-go", "vercel"], model: "minimax-m2.7" },
+      { providers: ["nebius"], model: "moonshot-ai/Kimi-K2-Instruct" },
+      { providers: ["nebius"], model: "deepseek-ai/DeepSeek-V3.2" },
+      { providers: ["nebius"], model: "openai/gpt-oss-120b" },
+      { providers: ["nebius"], model: "Qwen/Qwen3-235B-A22B-Instruct-2507" },
+      { providers: ["nebius"], model: "zai-org/GLM-4.7" },
     ],
   },
-  "sisyphus-junior": {
+  "junior-architect": {
     fallbackChain: [
-      { providers: ["anthropic", "github-copilot", "opencode", "vercel"], model: "claude-sonnet-4-6" },
-      { providers: ["opencode-go", "vercel"], model: "kimi-k2.5" },
-      {
-        providers: ["openai", "github-copilot", "opencode", "vercel"],
-        model: "gpt-5.4",
-        variant: "medium",
-      },
-      { providers: ["opencode-go", "vercel"], model: "minimax-m2.7" },
-      { providers: ["opencode"], model: "big-pickle" },
+      { providers: ["nebius"], model: "openai/gpt-oss-120b" },
+      { providers: ["nebius"], model: "deepseek-ai/DeepSeek-V3.2" },
+      { providers: ["nebius"], model: "PrimeIntellect/INTELLECT-3" },
+      { providers: ["nebius"], model: "google/Gemma-3-27b-it" },
+      { providers: ["nebius"], model: "NousResearch/Hermes-4-70B" },
     ],
   },
 };
@@ -185,155 +123,72 @@ export const AGENT_MODEL_REQUIREMENTS: Record<string, ModelRequirement> = {
 export const CATEGORY_MODEL_REQUIREMENTS: Record<string, ModelRequirement> = {
   "visual-engineering": {
     fallbackChain: [
-      {
-        providers: ["google", "github-copilot", "opencode", "vercel"],
-        model: "gemini-3.1-pro",
-        variant: "high",
-      },
-      { providers: ["zai-coding-plan", "opencode", "vercel"], model: "glm-5" },
-      {
-        providers: ["anthropic", "github-copilot", "opencode", "vercel"],
-        model: "claude-opus-4-6",
-        variant: "max",
-      },
-      { providers: ["opencode-go", "vercel"], model: "glm-5" },
-      { providers: ["kimi-for-coding"], model: "k2p5" },
+      { providers: ["nebius"], model: "Qwen/Qwen2.5-VL-72B-Instruct" },
+      { providers: ["nebius"], model: "nvidia/Llama-3_1-Nemotron-Ultra-253B-v1" },
+      { providers: ["nebius"], model: "deepseek-ai/DeepSeek-V3.2" },
+      { providers: ["nebius"], model: "moonshot-ai/Kimi-K2.5" },
     ],
   },
   ultrabrain: {
     fallbackChain: [
-      {
-        providers: ["openai", "opencode", "vercel"],
-        model: "gpt-5.4",
-        variant: "xhigh",
-      },
-      {
-        providers: ["google", "github-copilot", "opencode", "vercel"],
-        model: "gemini-3.1-pro",
-        variant: "high",
-      },
-      {
-        providers: ["anthropic", "github-copilot", "opencode", "vercel"],
-        model: "claude-opus-4-6",
-        variant: "max",
-      },
-      { providers: ["opencode-go", "vercel"], model: "glm-5" },
+      { providers: ["nebius"], model: "deepseek-ai/DeepSeek-R1-0528" },
+      { providers: ["nebius"], model: "Qwen/Qwen3-235B-A22B-Thinking-2507" },
+      { providers: ["nebius"], model: "NousResearch/Hermes-4-405B" },
+      { providers: ["nebius"], model: "moonshot-ai/Kimi-K2-Thinking" },
+      { providers: ["nebius"], model: "nvidia/Llama-3_1-Nemotron-Ultra-253B-v1" },
+      { providers: ["nebius"], model: "zai-org/GLM-5" },
     ],
   },
   deep: {
     fallbackChain: [
-      {
-        providers: ["openai", "github-copilot", "venice", "opencode", "vercel"],
-        model: "gpt-5.4",
-        variant: "medium",
-      },
-      {
-        providers: ["anthropic", "github-copilot", "opencode", "vercel"],
-        model: "claude-opus-4-6",
-        variant: "max",
-      },
-      {
-        providers: ["google", "github-copilot", "opencode", "vercel"],
-        model: "gemini-3.1-pro",
-        variant: "high",
-      },
+      { providers: ["nebius"], model: "moonshot-ai/Kimi-K2.5" },
+      { providers: ["nebius"], model: "Qwen/Qwen3-Coder-480B-A35B-Instruct" },
+      { providers: ["nebius"], model: "NousResearch/Hermes-4-405B" },
+      { providers: ["nebius"], model: "zai-org/GLM-5" },
+      { providers: ["nebius"], model: "deepseek-ai/DeepSeek-V3.2" },
     ],
   },
   artistry: {
     fallbackChain: [
-      {
-        providers: ["google", "github-copilot", "opencode", "vercel"],
-        model: "gemini-3.1-pro",
-        variant: "high",
-      },
-      {
-        providers: ["anthropic", "github-copilot", "opencode", "vercel"],
-        model: "claude-opus-4-6",
-        variant: "max",
-      },
-      { providers: ["openai", "github-copilot", "opencode", "vercel"], model: "gpt-5.4" },
+      { providers: ["nebius"], model: "nvidia/Llama-3_1-Nemotron-Ultra-253B-v1" },
+      { providers: ["nebius"], model: "minimax/MiniMax-M2.5" },
+      { providers: ["nebius"], model: "zai-org/GLM-4.5" },
+      { providers: ["nebius"], model: "moonshot-ai/Kimi-K2.5" },
     ],
-    requiresModel: "gemini-3.1-pro",
   },
   quick: {
     fallbackChain: [
-      {
-        providers: ["openai", "github-copilot", "opencode", "vercel"],
-        model: "gpt-5.4-mini",
-      },
-      {
-        providers: ["anthropic", "github-copilot", "opencode", "vercel"],
-        model: "claude-haiku-4-5",
-      },
-      {
-        providers: ["google", "github-copilot", "opencode", "vercel"],
-        model: "gemini-3-flash",
-      },
-      { providers: ["opencode-go", "vercel"], model: "minimax-m2.7" },
-      { providers: ["opencode", "vercel"], model: "gpt-5-nano" },
+      { providers: ["nebius"], model: "google/Gemma-3-27b-it" },
+      { providers: ["nebius"], model: "openai/gpt-oss-20b" },
+      { providers: ["nebius"], model: "NousResearch/Hermes-4-70B" },
+      { providers: ["nebius"], model: "nvidia/Nemotron-3-Nano-30B-A3B" },
+      { providers: ["nebius"], model: "Qwen/Qwen3-30B-A3B-Instruct-2507" },
     ],
   },
   "unspecified-low": {
     fallbackChain: [
-      {
-        providers: ["anthropic", "github-copilot", "opencode", "vercel"],
-        model: "claude-sonnet-4-6",
-      },
-      {
-        providers: ["openai", "opencode", "vercel"],
-        model: "gpt-5.3-codex",
-        variant: "medium",
-      },
-      { providers: ["opencode-go", "vercel"], model: "kimi-k2.5" },
-      {
-        providers: ["google", "github-copilot", "opencode", "vercel"],
-        model: "gemini-3-flash",
-      },
-      { providers: ["opencode-go", "vercel"], model: "minimax-m2.7" },
+      { providers: ["nebius"], model: "meta-llama/Llama-3.3-70B-Instruct" },
+      { providers: ["nebius"], model: "deepseek-ai/DeepSeek-V3.2" },
+      { providers: ["nebius"], model: "openai/gpt-oss-120b" },
+      { providers: ["nebius"], model: "NousResearch/Hermes-4-70B" },
+      { providers: ["nebius"], model: "google/Gemma-3-27b-it" },
     ],
   },
   "unspecified-high": {
     fallbackChain: [
-      {
-        providers: ["anthropic", "github-copilot", "opencode", "vercel"],
-        model: "claude-opus-4-6",
-        variant: "max",
-      },
-      {
-        providers: ["openai", "github-copilot", "opencode", "vercel"],
-        model: "gpt-5.4",
-        variant: "high",
-      },
-      { providers: ["zai-coding-plan", "opencode", "vercel"], model: "glm-5" },
-      { providers: ["kimi-for-coding"], model: "k2p5" },
-      { providers: ["opencode-go", "vercel"], model: "glm-5" },
-      { providers: ["opencode", "vercel"], model: "kimi-k2.5" },
-      {
-        providers: [
-          "opencode",
-          "moonshotai",
-          "moonshotai-cn",
-          "firmware",
-          "ollama-cloud",
-          "aihubmix",
-          "vercel",
-        ],
-        model: "kimi-k2.5",
-      },
+      { providers: ["nebius"], model: "Qwen/Qwen3.5-397B-A17B" },
+      { providers: ["nebius"], model: "Qwen/Qwen3-Coder-480B-A35B-Instruct" },
+      { providers: ["nebius"], model: "deepseek-ai/DeepSeek-R1-0528" },
+      { providers: ["nebius"], model: "NousResearch/Hermes-4-405B" },
+      { providers: ["nebius"], model: "zai-org/GLM-5" },
     ],
   },
   writing: {
     fallbackChain: [
-      {
-        providers: ["google", "github-copilot", "opencode", "vercel"],
-        model: "gemini-3-flash",
-      },
-      { providers: ["opencode-go", "vercel"], model: "kimi-k2.5" },
-      {
-        providers: ["anthropic", "github-copilot", "opencode", "vercel"],
-        model: "claude-sonnet-4-6",
-      },
-      { providers: ["opencode-go", "vercel"], model: "minimax-m2.7" },
+      { providers: ["nebius"], model: "PrimeIntellect/INTELLECT-3" },
+      { providers: ["nebius"], model: "minimax/MiniMax-M2.5" },
+      { providers: ["nebius"], model: "deepseek-ai/DeepSeek-V3.2" },
+      { providers: ["nebius"], model: "zai-org/GLM-4.5-Air" },
     ],
   },
 };

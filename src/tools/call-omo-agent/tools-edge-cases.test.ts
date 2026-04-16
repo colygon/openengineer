@@ -25,13 +25,13 @@ function createMockCtx(agents: Array<{ name: string; mode?: string }> = []): Plu
 }
 
 const DEFAULT_AGENTS = [
-  { name: "explore", mode: "subagent" },
+  { name: "analyst", mode: "subagent" },
   { name: "librarian", mode: "subagent" },
-  { name: "oracle", mode: "subagent" },
-  { name: "hephaestus", mode: "subagent" },
-  { name: "metis", mode: "subagent" },
-  { name: "momus", mode: "subagent" },
-  { name: "multimodal-looker", mode: "subagent" },
+  { name: "strategist", mode: "subagent" },
+  { name: "engineer", mode: "subagent" },
+  { name: "consultant", mode: "subagent" },
+  { name: "qa-engineer", mode: "subagent" },
+  { name: "designer", mode: "subagent" },
 ]
 
 const reserveCommitMock = mock(() => 1)
@@ -80,7 +80,7 @@ describe("createCallOmoAgent edge cases", () => {
         {
           description: "Test",
           prompt: "Test prompt",
-          subagent_type: "explore",
+          subagent_type: "analyst",
           run_in_background: false,
         },
         toolCtx,
@@ -131,7 +131,7 @@ describe("createCallOmoAgent edge cases", () => {
     test("#then the agent is callable without conflict", async () => {
       const agents = [
         ...DEFAULT_AGENTS,
-        { name: "explore", mode: "subagent" },
+        { name: "analyst", mode: "subagent" },
       ]
       const mockCtx = createMockCtx(agents)
       const mockManager = {
@@ -141,7 +141,7 @@ describe("createCallOmoAgent edge cases", () => {
           id: "task-id",
           sessionID: "ses-1",
           description: "Test",
-          agent: "explore",
+          agent: "analyst",
           status: "pending",
         })),
         getTask: mock(() => ({ status: "pending", sessionID: "ses-1" })),
@@ -153,7 +153,7 @@ describe("createCallOmoAgent edge cases", () => {
         {
           description: "Test",
           prompt: "Search codebase",
-          subagent_type: "explore",
+          subagent_type: "analyst",
           run_in_background: true,
         },
         toolCtx,
@@ -209,7 +209,7 @@ describe("createCallOmoAgent edge cases", () => {
         {
           description: "Test",
           prompt: "Continue work",
-          subagent_type: "explore",
+          subagent_type: "analyst",
           run_in_background: true,
           session_id: "ses-existing-123",
         },

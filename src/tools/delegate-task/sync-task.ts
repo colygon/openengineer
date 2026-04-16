@@ -145,7 +145,7 @@ export async function executeSyncTask(
       categoryModel: effectiveCategoryModel,
       toastManager,
       taskId,
-      sisyphusAgentConfig: executorCtx.sisyphusAgentConfig,
+      architectAgentConfig: executorCtx.architectAgentConfig,
     })
     if (promptError) {
       const promptResult = await retrySyncPromptWithFallbacks({
@@ -162,7 +162,7 @@ export async function executeSyncTask(
             categoryModel: fallbackModel,
             toastManager,
             taskId,
-            sisyphusAgentConfig: executorCtx.sisyphusAgentConfig,
+            architectAgentConfig: executorCtx.architectAgentConfig,
           })
         },
       })

@@ -1007,13 +1007,13 @@ describe("todo-continuation-enforcer", () => {
   }, { timeout: 15000 })
 
   test("should accept skipAgents option without error", async () => {
-    // given - session with skipAgents configured for Prometheus
-    const sessionID = "main-prometheus-option"
+    // given - session with skipAgents configured for ProductManager
+    const sessionID = "main-product-manager-option"
     setMainSession(sessionID)
 
     // when - create hook with skipAgents option (should not throw)
     const hook = createTodoContinuationEnforcer(createMockPluginInput(), {
-      skipAgents: ["Prometheus (Planner)", "custom-agent"],
+      skipAgents: ["ProductManager (Planner)", "custom-agent"],
     })
 
     // then - handler works without error
@@ -1540,8 +1540,8 @@ describe("todo-continuation-enforcer", () => {
 
     // OpenCode returns assistant messages with flat modelID/providerID, not nested model object
     const mockMessagesWithAssistant = [
-      { info: { id: "msg-1", role: "user", agent: "sisyphus", model: { providerID: "openai", modelID: "gpt-5.4" } } },
-      { info: { id: "msg-2", role: "assistant", agent: "sisyphus", modelID: "gpt-5.4", providerID: "openai" } },
+      { info: { id: "msg-1", role: "user", agent: "architect", model: { providerID: "openai", modelID: "gpt-5.4" } } },
+      { info: { id: "msg-2", role: "assistant", agent: "architect", modelID: "gpt-5.4", providerID: "openai" } },
     ]
 
     const mockInput = {
@@ -1600,8 +1600,8 @@ describe("todo-continuation-enforcer", () => {
     setMainSession(sessionID)
 
     const mockMessagesWithCompaction = [
-      { info: { id: "msg-1", role: "user", agent: "sisyphus", model: { providerID: "anthropic", modelID: "claude-sonnet-4-6" } } },
-      { info: { id: "msg-2", role: "assistant", agent: "sisyphus", modelID: "claude-sonnet-4-6", providerID: "anthropic" } },
+      { info: { id: "msg-1", role: "user", agent: "architect", model: { providerID: "anthropic", modelID: "claude-sonnet-4-6" } } },
+      { info: { id: "msg-2", role: "assistant", agent: "architect", modelID: "claude-sonnet-4-6", providerID: "anthropic" } },
       { info: { id: "msg-3", role: "assistant", agent: "compaction", modelID: "claude-sonnet-4-6", providerID: "anthropic" } },
     ]
 
@@ -1707,9 +1707,9 @@ describe("todo-continuation-enforcer", () => {
     setMainSession(sessionID)
 
     const mockMessagesWithCompactionMarker = [
-      { info: { id: "msg-1", role: "assistant", agent: "sisyphus", modelID: "claude-sonnet-4-6", providerID: "anthropic" } },
+      { info: { id: "msg-1", role: "assistant", agent: "architect", modelID: "claude-sonnet-4-6", providerID: "anthropic" } },
       {
-        info: { id: "msg-2", role: "user", agent: "atlas", model: { providerID: "openai", modelID: "gpt-5.4" } },
+        info: { id: "msg-2", role: "user", agent: "technical-lead", model: { providerID: "openai", modelID: "gpt-5.4" } },
         parts: [{ type: "compaction" }],
       },
     ]
@@ -1757,14 +1757,14 @@ describe("todo-continuation-enforcer", () => {
     expect(promptCalls).toHaveLength(0)
   })
 
-  test("should skip injection when prometheus agent is after compaction", async () => {
-    // given - prometheus session that was compacted
-    const sessionID = "main-prometheus-compacted"
+  test("should skip injection when product-manager agent is after compaction", async () => {
+    // given - productManager session that was compacted
+    const sessionID = "main-product-manager-compacted"
     setMainSession(sessionID)
 
-    const mockMessagesPrometheusCompacted = [
-      { info: { id: "msg-1", role: "user", agent: "prometheus" } },
-      { info: { id: "msg-2", role: "assistant", agent: "prometheus" } },
+    const mockMessagesProductManagerCompacted = [
+      { info: { id: "msg-1", role: "user", agent: "product-manager" } },
+      { info: { id: "msg-2", role: "assistant", agent: "product-manager" } },
       { info: { id: "msg-3", role: "assistant", agent: "compaction" } },
     ]
 
@@ -1774,7 +1774,7 @@ describe("todo-continuation-enforcer", () => {
           todo: async () => ({
             data: [{ id: "1", content: "Task 1", status: "pending", priority: "high" }],
           }),
-           messages: async () => ({ data: mockMessagesPrometheusCompacted }),
+           messages: async () => ({ data: mockMessagesProductManagerCompacted }),
            prompt: async (opts: any) => {
              promptCalls.push({
                sessionID: opts.path.id,
@@ -1808,7 +1808,7 @@ describe("todo-continuation-enforcer", () => {
 
      await fakeTimers.advanceBy(3000)
 
-     // then - no continuation (prometheus found after filtering compaction, prometheus is in skipAgents)
+     // then - no continuation (productManager found after filtering compaction, productManager is in skipAgents)
     expect(promptCalls).toHaveLength(0)
   })
 

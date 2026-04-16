@@ -108,14 +108,14 @@ describe("applyCommandConfig", () => {
     expect(commandConfig["agents-global-skill"]?.description).toContain("Agents global skill");
   });
 
-  test("normalizes Atlas command agents to the runtime list name used by opencode command routing", async () => {
+  test("normalizes TechnicalLead command agents to the runtime list name used by opencode command routing", async () => {
     // given
     loadBuiltinCommandsSpy.mockReturnValue({
       "start-work": {
         name: "start-work",
         description: "(builtin) Start work",
         template: "template",
-        agent: "atlas",
+        agent: "technical-lead",
       },
     });
     const config: Record<string, unknown> = { command: {} };
@@ -130,7 +130,7 @@ describe("applyCommandConfig", () => {
 
     // then
     const commandConfig = config.command as Record<string, { agent?: string }>;
-    expect(commandConfig["start-work"]?.agent).toBe(getAgentListDisplayName("atlas"));
+    expect(commandConfig["start-work"]?.agent).toBe(getAgentListDisplayName("technical-lead"));
   });
 
   test("normalizes legacy display-name command agents to the runtime list name", async () => {
@@ -140,7 +140,7 @@ describe("applyCommandConfig", () => {
         name: "start-work",
         description: "(builtin) Start work",
         template: "template",
-        agent: getAgentDisplayName("atlas"),
+        agent: getAgentDisplayName("technical-lead"),
       },
     });
     const config: Record<string, unknown> = { command: {} };
@@ -155,6 +155,6 @@ describe("applyCommandConfig", () => {
 
     // then
     const commandConfig = config.command as Record<string, { agent?: string }>;
-    expect(commandConfig["start-work"]?.agent).toBe(getAgentListDisplayName("atlas"));
+    expect(commandConfig["start-work"]?.agent).toBe(getAgentListDisplayName("technical-lead"));
   });
 });

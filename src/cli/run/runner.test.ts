@@ -21,44 +21,44 @@ describe("resolveRunAgent", () => {
 
   it("uses CLI agent over env and config", () => {
     // given
-    const config = createConfig({ default_run_agent: "prometheus" })
-    const env = { OPENCODE_DEFAULT_AGENT: "Atlas" }
+    const config = createConfig({ default_run_agent: "product-manager" })
+    const env = { OPENCODE_DEFAULT_AGENT: "TechnicalLead" }
 
     // when
     const agent = resolveRunAgent(
-      { message: "test", agent: "Hephaestus" },
+      { message: "test", agent: "Engineer" },
       config,
       env
     )
 
     // then
-    expect(agent).toBe(getAgentRuntimeName("hephaestus"))
+    expect(agent).toBe(getAgentRuntimeName("engineer"))
   })
 
   it("uses env agent over config", () => {
     // given
-    const config = createConfig({ default_run_agent: "prometheus" })
-    const env = { OPENCODE_DEFAULT_AGENT: "Atlas" }
+    const config = createConfig({ default_run_agent: "product-manager" })
+    const env = { OPENCODE_DEFAULT_AGENT: "TechnicalLead" }
 
     // when
     const agent = resolveRunAgent({ message: "test" }, config, env)
 
     // then
-    expect(agent).toBe(getAgentRuntimeName("atlas"))
+    expect(agent).toBe(getAgentRuntimeName("technical-lead"))
   })
 
   it("uses config agent over default", () => {
     // given
-    const config = createConfig({ default_run_agent: "Prometheus" })
+    const config = createConfig({ default_run_agent: "ProductManager" })
 
     // when
     const agent = resolveRunAgent({ message: "test" }, config, {})
 
     // then
-    expect(agent).toBe(getAgentRuntimeName("prometheus"))
+    expect(agent).toBe(getAgentRuntimeName("product-manager"))
   })
 
-  it("falls back to sisyphus when none set", () => {
+  it("falls back to architect when none set", () => {
     // given
     const config = createConfig()
 
@@ -66,29 +66,29 @@ describe("resolveRunAgent", () => {
     const agent = resolveRunAgent({ message: "test" }, config, {})
 
     // then
-    expect(agent).toBe(getAgentRuntimeName("sisyphus"))
+    expect(agent).toBe(getAgentRuntimeName("architect"))
   })
 
-  it("skips disabled sisyphus for next available core agent", () => {
+  it("skips disabled architect for next available core agent", () => {
     // given
-    const config = createConfig({ disabled_agents: ["sisyphus"] })
+    const config = createConfig({ disabled_agents: ["architect"] })
 
     // when
     const agent = resolveRunAgent({ message: "test" }, config, {})
 
     // then
-    expect(agent).toBe(getAgentRuntimeName("hephaestus"))
+    expect(agent).toBe(getAgentRuntimeName("engineer"))
   })
 
   it("maps display-name style default_run_agent values to canonical runtime names", () => {
     // given
-    const config = createConfig({ default_run_agent: "Sisyphus - Ultraworker" })
+    const config = createConfig({ default_run_agent: "Architect - Ultraworker" })
 
     // when
     const agent = resolveRunAgent({ message: "test" }, config, {})
 
     // then
-    expect(agent).toBe(getAgentRuntimeName("sisyphus"))
+    expect(agent).toBe(getAgentRuntimeName("architect"))
   })
 })
 

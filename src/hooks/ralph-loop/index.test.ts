@@ -1076,7 +1076,7 @@ Original task: Build something`
       expect(messagesCalls.length).toBe(1)
     })
 
-    test("should require oracle verification toast for ultrawork completion promise", async () => {
+    test("should require strategist verification toast for ultrawork completion promise", async () => {
       // given - hook with ultrawork mode and completion in transcript
       const transcriptPath = join(TEST_DIR, "transcript.jsonl")
       const hook = createRalphLoopHook(createMockPluginInput(), {
@@ -1090,7 +1090,7 @@ Original task: Build something`
 
       const verificationToast = toastCalls.find(t => t.title === "ULTRAWORK LOOP")
       expect(verificationToast).toBeDefined()
-      expect(verificationToast!.message).toMatch(/Oracle verification is now required/)
+      expect(verificationToast!.message).toMatch(/Strategist verification is now required/)
     })
 
     test("should show regular completion toast when ultrawork disabled", async () => {

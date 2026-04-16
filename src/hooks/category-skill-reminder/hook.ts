@@ -10,9 +10,9 @@ import { buildReminderMessage } from "./formatter"
  * These are orchestrator agents that delegate work to specialized agents.
  */
 const TARGET_AGENTS = new Set([
-  "sisyphus",
-  "sisyphus-junior",
-  "atlas",
+  "architect",
+  "junior-architect",
+  "technical-lead",
 ])
 
 /**
@@ -79,8 +79,8 @@ export function createCategorySkillReminderHook(
     const agentKey = getAgentConfigKey(agent)
     return (
       TARGET_AGENTS.has(agentKey) ||
-      agentKey.includes("sisyphus") ||
-      agentKey.includes("atlas")
+      agentKey.includes("architect") ||
+      agentKey.includes("technical-lead")
     )
   }
 

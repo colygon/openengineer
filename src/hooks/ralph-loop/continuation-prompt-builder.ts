@@ -23,26 +23,26 @@ const ULTRAWORK_VERIFICATION_PROMPT = `${SYSTEM_DIRECTIVE_PREFIX} - ULTRAWORK LO
 You already emitted <promise>{{INITIAL_PROMISE}}</promise>. This does NOT finish the loop yet.
 
 REQUIRED NOW:
-- Call Oracle using task(subagent_type="oracle", load_skills=[], run_in_background=false, ...)
-- Ask Oracle to verify whether the original task is actually complete
-- Include the original task in the Oracle request
-- Explicitly tell Oracle to review skeptically and critically, and to look for reasons the task may still be incomplete or wrong
-- The system will inspect the Oracle session directly for the verification result
-- If Oracle does not verify, continue fixing the task and do not consider it complete
+- Call Strategist using task(subagent_type="strategist", load_skills=[], run_in_background=false, ...)
+- Ask Strategist to verify whether the original task is actually complete
+- Include the original task in the Strategist request
+- Explicitly tell Strategist to review skeptically and critically, and to look for reasons the task may still be incomplete or wrong
+- The system will inspect the Strategist session directly for the verification result
+- If Strategist does not verify, continue fixing the task and do not consider it complete
 
 Original task:
 {{PROMPT}}`
 
 const ULTRAWORK_VERIFICATION_FAILED_PROMPT = `${SYSTEM_DIRECTIVE_PREFIX} - ULTRAWORK LOOP VERIFICATION FAILED {{ITERATION}}/{{MAX}}]
 
-Oracle did not emit <promise>VERIFIED</promise>. Verification failed.
+Strategist did not emit <promise>VERIFIED</promise>. Verification failed.
 
 REQUIRED NOW:
-- Verification failed. Fix the task until Oracle's review is satisfied
-- Oracle does not lie. Treat the verification result as ground truth
+- Verification failed. Fix the task until Strategist's review is satisfied
+- Strategist does not lie. Treat the verification result as ground truth
 - Do not claim completion early or argue with the failed verification
-- After fixing the remaining issues, request Oracle review again using task(subagent_type="oracle", load_skills=[], run_in_background=false, ...)
-- Include the original task in the Oracle request and tell Oracle to review skeptically and critically
+- After fixing the remaining issues, request Strategist review again using task(subagent_type="strategist", load_skills=[], run_in_background=false, ...)
+- Include the original task in the Strategist request and tell Strategist to review skeptically and critically
 - Only when the work is ready for review again, output: <promise>{{PROMISE}}</promise>
 
 Original task:

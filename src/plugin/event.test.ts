@@ -192,7 +192,7 @@ afterEach(() => {
 				ralphLoop: { event: async () => {} },
 				stopContinuationGuard: { event: async () => {} },
 				compactionTodoPreserver: { event: async () => {} },
-				atlasHook: { handler: async () => {} },
+				technicalLeadHook: { handler: async () => {} },
 			} as any,
 		})
 
@@ -285,7 +285,7 @@ afterEach(() => {
 				ralphLoop: { event: async () => {} },
 				stopContinuationGuard: { event: async () => {} },
 				compactionTodoPreserver: { event: async () => {} },
-				atlasHook: { handler: async () => {} },
+				technicalLeadHook: { handler: async () => {} },
 			} as any,
 		})
 
@@ -343,7 +343,7 @@ afterEach(() => {
 				ralphLoop: { event: async () => {} },
 				stopContinuationGuard: { event: async () => {} },
 				compactionTodoPreserver: { event: async () => {} },
-				atlasHook: { handler: async () => {} },
+				technicalLeadHook: { handler: async () => {} },
 			} as any,
 		})
 
@@ -840,7 +840,7 @@ describe("createEventHandler - retry dedupe lifecycle", () => {
 						role: "user",
 						modelID: "claude-opus-4-6-thinking",
 						providerID: "anthropic",
-						agent: "Sisyphus - Ultraworker",
+						agent: "Architect - Ultraworker",
 					},
 				},
 			},
@@ -861,7 +861,7 @@ describe("createEventHandler - retry dedupe lifecycle", () => {
 		await chatMessageHandler(
 			{
 				sessionID,
-				agent: "sisyphus",
+				agent: "architect",
 				model: { providerID: "anthropic", modelID: "claude-opus-4-6-thinking" },
 			},
 			firstOutput,

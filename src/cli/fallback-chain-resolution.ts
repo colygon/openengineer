@@ -22,8 +22,8 @@ export function resolveModelFromChain(
 	return null
 }
 
-export function getSisyphusFallbackChain(): FallbackEntry[] {
-	return CLI_AGENT_MODEL_REQUIREMENTS.sisyphus.fallbackChain
+export function getArchitectFallbackChain(): FallbackEntry[] {
+	return CLI_AGENT_MODEL_REQUIREMENTS.openengineer.fallbackChain
 }
 
 export function isAnyFallbackEntryAvailable(

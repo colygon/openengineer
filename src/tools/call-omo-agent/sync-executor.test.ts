@@ -72,7 +72,7 @@ function createToolContext(): ToolContext {
   return {
     sessionID: "parent-session",
     messageID: "msg-1",
-    agent: "sisyphus",
+    agent: "architect",
     abort: new AbortController().signal,
     metadata: mock(async () => {}),
   }
@@ -96,7 +96,7 @@ describe("executeSync", () => {
     const toolContext = createToolContext()
     const recorder = createPromptAsyncRecorder()
     const args = {
-      subagent_type: "explore",
+      subagent_type: "analyst",
       description: "test task",
       prompt: "find something",
       run_in_background: false,
@@ -109,7 +109,7 @@ describe("executeSync", () => {
     const promptInput = recorder.getCapturedInput()
     expect(promptInput).toBeDefined()
     expect(promptInput?.path.id).toBe("ses-test-123")
-    expect(promptInput?.body.agent).toBe("explore")
+    expect(promptInput?.body.agent).toBe("analyst")
     expect(promptInput?.body.tools.question).toBe(false)
     expect(promptInput?.body.tools.task).toBe(false)
     expect(promptInput?.body.parts).toEqual([{ type: "text", text: "find something" }])
@@ -122,7 +122,7 @@ describe("executeSync", () => {
     const toolContext = createToolContext()
     const recorder = createPromptAsyncRecorder()
     const args = {
-      subagent_type: "\u200BSisyphus\u200B - Ultraworker",
+      subagent_type: "\u200BArchitect\u200B - Ultraworker",
       description: "test task",
       prompt: "find something",
       run_in_background: false,
@@ -133,7 +133,7 @@ describe("executeSync", () => {
 
     //#then
     const promptInput = recorder.getCapturedInput()
-    expect(promptInput?.body.agent).toBe("Sisyphus - Ultraworker")
+    expect(promptInput?.body.agent).toBe("Architect - Ultraworker")
   })
 
   test("returns processed response with task metadata footer", async () => {
@@ -174,7 +174,7 @@ describe("executeSync", () => {
     const toolContext = createToolContext()
     const recorder = createPromptAsyncRecorder()
     const args = {
-      subagent_type: "explore",
+      subagent_type: "analyst",
       description: "test task",
       prompt: "find something",
       run_in_background: false,
@@ -226,7 +226,7 @@ describe("executeSync", () => {
     const toolContext = createToolContext()
     const recorder = createPromptAsyncRecorder()
     const args = {
-      subagent_type: "explore",
+      subagent_type: "analyst",
       description: "metadata title",
       prompt: "collect evidence",
       run_in_background: false,
@@ -251,7 +251,7 @@ describe("executeSync", () => {
     const toolContext = createToolContext()
     const recorder = createPromptAsyncRecorder()
     const args = {
-      subagent_type: "explore",
+      subagent_type: "analyst",
       description: "test task",
       prompt: "find something",
       run_in_background: false,
@@ -285,7 +285,7 @@ describe("executeSync", () => {
       throw new Error("agent.name is undefined")
     })
     const args = {
-      subagent_type: "explore",
+      subagent_type: "analyst",
       description: "missing agent",
       prompt: "find something",
       run_in_background: false,
@@ -295,7 +295,7 @@ describe("executeSync", () => {
     const result = await executeSync(args, toolContext, createContext(recorder.promptAsync) as never, deps)
 
     //#then
-    expect(result).toContain('Error: Agent "explore" not found')
+    expect(result).toContain('Error: Agent "analyst" not found')
     expect(result).toContain("session_id: ses-missing-agent")
     expect(deps.waitForCompletion).not.toHaveBeenCalled()
     expect(deps.processMessages).not.toHaveBeenCalled()
@@ -308,7 +308,7 @@ describe("executeSync", () => {
     const toolContext = createToolContext()
     const recorder = createPromptAsyncRecorder()
     const args = {
-      subagent_type: "\u200BSisyphus - Ultraworker",
+      subagent_type: "\u200BArchitect - Ultraworker",
       description: "prefixed agent",
       prompt: "find something",
       run_in_background: false,
@@ -319,7 +319,7 @@ describe("executeSync", () => {
 
     //#then
     const promptInput = recorder.getCapturedInput()
-    expect(promptInput?.body.agent).toBe("Sisyphus - Ultraworker")
+    expect(promptInput?.body.agent).toBe("Architect - Ultraworker")
   })
 
   test("returns generic prompt failure with task metadata", async () => {
@@ -367,7 +367,7 @@ describe("executeSync", () => {
     }
 
     const args = {
-      subagent_type: "explore",
+      subagent_type: "analyst",
       description: "test task",
       prompt: "find something",
     }
@@ -375,7 +375,7 @@ describe("executeSync", () => {
     const toolContext = {
       sessionID: "parent-session",
       messageID: "msg-4",
-      agent: "sisyphus",
+      agent: "architect",
       abort: new AbortController().signal,
       metadata: mock(async () => {}),
     }

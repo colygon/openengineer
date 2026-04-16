@@ -84,15 +84,15 @@ describe("resolveCallableAgents", () => {
     describe("#when an agent has mode=primary", () => {
       test("#then it is excluded from the callable list", async () => {
         const agents = [
-          { name: "sisyphus", mode: "primary" },
-          { name: "explore", mode: "subagent" },
+          { name: "architect", mode: "primary" },
+          { name: "analyst", mode: "subagent" },
         ]
         const client = createMockClient(agents)
 
         const result = await resolveCallableAgents(client)
 
-        expect(result).not.toContain("sisyphus")
-        expect(result).toContain("explore")
+        expect(result).not.toContain("architect")
+        expect(result).toContain("analyst")
       })
     })
 
@@ -117,15 +117,15 @@ describe("resolveCallableAgents", () => {
     describe("#when duplicate agent names exist across sources", () => {
       test("#then no duplicates appear in the result", async () => {
         const agents = [
-          { name: "explore", mode: "subagent" },
-          { name: "explore", mode: "subagent" },
+          { name: "analyst", mode: "subagent" },
+          { name: "analyst", mode: "subagent" },
           { name: "Explore", mode: "subagent" },
         ]
         const client = createMockClient(agents)
 
         const result = await resolveCallableAgents(client)
 
-        const exploreCount = result.filter((n: string) => n === "explore").length
+        const exploreCount = result.filter((n: string) => n === "analyst").length
         expect(exploreCount).toBe(1)
       })
     })
@@ -134,33 +134,33 @@ describe("resolveCallableAgents", () => {
       test("#then entries with null name are skipped", async () => {
         const agents = [
           { name: null, mode: "subagent" },
-          { name: "explore", mode: "subagent" },
+          { name: "analyst", mode: "subagent" },
         ]
         const client = createMockClient(agents)
 
         const result = await resolveCallableAgents(client)
 
-        expect(result).toContain("explore")
+        expect(result).toContain("analyst")
         expect(result.length).toBeGreaterThanOrEqual(ALLOWED_AGENTS.length)
       })
 
       test("#then entries with numeric name are skipped", async () => {
         const agents = [
           { name: 42, mode: "subagent" },
-          { name: "explore", mode: "subagent" },
+          { name: "analyst", mode: "subagent" },
         ]
         const client = createMockClient(agents)
 
         const result = await resolveCallableAgents(client)
 
         expect(result).not.toContain("42")
-        expect(result).toContain("explore")
+        expect(result).toContain("analyst")
       })
 
       test("#then entries with whitespace-only name are skipped", async () => {
         const agents = [
           { name: "   ", mode: "subagent" },
-          { name: "explore", mode: "subagent" },
+          { name: "analyst", mode: "subagent" },
         ]
         const client = createMockClient(agents)
 
@@ -168,19 +168,19 @@ describe("resolveCallableAgents", () => {
 
         expect(result).not.toContain("")
         expect(result).not.toContain("   ")
-        expect(result).toContain("explore")
+        expect(result).toContain("analyst")
       })
 
       test("#then entries with missing name property are skipped", async () => {
         const agents = [
           { mode: "subagent" },
-          { name: "explore", mode: "subagent" },
+          { name: "analyst", mode: "subagent" },
         ]
         const client = createMockClient(agents)
 
         const result = await resolveCallableAgents(client)
 
-        expect(result).toContain("explore")
+        expect(result).toContain("analyst")
         expect(result.length).toBeGreaterThanOrEqual(ALLOWED_AGENTS.length)
       })
 
@@ -188,13 +188,13 @@ describe("resolveCallableAgents", () => {
         const agents = [
           null,
           undefined,
-          { name: "explore", mode: "subagent" },
+          { name: "analyst", mode: "subagent" },
         ] as unknown as Array<Record<string, unknown>>
         const client = createMockClient(agents)
 
         const result = await resolveCallableAgents(client)
 
-        expect(result).toContain("explore")
+        expect(result).toContain("analyst")
       })
     })
 

@@ -4,70 +4,70 @@ import { describe, expect, test } from "bun:test"
 import { AGENT_NAME_MAP, migrateAgentNames } from "./agent-names"
 
 describe("AGENT_NAME_MAP parenthesized aliases", () => {
-  test("maps Sisyphus (Ultraworker) to sisyphus", () => {
+  test("maps Architect (Ultraworker) to architect", () => {
     // given
-    const alias = "Sisyphus (Ultraworker)"
+    const alias = "Architect (Ultraworker)"
 
     // when
     const result = AGENT_NAME_MAP[alias]
 
     // then
-    expect(result).toBe("sisyphus")
+    expect(result).toBe("architect")
   })
 
-  test("maps Hephaestus (Deep Agent) to hephaestus", () => {
+  test("maps Engineer (Deep Agent) to engineer", () => {
     // given
-    const alias = "Hephaestus (Deep Agent)"
+    const alias = "Engineer (Deep Agent)"
 
     // when
     const result = AGENT_NAME_MAP[alias]
 
     // then
-    expect(result).toBe("hephaestus")
+    expect(result).toBe("engineer")
   })
 
-  test("maps Prometheus (Plan Builder) to prometheus", () => {
+  test("maps ProductManager (Plan Builder) to product-manager", () => {
     // given
-    const alias = "Prometheus (Plan Builder)"
+    const alias = "ProductManager (Plan Builder)"
 
     // when
     const result = AGENT_NAME_MAP[alias]
 
     // then
-    expect(result).toBe("prometheus")
+    expect(result).toBe("product-manager")
   })
 
-  test("maps Atlas (Plan Executor) to atlas", () => {
+  test("maps TechnicalLead (Plan Executor) to technical-lead", () => {
     // given
-    const alias = "Atlas (Plan Executor)"
+    const alias = "TechnicalLead (Plan Executor)"
 
     // when
     const result = AGENT_NAME_MAP[alias]
 
     // then
-    expect(result).toBe("atlas")
+    expect(result).toBe("technical-lead")
   })
 
-  test("maps Metis (Plan Consultant) to metis", () => {
+  test("maps Consultant (Plan Consultant) to consultant", () => {
     // given
-    const alias = "Metis (Plan Consultant)"
+    const alias = "Consultant (Plan Consultant)"
 
     // when
     const result = AGENT_NAME_MAP[alias]
 
     // then
-    expect(result).toBe("metis")
+    expect(result).toBe("consultant")
   })
 
-  test("maps Momus (Plan Critic) to momus", () => {
+  test("maps QaEngineer (Plan Critic) to qa-engineer", () => {
     // given
-    const alias = "Momus (Plan Critic)"
+    const alias = "QaEngineer (Plan Critic)"
 
     // when
     const result = AGENT_NAME_MAP[alias]
 
     // then
-    expect(result).toBe("momus")
+    expect(result).toBe("qa-engineer")
   })
 })
 
@@ -75,12 +75,12 @@ describe("migrateAgentNames with parenthesized aliases", () => {
   test("migrates all parenthesized aliases to canonical names", () => {
     // given
     const legacyAgents = {
-      "Sisyphus (Ultraworker)": { model: "claude-opus-4" },
-      "Hephaestus (Deep Agent)": { model: "gpt-5.4" },
-      "Prometheus (Plan Builder)": { model: "claude-opus-4" },
-      "Atlas (Plan Executor)": { model: "kimi-k2.5" },
-      "Metis (Plan Consultant)": { model: "claude-opus-4" },
-      "Momus (Plan Critic)": { model: "claude-opus-4" },
+      "Architect (Ultraworker)": { model: "claude-opus-4" },
+      "Engineer (Deep Agent)": { model: "gpt-5.4" },
+      "ProductManager (Plan Builder)": { model: "claude-opus-4" },
+      "TechnicalLead (Plan Executor)": { model: "kimi-k2.5" },
+      "Consultant (Plan Consultant)": { model: "claude-opus-4" },
+      "QaEngineer (Plan Critic)": { model: "claude-opus-4" },
     }
 
     // when
@@ -88,13 +88,13 @@ describe("migrateAgentNames with parenthesized aliases", () => {
 
     // then
     expect(changed).toBe(true)
-    expect(migrated.sisyphus).toEqual({ model: "claude-opus-4" })
-    expect(migrated.hephaestus).toEqual({ model: "gpt-5.4" })
-    expect(migrated.prometheus).toEqual({ model: "claude-opus-4" })
-    expect(migrated.atlas).toEqual({ model: "kimi-k2.5" })
-    expect(migrated.metis).toEqual({ model: "claude-opus-4" })
-    expect(migrated.momus).toEqual({ model: "claude-opus-4" })
-    expect(migrated["Sisyphus (Ultraworker)"]).toBeUndefined()
-    expect(migrated["Hephaestus (Deep Agent)"]).toBeUndefined()
+    expect(migrated.openengineer).toEqual({ model: "claude-opus-4" })
+    expect(migrated.engineer).toEqual({ model: "gpt-5.4" })
+    expect(migrated.product-manager).toEqual({ model: "claude-opus-4" })
+    expect(migrated.technical-lead).toEqual({ model: "kimi-k2.5" })
+    expect(migrated.consultant).toEqual({ model: "claude-opus-4" })
+    expect(migrated.qa-engineer).toEqual({ model: "claude-opus-4" })
+    expect(migrated["Architect (Ultraworker)"]).toBeUndefined()
+    expect(migrated["Engineer (Deep Agent)"]).toBeUndefined()
   })
 })

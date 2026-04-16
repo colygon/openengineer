@@ -21,11 +21,11 @@ describe("createPluginInterface - command.execute.before", () => {
 
   beforeEach(() => {
     testDir = join(tmpdir(), `plugin-interface-start-work-${randomUUID()}`)
-    mkdirSync(join(testDir, ".sisyphus", "plans"), { recursive: true })
-    writeFileSync(join(testDir, ".sisyphus", "plans", "worker-plan.md"), "# Plan\n- [ ] Task 1")
+    mkdirSync(join(testDir, ".openengineer", "plans"), { recursive: true })
+    writeFileSync(join(testDir, ".openengineer", "plans", "worker-plan.md"), "# Plan\n- [ ] Task 1")
     _resetForTesting()
-    registerAgentName("prometheus")
-    registerAgentName("sisyphus")
+    registerAgentName("product-manager")
+    registerAgentName("architect")
   })
 
   afterEach(() => {
@@ -35,7 +35,7 @@ describe("createPluginInterface - command.execute.before", () => {
 
   test("executes start-work side effects for native command execution", async () => {
     // given
-    updateSessionAgent("ses-command-before", "prometheus")
+    updateSessionAgent("ses-command-before", "product-manager")
     const pluginInterface = createPluginInterface({
       ctx: {
         directory: testDir,
@@ -76,13 +76,13 @@ describe("createPluginInterface - command.execute.before", () => {
     expect(pluginInterface["command.execute.before"]).toBeDefined()
     expect(output.parts[0]?.text).toContain("Auto-Selected Plan")
     expect(output.parts[0]?.text).toContain("boulder.json has been created")
-    expect(getSessionAgent("ses-command-before")).toBe("sisyphus")
-    expect(readBoulderState(testDir)?.agent).toBe("sisyphus")
+    expect(getSessionAgent("ses-command-before")).toBe("architect")
+    expect(readBoulderState(testDir)?.agent).toBe("architect")
   })
 
   test("does not run start-work side effects for other native commands with session context", async () => {
     // given
-    updateSessionAgent("ses-handoff", "prometheus")
+    updateSessionAgent("ses-handoff", "product-manager")
     const pluginInterface = createPluginInterface({
       ctx: {
         directory: testDir,
@@ -122,13 +122,13 @@ describe("createPluginInterface - command.execute.before", () => {
     // then
     expect(output.parts[0]?.text).toContain("HANDOFF CONTEXT")
     expect(readBoulderState(testDir)).toBeNull()
-    expect(getSessionAgent("ses-handoff")).toBe("prometheus")
+    expect(getSessionAgent("ses-handoff")).toBe("product-manager")
   })
 
-  test("switches native start-work to Atlas when Atlas is registered in config", async () => {
+  test("switches native start-work to TechnicalLead when TechnicalLead is registered in config", async () => {
     // given
-    registerAgentName("atlas")
-    updateSessionAgent("ses-command-atlas", "prometheus")
+    registerAgentName("technical-lead")
+    updateSessionAgent("ses-command-technical-lead", "product-manager")
     const pluginInterface = createPluginInterface({
       ctx: {
         directory: testDir,
@@ -159,16 +159,16 @@ describe("createPluginInterface - command.execute.before", () => {
     // when
     await pluginInterface["chat.message"]?.(
       {
-        sessionID: "ses-command-atlas",
-        agent: "prometheus",
+        sessionID: "ses-command-technical-lead",
+        agent: "product-manager",
       } as never,
       output as never
     )
 
     // then
-    expect(output.message.agent).toBe("atlas")
-    expect(getSessionAgent("ses-command-atlas")).toBe("atlas")
-    expect(readBoulderState(testDir)?.agent).toBe("atlas")
+    expect(output.message.agent).toBe("technical-lead")
+    expect(getSessionAgent("ses-command-technical-lead")).toBe("technical-lead")
+    expect(readBoulderState(testDir)?.agent).toBe("technical-lead")
   })
 })
 
@@ -179,7 +179,7 @@ describe("createPluginInterface - ulw-loop native command smoke", () => {
     testDir = join(tmpdir(), `plugin-interface-ulw-loop-${randomUUID()}`)
     mkdirSync(testDir, { recursive: true })
     _resetForTesting()
-    registerAgentName("sisyphus")
+    registerAgentName("architect")
   })
 
   afterEach(() => {
@@ -237,7 +237,7 @@ describe("createPluginInterface - ulw-loop native command smoke", () => {
     await pluginInterface["chat.message"]?.(
       {
         sessionID: "ses-ulw-native",
-        agent: "sisyphus",
+        agent: "architect",
       } as never,
       output as never,
     )

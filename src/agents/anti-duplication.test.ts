@@ -2,7 +2,7 @@
 
 import { describe, it, expect } from "bun:test"
 import { buildAntiDuplicationSection } from "./dynamic-agent-prompt-builder"
-import { METIS_SYSTEM_PROMPT } from "./metis"
+import { CONSULTANT_SYSTEM_PROMPT } from "./consultant"
 
 describe("buildAntiDuplicationSection", () => {
   it("#given no arguments #when building anti-duplication section #then returns comprehensive rule section", () => {
@@ -92,10 +92,10 @@ describe("buildAntiDuplicationSection", () => {
   })
 })
 
-describe("METIS_SYSTEM_PROMPT anti-duplication coverage", () => {
+describe("CONSULTANT_SYSTEM_PROMPT anti-duplication coverage", () => {
   it("#given the system prompt #when reading delegated exploration rules #then includes anti-duplication guidance", () => {
     // given
-    const prompt = METIS_SYSTEM_PROMPT
+    const prompt = CONSULTANT_SYSTEM_PROMPT
 
     // when / then
     expect(prompt).toContain("<Anti_Duplication>")
