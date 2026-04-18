@@ -10,7 +10,7 @@ describe("createCommandExecuteBeforeHandler", () => {
     const startLoop = mock(() => true)
     const handler = createCommandExecuteBeforeHandler({
       hooks: {
-        ralphLoop: {
+        autoLoop: {
           startLoop,
           cancelLoop: mock(() => true),
         },
@@ -83,7 +83,7 @@ describe("createCommandExecuteBeforeHandler", () => {
     const startLoop = mock(() => true)
     const handler = createCommandExecuteBeforeHandler({
       hooks: {
-        ralphLoop: {
+        autoLoop: {
           startLoop,
           cancelLoop: mock(() => true),
         },

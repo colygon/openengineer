@@ -4,12 +4,12 @@ import { tmpdir } from "node:os"
 import { join } from "node:path"
 import * as shared from "./shared"
 import { mergeConfigs, parseConfigPartially } from "./plugin-config";
-import { OhMyOpenCodeConfigSchema, type OhMyOpenCodeConfig } from "./config";
+import { OpenEngineerConfigSchema, type OpenEngineerConfig } from "./config";
 
 const tempDirs: string[] = []
 
-function createConfig(config: Partial<OhMyOpenCodeConfig>): OhMyOpenCodeConfig {
-  return OhMyOpenCodeConfigSchema.parse(config)
+function createConfig(config: Partial<OpenEngineerConfig>): OpenEngineerConfig {
+  return OpenEngineerConfigSchema.parse(config)
 }
 
 async function importFreshPluginConfigModule(): Promise<typeof import("./plugin-config")> {
@@ -164,7 +164,7 @@ describe("parseConfigPartially", () => {
     //#then should accept the hook name so runtime and schema stay aligned
 
     it("should accept unknown disabled_hooks values for forward compatibility", () => {
-      const result = OhMyOpenCodeConfigSchema.safeParse({
+      const result = OpenEngineerConfigSchema.safeParse({
         disabled_hooks: ["future-hook-name"],
       });
 
@@ -303,7 +303,7 @@ describe("parseConfigPartially", () => {
 describe("loadPluginConfig", () => {
   it("should only honor mcp_env_allowlist from user config", async () => {
     // given
-    const rootDir = mkdtempSync(join(tmpdir(), "omo-plugin-config-"))
+    const rootDir = mkdtempSync(join(tmpdir(), "oe-plugin-config-"))
     const userConfigDir = join(rootDir, "user-config")
     const projectDir = join(rootDir, "project")
     const projectConfigDir = join(projectDir, ".opencode")
@@ -333,7 +333,7 @@ describe("loadPluginConfig", () => {
 
   it("should ignore edits to the renamed legacy backup after migration", async () => {
     // given
-    const rootDir = mkdtempSync(join(tmpdir(), "omo-plugin-config-legacy-"))
+    const rootDir = mkdtempSync(join(tmpdir(), "oe-plugin-config-legacy-"))
     const userConfigDir = join(rootDir, "user-config")
     const projectDir = join(rootDir, "project")
     const projectConfigDir = join(projectDir, ".opencode")
@@ -363,7 +363,7 @@ describe("loadPluginConfig", () => {
 
   it("should still load config from legacy path when migration fails", async () => {
     // given - legacy config exists but canonical path is not writable
-    const rootDir = mkdtempSync(join(tmpdir(), "omo-plugin-config-fail-"))
+    const rootDir = mkdtempSync(join(tmpdir(), "oe-plugin-config-fail-"))
     const userConfigDir = join(rootDir, "user-config")
     const projectDir = join(rootDir, "project")
     const projectConfigDir = join(projectDir, ".opencode")
@@ -383,7 +383,7 @@ describe("loadPluginConfig", () => {
     process.env.OPENCODE_CONFIG_DIR = userConfigDir
 
     // when
-    let config: OhMyOpenCodeConfig
+    let config: OpenEngineerConfig
     try {
       const fresh = await importFreshPluginConfigModule()
       config = fresh.loadPluginConfig(projectDir, {})
@@ -400,7 +400,7 @@ describe("loadPluginConfig", () => {
 
   it("should load migrated legacy project config on the first load", async () => {
     // given
-    const rootDir = mkdtempSync(join(tmpdir(), "omo-plugin-config-first-load-"))
+    const rootDir = mkdtempSync(join(tmpdir(), "oe-plugin-config-first-load-"))
     const userConfigDir = join(rootDir, "user-config")
     const projectDir = join(rootDir, "project")
     const projectConfigDir = join(projectDir, ".opencode")
@@ -426,7 +426,7 @@ describe("loadPluginConfig", () => {
 
   it("should preserve explicit user git_master settings when project config omits git_master", async () => {
     // given
-    const rootDir = mkdtempSync(join(tmpdir(), "omo-plugin-config-git-master-user-"))
+    const rootDir = mkdtempSync(join(tmpdir(), "oe-plugin-config-git-master-user-"))
     const userConfigDir = join(rootDir, "user-config")
     const projectDir = join(rootDir, "project")
     const projectConfigDir = join(projectDir, ".opencode")
@@ -470,7 +470,7 @@ describe("loadPluginConfig", () => {
 
   it("should merge explicit git_master keys from user and project configs", async () => {
     // given
-    const rootDir = mkdtempSync(join(tmpdir(), "omo-plugin-config-git-master-merge-"))
+    const rootDir = mkdtempSync(join(tmpdir(), "oe-plugin-config-git-master-merge-"))
     const userConfigDir = join(rootDir, "user-config")
     const projectDir = join(rootDir, "project")
     const projectConfigDir = join(projectDir, ".opencode")

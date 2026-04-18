@@ -188,7 +188,7 @@ Original error: ${createResult.error}`
             agent: DESIGNER_AGENT,
             tools: {
               task: false,
-              call_omo_agent: false,
+              call_agent: false,
               look_at: false,
               read: readEnabled,
             },

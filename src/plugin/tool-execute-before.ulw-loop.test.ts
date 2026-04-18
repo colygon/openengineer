@@ -4,8 +4,8 @@ import { tmpdir } from "node:os"
 import { join } from "node:path"
 import { createToolExecuteAfterHandler } from "./tool-execute-after"
 import { createToolExecuteBeforeHandler } from "./tool-execute-before"
-import { ULTRAWORK_VERIFICATION_PROMISE } from "../hooks/ralph-loop/constants"
-import { clearState, readState, writeState } from "../hooks/ralph-loop/storage"
+import { ULTRAWORK_VERIFICATION_PROMISE } from "../hooks/auto-loop/constants"
+import { clearState, readState, writeState } from "../hooks/auto-loop/storage"
 
 describe("tool.execute.before ultrawork strategist verification", () => {
 	function createCtx(directory: string) {
@@ -98,7 +98,7 @@ describe("tool.execute.before ultrawork strategist verification", () => {
 		const handler = createToolExecuteBeforeHandler({
 			ctx: createCtx(directory) as unknown as Parameters<typeof createToolExecuteBeforeHandler>[0]["ctx"],
 			hooks: {
-				ralphLoop: {
+				autoLoop: {
 					startLoop: (sessionID: string, prompt: string, options?: Record<string, unknown>) => {
 						startLoopCalls.push({ sessionID, prompt, options: options ?? {} })
 						return true

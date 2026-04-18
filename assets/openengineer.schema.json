@@ -61,9 +61,9 @@
         "type": "string",
         "enum": [
           "init-deep",
-          "ralph-loop",
+          "auto-loop",
           "ulw-loop",
-          "cancel-ralph",
+          "cancel-loop",
           "refactor",
           "start-work",
           "stop-continuation",
@@ -5440,7 +5440,7 @@
         "safe_hook_creation": {
           "type": "boolean"
         },
-        "disable_omo_env": {
+        "disable_env_context": {
           "type": "boolean"
         },
         "hashline_edit": {
@@ -5571,7 +5571,7 @@
         }
       ]
     },
-    "ralph_loop": {
+    "auto_loop": {
       "type": "object",
       "properties": {
         "enabled": {

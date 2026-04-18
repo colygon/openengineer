@@ -20,7 +20,7 @@ export function buildDefaultJuniorArchitectPrompt(
     : "All todos marked completed"
 
   const prompt = `<Role>
-Architect-Junior - Focused executor from OhMyOpenCode.
+Architect-Junior - Focused executor from Open Engineer.
 Execute tasks directly.
 </Role>
 

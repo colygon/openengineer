@@ -5,8 +5,8 @@ import { tmpdir } from "node:os"
 import { join } from "node:path"
 import { createOpencodeClient } from "@opencode-ai/sdk"
 import type { AssistantMessage, Session } from "@opencode-ai/sdk"
-import type { BoulderState } from "../../features/boulder-state"
-import { clearBoulderState, writeBoulderState } from "../../features/boulder-state"
+import type { PlanState } from "../../features/plan-state"
+import { clearPlanState, writePlanState } from "../../features/plan-state"
 
 const TEST_STORAGE_ROOT = join(tmpdir(), `technicalLead-final-wave-regression-storage-${randomUUID()}`)
 const TEST_MESSAGE_STORAGE = join(TEST_STORAGE_ROOT, "message")
@@ -100,7 +100,7 @@ describe("TechnicalLead final-wave approval gate regressions", () => {
     const planPath = join(testDirectory, `${planName}.md`)
     writeFileSync(planPath, planContent)
 
-    const state: BoulderState = {
+    const state: PlanState = {
       active_plan: planPath,
       started_at: "2026-01-02T10:00:00Z",
       session_ids: [sessionID],
@@ -108,17 +108,17 @@ describe("TechnicalLead final-wave approval gate regressions", () => {
       agent: "technical-lead",
     }
 
-    writeBoulderState(testDirectory, state)
+    writePlanState(testDirectory, state)
   }
 
   beforeEach(() => {
     testDirectory = join(tmpdir(), `technicalLead-final-wave-regression-${randomUUID()}`)
     mkdirSync(join(testDirectory, ".openengineer"), { recursive: true })
-    clearBoulderState(testDirectory)
+    clearPlanState(testDirectory)
   })
 
   afterEach(() => {
-    clearBoulderState(testDirectory)
+    clearPlanState(testDirectory)
     if (existsSync(testDirectory)) {
       rmSync(testDirectory, { recursive: true, force: true })
     }

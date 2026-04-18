@@ -1,6 +1,6 @@
 import type { AgentOverrides } from "../../config"
 import type { BackgroundManager } from "../../features/background-agent"
-import type { TopLevelTaskRef } from "../../features/boulder-state"
+import type { TopLevelTaskRef } from "../../features/plan-state"
 
 export type ModelInfo = { providerID: string; modelID: string; variant?: string }
 

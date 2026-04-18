@@ -8,7 +8,7 @@ const { checkForLegacyPluginEntry } = await import(
 )
 
 function createTestConfigDir(): string {
-  return mkdtempSync(join(tmpdir(), "omo-legacy-check-"))
+  return mkdtempSync(join(tmpdir(), "oe-legacy-check-"))
 }
 
 function cleanupTestConfigDir(testConfigDir: string): void {

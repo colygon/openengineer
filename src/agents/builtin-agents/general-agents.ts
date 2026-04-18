@@ -25,7 +25,7 @@ export function collectPendingBuiltinAgents(input: {
   isFirstRunNoCache: boolean
   disabledSkills?: Set<string>
   useTaskSystem?: boolean
-  disableOmoEnv?: boolean
+  disableEnvContext?: boolean
 }): { pendingAgentConfigs: Map<string, AgentConfig>; availableAgents: AvailableAgent[] } {
   const {
     agentSources,
@@ -41,7 +41,7 @@ export function collectPendingBuiltinAgents(input: {
     availableModels,
     isFirstRunNoCache,
     disabledSkills,
-    disableOmoEnv = false,
+    disableEnvContext = false,
   } = input
 
   const availableAgents: AvailableAgent[] = []
@@ -100,7 +100,7 @@ export function collectPendingBuiltinAgents(input: {
     }
 
     if (agentName === "librarian") {
-      config = applyEnvironmentContext(config, directory, { disableOmoEnv })
+      config = applyEnvironmentContext(config, directory, { disableEnvContext })
     }
 
     config = applyOverrides(config, override, mergedCategories, directory)

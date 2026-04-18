@@ -2,7 +2,7 @@
 
 import { describe, test, expect, spyOn, beforeEach, afterEach, mock } from "bun:test"
 import type { CategoryConfig } from "../config/schema"
-import type { OhMyOpenCodeConfig } from "../config"
+import type { OpenEngineerConfig } from "../config"
 import { getAgentDisplayName, getAgentListDisplayName, getAgentRuntimeName } from "../shared/agent-display-names"
 import { resolveCategoryConfig } from "./category-config-resolver"
 
@@ -29,7 +29,7 @@ async function importFreshConfigHandlerModule(): Promise<typeof import("./config
   return import(`./config-handler?test=${Date.now()}-${Math.random()}`)
 }
 
-function createPluginConfig(overrides: Partial<OhMyOpenCodeConfig> = {}): OhMyOpenCodeConfig {
+function createPluginConfig(overrides: Partial<OpenEngineerConfig> = {}): OpenEngineerConfig {
   return {
     git_master: {
       commit_footer: true,
@@ -1523,8 +1523,8 @@ describe("per-agent todowrite/todoread deny when task_system enabled", () => {
   })
 })
 
-describe("disable_omo_env pass-through", () => {
-  test("passes disable_omo_env=true to createBuiltinAgents", async () => {
+describe("disable_env_context pass-through", () => {
+  test("passes disable_env_context=true to createBuiltinAgents", async () => {
     //#given
     const createBuiltinAgentsMock = agents.createBuiltinAgents as unknown as {
       mockResolvedValue: (value: Record<string, unknown>) => void
@@ -1535,7 +1535,7 @@ describe("disable_omo_env pass-through", () => {
     })
 
     const pluginConfig = createPluginConfig({
-      experimental: { disable_omo_env: true },
+      experimental: { disable_env_context: true },
     })
     const config: Record<string, unknown> = {
       model: "anthropic/claude-opus-4-6",
@@ -1557,13 +1557,13 @@ describe("disable_omo_env pass-through", () => {
     const lastCall =
       createBuiltinAgentsMock.mock.calls[createBuiltinAgentsMock.mock.calls.length - 1]
     expect(lastCall).toBeDefined()
-    const disableOmoEnv = Array.isArray(lastCall)
+    const disableEnvContext = Array.isArray(lastCall)
       ? lastCall[lastCall.length - 1]
       : undefined
-    expect(disableOmoEnv).toBe(true)
+    expect(disableEnvContext).toBe(true)
   })
 
-  test("passes disable_omo_env=false to createBuiltinAgents when omitted", async () => {
+  test("passes disable_env_context=false to createBuiltinAgents when omitted", async () => {
     //#given
     const createBuiltinAgentsMock = agents.createBuiltinAgents as unknown as {
       mockResolvedValue: (value: Record<string, unknown>) => void
@@ -1594,10 +1594,10 @@ describe("disable_omo_env pass-through", () => {
     const lastCall =
       createBuiltinAgentsMock.mock.calls[createBuiltinAgentsMock.mock.calls.length - 1]
     expect(lastCall).toBeDefined()
-    const disableOmoEnv = Array.isArray(lastCall)
+    const disableEnvContext = Array.isArray(lastCall)
       ? lastCall[lastCall.length - 1]
       : undefined
-    expect(disableOmoEnv).toBe(false)
+    expect(disableEnvContext).toBe(false)
   })
 })
 
@@ -1619,7 +1619,7 @@ describe("Agent merge priority — project-local overrides global", () => {
       },
     })
 
-    const pluginConfig: OhMyOpenCodeConfig = {}
+    const pluginConfig: OpenEngineerConfig = {}
     const config: Record<string, unknown> = {
       model: "anthropic/claude-opus-4-6",
       agent: {},
@@ -1659,7 +1659,7 @@ describe("Agent merge priority — project-local overrides global", () => {
       },
     })
 
-    const pluginConfig: OhMyOpenCodeConfig = {}
+    const pluginConfig: OpenEngineerConfig = {}
     const config: Record<string, unknown> = {
       model: "anthropic/claude-opus-4-6",
       agent: {},
@@ -1699,7 +1699,7 @@ describe("Agent merge priority — project-local overrides global", () => {
       },
     })
 
-    const pluginConfig: OhMyOpenCodeConfig = {}
+    const pluginConfig: OpenEngineerConfig = {}
     const config: Record<string, unknown> = {
       model: "anthropic/claude-opus-4-6",
       agent: {},
@@ -1747,7 +1747,7 @@ describe("Agent merge priority — project-local overrides global", () => {
       },
     })
 
-    const pluginConfig: OhMyOpenCodeConfig = {}
+    const pluginConfig: OpenEngineerConfig = {}
     const config: Record<string, unknown> = {
       model: "anthropic/claude-opus-4-6",
       agent: {},

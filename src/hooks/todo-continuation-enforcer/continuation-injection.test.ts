@@ -2,7 +2,7 @@ declare const require: (name: string) => any
 const { describe, expect, test } = require("bun:test")
 
 import { injectContinuation } from "./continuation-injection"
-import { OMO_INTERNAL_INITIATOR_MARKER } from "../../shared/internal-initiator-marker"
+import { OE_INTERNAL_INITIATOR_MARKER } from "../../shared/internal-initiator-marker"
 
 describe("injectContinuation", () => {
   test("preserves the registered built-in agent name before promptAsync", async () => {
@@ -83,7 +83,7 @@ describe("injectContinuation", () => {
 
     // then
     expect(capturedTools).toEqual({ question: false, bash: true })
-    expect(capturedText).toContain(OMO_INTERNAL_INITIATOR_MARKER)
+    expect(capturedText).toContain(OE_INTERNAL_INITIATOR_MARKER)
   })
 
   test("skips injection when agent is plan (prevents Plan Mode infinite loop)", async () => {

@@ -3,7 +3,7 @@ import { existsSync, mkdirSync, rmSync, writeFileSync } from "node:fs"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
 import { randomUUID } from "node:crypto"
-import { clearBoulderState, writeBoulderState } from "../../features/boulder-state"
+import { clearPlanState, writePlanState } from "../../features/plan-state"
 import { resolveActiveBoulderSession } from "./resolve-active-boulder-session"
 
 describe("resolveActiveBoulderSession", () => {
@@ -14,11 +14,11 @@ describe("resolveActiveBoulderSession", () => {
     if (!existsSync(testDirectory)) {
       mkdirSync(testDirectory, { recursive: true })
     }
-    clearBoulderState(testDirectory)
+    clearPlanState(testDirectory)
   })
 
   afterEach(() => {
-    clearBoulderState(testDirectory)
+    clearPlanState(testDirectory)
     if (existsSync(testDirectory)) {
       rmSync(testDirectory, { recursive: true, force: true })
     }
@@ -28,7 +28,7 @@ describe("resolveActiveBoulderSession", () => {
     // given
     const planPath = join(testDirectory, "complete-plan.md")
     writeFileSync(planPath, "# Plan\n- [x] Task 1\n", "utf-8")
-    writeBoulderState(testDirectory, {
+    writePlanState(testDirectory, {
       active_plan: planPath,
       started_at: "2026-01-02T10:00:00Z",
       session_ids: ["ses_tracked"],
@@ -51,7 +51,7 @@ describe("resolveActiveBoulderSession", () => {
     // given
     const planPath = join(testDirectory, "incomplete-plan.md")
     writeFileSync(planPath, "# Plan\n- [ ] Task 1\n", "utf-8")
-    writeBoulderState(testDirectory, {
+    writePlanState(testDirectory, {
       active_plan: planPath,
       started_at: "2026-01-02T10:00:00Z",
       session_ids: ["ses_tracked"],
@@ -69,14 +69,14 @@ describe("resolveActiveBoulderSession", () => {
     // then
     expect(result).not.toBeNull()
     expect(result?.progress.isComplete).toBe(false)
-    expect(result?.boulderState.session_ids).toContain("ses_tracked")
+    expect(result?.planState.session_ids).toContain("ses_tracked")
   })
 
   test("returns tracked appended session for incomplete boulder plan", async () => {
     // given
     const planPath = join(testDirectory, "appended-incomplete-plan.md")
     writeFileSync(planPath, "# Plan\n- [ ] Task 1\n", "utf-8")
-    writeBoulderState(testDirectory, {
+    writePlanState(testDirectory, {
       active_plan: planPath,
       started_at: "2026-01-02T10:00:00Z",
       session_ids: ["ses_root", "ses_appended"],
@@ -94,6 +94,6 @@ describe("resolveActiveBoulderSession", () => {
     // then
     expect(result).not.toBeNull()
     expect(result?.progress.isComplete).toBe(false)
-    expect(result?.boulderState.session_ids).toContain("ses_appended")
+    expect(result?.planState.session_ids).toContain("ses_appended")
   })
 })

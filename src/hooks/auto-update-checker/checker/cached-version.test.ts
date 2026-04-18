@@ -31,7 +31,7 @@ describe("getCachedVersion (GH-3257)", () => {
   let cacheRoot: string
 
   beforeEach(() => {
-    cacheRoot = mkdtempSync(join(tmpdir(), "omo-cached-version-"))
+    cacheRoot = mkdtempSync(join(tmpdir(), "oe-cached-version-"))
     mockState.candidates = [
       join(cacheRoot, "node_modules", "oh-my-opencode", "package.json"),
       join(cacheRoot, "node_modules", "oh-my-openagent", "package.json"),

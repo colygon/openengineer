@@ -1,4 +1,4 @@
-import type { OhMyOpenCodeConfig } from "../config";
+import type { OpenEngineerConfig } from "../config";
 import type { PluginContext } from "./types";
 
 import {
@@ -114,7 +114,7 @@ function applyUserConfiguredFallbackChain(
   sessionID: string,
   agentName: string,
   currentProviderID: string,
-  pluginConfig: OhMyOpenCodeConfig,
+  pluginConfig: OpenEngineerConfig,
 ): void {
   const agentKey = getAgentConfigKey(agentName);
   const rawFallbackModels = getRawFallbackModels(sessionID, agentKey, pluginConfig);
@@ -134,7 +134,7 @@ function isCompactionAgent(agent: string): boolean {
 type EventInput = Parameters<NonNullable<NonNullable<CreatedHooks["writeExistingFileGuard"]>["event"]>>[0];
 export function createEventHandler(args: {
   ctx: PluginContext;
-  pluginConfig: OhMyOpenCodeConfig;
+  pluginConfig: OpenEngineerConfig;
   firstMessageVariantGate: FirstMessageVariantGate;
   managers: Managers;
   hooks: CreatedHooks;
@@ -255,7 +255,7 @@ export function createEventHandler(args: {
     await runEventHookSafely("agentUsageReminder", hooks.agentUsageReminder?.event, input);
     await runEventHookSafely("categorySkillReminder", hooks.categorySkillReminder?.event, input);
     await runEventHookSafely("interactiveBashSession", hooks.interactiveBashSession?.event, input as EventInput);
-    await runEventHookSafely("ralphLoop", hooks.ralphLoop?.event, input);
+    await runEventHookSafely("autoLoop", hooks.autoLoop?.event, input);
     await runEventHookSafely("stopContinuationGuard", hooks.stopContinuationGuard?.event, input);
     await runEventHookSafely("compactionContextInjector", hooks.compactionContextInjector?.event, input);
     await runEventHookSafely("compactionTodoPreserver", hooks.compactionTodoPreserver?.event, input);

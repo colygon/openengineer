@@ -5,8 +5,8 @@ import { tmpdir } from "node:os"
 import { join } from "node:path"
 import { createOpencodeClient } from "@opencode-ai/sdk"
 import type { AssistantMessage, Session } from "@opencode-ai/sdk"
-import type { BoulderState } from "../../features/boulder-state"
-import { clearBoulderState, writeBoulderState } from "../../features/boulder-state"
+import type { PlanState } from "../../features/plan-state"
+import { clearPlanState, writePlanState } from "../../features/plan-state"
 
 const TEST_STORAGE_ROOT = join(tmpdir(), `technicalLead-final-wave-storage-${randomUUID()}`)
 const TEST_MESSAGE_STORAGE = join(TEST_STORAGE_ROOT, "message")
@@ -114,11 +114,11 @@ describe("TechnicalLead final verification approval gate", () => {
   beforeEach(() => {
     testDirectory = join(tmpdir(), `technicalLead-final-wave-test-${randomUUID()}`)
     mkdirSync(join(testDirectory, ".openengineer"), { recursive: true })
-    clearBoulderState(testDirectory)
+    clearPlanState(testDirectory)
   })
 
   afterEach(() => {
-    clearBoulderState(testDirectory)
+    clearPlanState(testDirectory)
     if (existsSync(testDirectory)) {
       rmSync(testDirectory, { recursive: true, force: true })
     }
@@ -145,14 +145,14 @@ describe("TechnicalLead final verification approval gate", () => {
 `,
     )
 
-    const state: BoulderState = {
+    const state: PlanState = {
       active_plan: planPath,
       started_at: "2026-01-02T10:00:00Z",
       session_ids: [sessionID],
       plan_name: "final-wave-plan",
       agent: "technical-lead",
     }
-    writeBoulderState(testDirectory, state)
+    writePlanState(testDirectory, state)
 
     const mockInput = createMockPluginInput()
     const hook = createTechnicalLeadHook(mockInput)
@@ -201,14 +201,14 @@ session_id: ses_final_wave_review
 `,
     )
 
-    const state: BoulderState = {
+    const state: PlanState = {
       active_plan: planPath,
       started_at: "2026-01-02T10:00:00Z",
       session_ids: [sessionID],
       plan_name: "implementation-plan",
       agent: "technical-lead",
     }
-    writeBoulderState(testDirectory, state)
+    writePlanState(testDirectory, state)
 
     const hook = createTechnicalLeadHook(createMockPluginInput())
     const toolOutput = {

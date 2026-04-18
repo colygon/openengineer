@@ -110,7 +110,7 @@ function installModuleMocks(): void {
   }))
 }
 
-describe("OhMyOpenCodePlugin telemetry isolation", () => {
+describe("OpenEngineerPlugin telemetry isolation", () => {
   beforeEach(() => {
     mock.restore()
     installModuleMocks()

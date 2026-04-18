@@ -748,31 +748,31 @@ describe("Engineer environment context toggle", () => {
     )
   }
 
-  test("includes <omo-env> tag when disable flag is unset", async () => {
+  test("includes <env-context> tag when disable flag is unset", async () => {
     // #when
     const agents = await buildAgents(undefined)
 
     // #then
     expect(agents.engineer).toBeDefined()
-    expect(agents.engineer.prompt).toContain("<omo-env>")
+    expect(agents.engineer.prompt).toContain("<env-context>")
   })
 
-  test("includes <omo-env> tag when disable flag is false", async () => {
+  test("includes <env-context> tag when disable flag is false", async () => {
     // #when
     const agents = await buildAgents(false)
 
     // #then
     expect(agents.engineer).toBeDefined()
-    expect(agents.engineer.prompt).toContain("<omo-env>")
+    expect(agents.engineer.prompt).toContain("<env-context>")
   })
 
-  test("omits <omo-env> tag when disable flag is true", async () => {
+  test("omits <env-context> tag when disable flag is true", async () => {
     // #when
     const agents = await buildAgents(true)
 
     // #then
     expect(agents.engineer).toBeDefined()
-    expect(agents.engineer.prompt).not.toContain("<omo-env>")
+    expect(agents.engineer.prompt).not.toContain("<env-context>")
   })
 })
 
@@ -807,31 +807,31 @@ describe("Architect and Librarian environment context toggle", () => {
     )
   }
 
-  test("includes <omo-env> for architect and librarian when disable flag is unset", async () => {
+  test("includes <env-context> for architect and librarian when disable flag is unset", async () => {
     const agents = await buildAgents(undefined)
 
     expect(agents.openengineer).toBeDefined()
     expect(agents.librarian).toBeDefined()
-    expect(agents.openengineer.prompt).toContain("<omo-env>")
-    expect(agents.librarian.prompt).toContain("<omo-env>")
+    expect(agents.openengineer.prompt).toContain("<env-context>")
+    expect(agents.librarian.prompt).toContain("<env-context>")
   })
 
-  test("includes <omo-env> for architect and librarian when disable flag is false", async () => {
+  test("includes <env-context> for architect and librarian when disable flag is false", async () => {
     const agents = await buildAgents(false)
 
     expect(agents.openengineer).toBeDefined()
     expect(agents.librarian).toBeDefined()
-    expect(agents.openengineer.prompt).toContain("<omo-env>")
-    expect(agents.librarian.prompt).toContain("<omo-env>")
+    expect(agents.openengineer.prompt).toContain("<env-context>")
+    expect(agents.librarian.prompt).toContain("<env-context>")
   })
 
-  test("omits <omo-env> for architect and librarian when disable flag is true", async () => {
+  test("omits <env-context> for architect and librarian when disable flag is true", async () => {
     const agents = await buildAgents(true)
 
     expect(agents.openengineer).toBeDefined()
     expect(agents.librarian).toBeDefined()
-    expect(agents.openengineer.prompt).not.toContain("<omo-env>")
-    expect(agents.librarian.prompt).not.toContain("<omo-env>")
+    expect(agents.openengineer.prompt).not.toContain("<env-context>")
+    expect(agents.librarian.prompt).not.toContain("<env-context>")
   })
 })
 
@@ -848,7 +848,7 @@ describe("TechnicalLead is unaffected by environment context toggle", () => {
     fetchSpy.mockRestore()
   })
 
-  test("technical-lead prompt is unchanged and never contains <omo-env>", async () => {
+  test("technical-lead prompt is unchanged and never contains <env-context>", async () => {
     const agentsDefault = await createBuiltinAgents(
       [],
       {},
@@ -883,8 +883,8 @@ describe("TechnicalLead is unaffected by environment context toggle", () => {
 
     expect(agentsDefault.technicalLead).toBeDefined()
     expect(agentsDisabled.technicalLead).toBeDefined()
-    expect(agentsDefault.technical-lead.prompt).not.toContain("<omo-env>")
-    expect(agentsDisabled.technical-lead.prompt).not.toContain("<omo-env>")
+    expect(agentsDefault.technical-lead.prompt).not.toContain("<env-context>")
+    expect(agentsDisabled.technical-lead.prompt).not.toContain("<env-context>")
     expect(agentsDisabled.technicalLead.prompt).toBe(agentsDefault.technicalLead.prompt)
   })
 })

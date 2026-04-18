@@ -19,7 +19,7 @@ describe("stop-continuation template", () => {
 
     // then - it should mention key behaviors
     expect(STOP_CONTINUATION_TEMPLATE).toContain("todo-continuation-enforcer")
-    expect(STOP_CONTINUATION_TEMPLATE).toContain("Ralph Loop")
+    expect(STOP_CONTINUATION_TEMPLATE).toContain("Auto Loop")
     expect(STOP_CONTINUATION_TEMPLATE).toContain("boulder state")
   })
 })

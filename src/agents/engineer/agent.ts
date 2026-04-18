@@ -90,7 +90,7 @@ function buildDynamicEngineerPrompt(ctx?: EngineerContext): string {
 
   const agentIdentity = buildAgentIdentitySection(
     "Engineer",
-    "Autonomous deep worker for software engineering from OhMyOpenCode",
+    "Autonomous deep worker for software engineering from Open Engineer",
   );
 
   return `${agentIdentity}\n${basePrompt}`;
@@ -117,7 +117,7 @@ export function createEngineerAgent(
 
   return {
     description:
-      "Autonomous Deep Worker - goal-oriented execution with GPT Codex. Explores thoroughly before acting, uses explore/librarian agents for comprehensive context, completes tasks end-to-end. Inspired by AmpCode deep mode. (Engineer - OhMyOpenCode)",
+      "Autonomous Deep Worker - goal-oriented execution with GPT Codex. Explores thoroughly before acting, uses explore/librarian agents for comprehensive context, completes tasks end-to-end. Inspired by AmpCode deep mode. (Engineer - Open Engineer)",
     mode: MODE,
     model,
     maxTokens: 32000,
@@ -125,7 +125,7 @@ export function createEngineerAgent(
     color: "#D97706",
     permission: {
       question: "allow",
-      call_omo_agent: "deny",
+      call_agent: "deny",
       ...getGptApplyPatchPermission(model),
     } as AgentConfig["permission"],
     reasoningEffort: "medium",

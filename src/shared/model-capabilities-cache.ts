@@ -158,7 +158,7 @@ export async function fetchModelCapabilitiesSnapshot(args: {
 }
 
 export function createModelCapabilitiesCacheStore(
-  getCacheDir: () => string = dataPath.getOmoOpenCodeCacheDir,
+  getCacheDir: () => string = dataPath.getPluginCacheDir,
 ) {
   const snapshotCacheStore = createJsonFileCacheStore<ModelCapabilitiesSnapshot>({
     getCacheDir,
@@ -202,7 +202,7 @@ export function createModelCapabilitiesCacheStore(
 }
 
 const defaultModelCapabilitiesCacheStore = createModelCapabilitiesCacheStore(
-  () => dataPath.getOmoOpenCodeCacheDir(),
+  () => dataPath.getPluginCacheDir(),
 )
 
 export const {

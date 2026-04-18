@@ -257,7 +257,7 @@ const mockCreatePluginInterface = mock(() => ({}))
 const mockInitializeOpenClaw = mock(async () => {})
 const mockStartTmuxCheck = mock(() => {})
 
-let OhMyOpenCodePlugin: (typeof import("./index"))["default"]
+let OpenEngineerPlugin: (typeof import("./index"))["default"]
 
 function installIndexModuleMocks(): void {
   mock.module("./cli/config-manager/config-context", () => ({
@@ -333,11 +333,11 @@ async function importFreshIndexModule(): Promise<typeof import("./index")> {
   return import(`./index?test=${Date.now()}-${Math.random()}`)
 }
 
-describe("OhMyOpenCodePlugin", () => {
+describe("OpenEngineerPlugin", () => {
   beforeEach(async () => {
     mock.restore()
     installIndexModuleMocks()
-    ;({ default: OhMyOpenCodePlugin } = await importFreshIndexModule())
+    ;({ default: OpenEngineerPlugin } = await importFreshIndexModule())
     mockInitConfigContext.mockClear()
     mockDetectExternalSkillPlugin.mockClear()
     mockGetSkillPluginConflictWarning.mockClear()
@@ -375,10 +375,10 @@ describe("OhMyOpenCodePlugin", () => {
     })
 
     // when
-    await OhMyOpenCodePlugin({
+    await OpenEngineerPlugin({
       directory: "/tmp/project",
       client: {},
-    } as Parameters<typeof OhMyOpenCodePlugin>[0])
+    } as Parameters<typeof OpenEngineerPlugin>[0])
 
     // then
     expect(mockInitializeOpenClaw).toHaveBeenCalledTimes(1)
@@ -390,10 +390,10 @@ describe("OhMyOpenCodePlugin", () => {
     mockLoadPluginConfig.mockReturnValue({})
 
     // when
-    await OhMyOpenCodePlugin({
+    await OpenEngineerPlugin({
       directory: "/tmp/project",
       client: {},
-    } as Parameters<typeof OhMyOpenCodePlugin>[0])
+    } as Parameters<typeof OpenEngineerPlugin>[0])
 
     // then
     expect(mockInitializeOpenClaw).not.toHaveBeenCalled()

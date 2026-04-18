@@ -12,12 +12,12 @@ import {
   subagentSessions,
 } from "../../features/claude-code-session-state"
 import type { ContextCollector } from "../../features/context-injector"
-import type { RalphLoopHook } from "../ralph-loop"
+import type { AutoLoopHook } from "../auto-loop"
 
 export function createKeywordDetectorHook(
   ctx: PluginInput,
   _collector?: ContextCollector,
-  _ralphLoop?: Pick<RalphLoopHook, "startLoop">
+  _autoLoop?: Pick<AutoLoopHook, "startLoop">
 ) {
   function getRuntimeVariant(input: { variant?: string }, message: Record<string, unknown>): string | undefined {
     if (typeof message["variant"] === "string") {

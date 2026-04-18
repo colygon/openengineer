@@ -7,7 +7,7 @@ import { createPluginInterface } from "./plugin-interface"
 import { createAutoSlashCommandHook } from "./hooks/auto-slash-command"
 import { createStartWorkHook } from "./hooks/start-work"
 import { getAgentListDisplayName } from "./shared/agent-display-names"
-import { readBoulderState } from "./features/boulder-state"
+import { readPlanState } from "./features/plan-state"
 import {
   _resetForTesting,
   getSessionAgent,
@@ -77,7 +77,7 @@ describe("createPluginInterface - command.execute.before", () => {
     expect(output.parts[0]?.text).toContain("Auto-Selected Plan")
     expect(output.parts[0]?.text).toContain("boulder.json has been created")
     expect(getSessionAgent("ses-command-before")).toBe("architect")
-    expect(readBoulderState(testDir)?.agent).toBe("architect")
+    expect(readPlanState(testDir)?.agent).toBe("architect")
   })
 
   test("does not run start-work side effects for other native commands with session context", async () => {
@@ -121,7 +121,7 @@ describe("createPluginInterface - command.execute.before", () => {
 
     // then
     expect(output.parts[0]?.text).toContain("HANDOFF CONTEXT")
-    expect(readBoulderState(testDir)).toBeNull()
+    expect(readPlanState(testDir)).toBeNull()
     expect(getSessionAgent("ses-handoff")).toBe("product-manager")
   })
 
@@ -168,7 +168,7 @@ describe("createPluginInterface - command.execute.before", () => {
     // then
     expect(output.message.agent).toBe("technical-lead")
     expect(getSessionAgent("ses-command-technical-lead")).toBe("technical-lead")
-    expect(readBoulderState(testDir)?.agent).toBe("technical-lead")
+    expect(readPlanState(testDir)?.agent).toBe("technical-lead")
   })
 })
 
@@ -209,7 +209,7 @@ describe("createPluginInterface - ulw-loop native command smoke", () => {
       managers: {} as never,
       hooks: {
         autoSlashCommand: createAutoSlashCommandHook({ skills: [] }),
-        ralphLoop: {
+        autoLoop: {
           startLoop: (sessionID: string, prompt: string, options?: Record<string, unknown>) => {
             startLoopCalls.push({ sessionID, prompt, options: options ?? {} })
             return true

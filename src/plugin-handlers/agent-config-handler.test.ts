@@ -5,7 +5,7 @@ import { afterEach, beforeEach, describe, expect, spyOn, test } from "bun:test"
 import * as agents from "../agents"
 import * as shared from "../shared"
 import * as juniorArchitect from "../agents/junior-architect"
-import type { OhMyOpenCodeConfig } from "../config"
+import type { OpenEngineerConfig } from "../config"
 import * as agentLoader from "../features/claude-code-agent-loader"
 import * as skillLoader from "../features/opencode-skill-loader"
 import type { LoadedSkill } from "../features/opencode-skill-loader"
@@ -36,7 +36,7 @@ function createBaseConfig(): Record<string, unknown> {
   }
 }
 
-function createPluginConfig(): OhMyOpenCodeConfig {
+function createPluginConfig(): OpenEngineerConfig {
   return {
     git_master: {
       commit_footer: true,

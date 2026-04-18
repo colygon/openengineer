@@ -1,4 +1,4 @@
-import { getPlanProgress, readBoulderState } from "../../features/boulder-state"
+import { getPlanProgress, readPlanState } from "../../features/plan-state"
 import { getSessionAgent } from "../../features/claude-code-session-state"
 import {
   getActiveContinuationMarkerReason,
@@ -8,12 +8,12 @@ import {
 import { isSessionInBoulderLineage } from "../../hooks/technical-lead/boulder-session-lineage"
 import { getLastAgentFromSession } from "../../hooks/technical-lead/session-last-agent"
 import { getAgentConfigKey } from "../../shared/agent-display-names"
-import { readState as readRalphLoopState } from "../../hooks/ralph-loop/storage"
+import { readState as readAutoLoopState } from "../../hooks/auto-loop/storage"
 import type { RunContext } from "./types"
 
 export interface ContinuationState {
   hasActiveBoulder: boolean
-  hasActiveRalphLoop: boolean
+  hasActiveAutoLoop: boolean
   hasHookMarker: boolean
   hasTodoHookMarker: boolean
   hasActiveHookMarker: boolean
@@ -29,7 +29,7 @@ export async function getContinuationState(
 
   return {
     hasActiveBoulder: await hasActiveBoulderContinuation(directory, sessionID, client),
-    hasActiveRalphLoop: hasActiveRalphLoopContinuation(directory, sessionID),
+    hasActiveAutoLoop: hasActiveAutoLoopContinuation(directory, sessionID),
     hasHookMarker: marker !== null,
     hasTodoHookMarker: marker?.sources.todo !== undefined,
     hasActiveHookMarker: isContinuationMarkerActive(marker),
@@ -42,7 +42,7 @@ async function hasActiveBoulderContinuation(
   sessionID: string,
   client?: RunContext["client"],
 ): Promise<boolean> {
-  const boulder = readBoulderState(directory)
+  const boulder = readPlanState(directory)
   if (!boulder) return false
 
   const progress = getPlanProgress(boulder.active_plan)
@@ -100,8 +100,8 @@ async function isTrackedDescendantSession(
   })
 }
 
-function hasActiveRalphLoopContinuation(directory: string, sessionID: string): boolean {
-  const state = readRalphLoopState(directory)
+function hasActiveAutoLoopContinuation(directory: string, sessionID: string): boolean {
+  const state = readAutoLoopState(directory)
   if (!state || !state.active) return false
 
   if (state.session_id && state.session_id !== sessionID) {

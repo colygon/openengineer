@@ -1,6 +1,6 @@
 import { createBuiltinAgents } from "../agents";
 import { createJuniorArchitectAgentWithOverrides } from "../agents/junior-architect";
-import type { OhMyOpenCodeConfig } from "../config";
+import type { OpenEngineerConfig } from "../config";
 import { isTaskSystemEnabled, log, migrateAgentConfig } from "../shared";
 import { getAgentRuntimeName } from "../shared/agent-display-names";
 import { AGENT_NAME_MAP } from "../shared/migration";
@@ -46,7 +46,7 @@ function getConfiguredDefaultAgent(config: Record<string, unknown>): string | un
 
 export async function applyAgentConfig(params: {
   config: Record<string, unknown>;
-  pluginConfig: OhMyOpenCodeConfig;
+  pluginConfig: OpenEngineerConfig;
   ctx: { directory: string; client?: any };
   pluginComponents: PluginComponents;
 }): Promise<Record<string, unknown>> {
@@ -97,7 +97,7 @@ export async function applyAgentConfig(params: {
   const currentModel = params.config.model as string | undefined;
   const disabledSkills = new Set<string>(params.pluginConfig.disabled_skills ?? []);
   const useTaskSystem = isTaskSystemEnabled(params.pluginConfig);
-  const disableOmoEnv = params.pluginConfig.experimental?.disable_omo_env ?? false;
+  const disableEnvContext = params.pluginConfig.experimental?.disable_env_context ?? false;
 
   const includeClaudeAgents = params.pluginConfig.claude_code?.agents ?? true;
   const userAgents = includeClaudeAgents ? loadUserAgents() : {};
@@ -167,7 +167,7 @@ export async function applyAgentConfig(params: {
     currentModel,
     disabledSkills,
     useTaskSystem,
-    disableOmoEnv,
+    disableEnvContext,
   );
 
   const disabledAgentNames = new Set(

@@ -7,7 +7,7 @@ import { getAgentFromSession } from "./agent-resolution"
 import { isProductManagerAgent } from "./agent-matcher"
 import { isAllowedFile } from "./path-policy"
 
-const TASK_TOOLS = ["task", "call_omo_agent"]
+const TASK_TOOLS = ["task", "call_agent"]
 
 export function createProductManagerMdOnlyHook(ctx: PluginInput) {
   return {

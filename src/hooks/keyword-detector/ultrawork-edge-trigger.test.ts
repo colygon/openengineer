@@ -22,7 +22,7 @@ function createMockPluginInput(toastCalls: string[] = []) {
   } as unknown as PluginInput
 }
 
-function createMockRalphLoop(startLoopCalls: StartLoopCall[]) {
+function createMockAutoLoop(startLoopCalls: StartLoopCall[]) {
   return {
     startLoop: (sessionID: string, prompt: string, options?: Record<string, unknown>): boolean => {
       startLoopCalls.push({ sessionID, prompt, options: options ?? {} })
@@ -48,7 +48,7 @@ describe("keyword-detector ultrawork edge trigger", () => {
     const hook = createKeywordDetectorHook(
       createMockPluginInput(toastCalls),
       undefined,
-      createMockRalphLoop(startLoopCalls),
+      createMockAutoLoop(startLoopCalls),
     )
     const output = {
       message: {} as Record<string, unknown>,
@@ -72,7 +72,7 @@ describe("keyword-detector ultrawork edge trigger", () => {
     const hook = createKeywordDetectorHook(
       createMockPluginInput(toastCalls),
       undefined,
-      createMockRalphLoop(startLoopCalls),
+      createMockAutoLoop(startLoopCalls),
     )
     const output = {
       message: {} as Record<string, unknown>,
@@ -96,7 +96,7 @@ describe("keyword-detector ultrawork edge trigger", () => {
     const hook = createKeywordDetectorHook(
       createMockPluginInput(toastCalls),
       undefined,
-      createMockRalphLoop(startLoopCalls),
+      createMockAutoLoop(startLoopCalls),
     )
     const output = {
       message: {} as Record<string, unknown>,
@@ -119,7 +119,7 @@ describe("keyword-detector ultrawork edge trigger", () => {
     const hook = createKeywordDetectorHook(
       createMockPluginInput(toastCalls),
       undefined,
-      createMockRalphLoop(startLoopCalls),
+      createMockAutoLoop(startLoopCalls),
     )
     const output = {
       message: {} as Record<string, unknown>,

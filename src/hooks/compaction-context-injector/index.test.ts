@@ -4,7 +4,7 @@ mock.module("../../shared/system-directive", () => ({
   createSystemDirective: (type: string) => `[DIRECTIVE:${type}]`,
   SystemDirectiveTypes: {
     TODO_CONTINUATION: "TODO CONTINUATION",
-    RALPH_LOOP: "RALPH LOOP",
+    AUTO_LOOP: "RALPH LOOP",
     BOULDER_CONTINUATION: "BOULDER CONTINUATION",
     DELEGATION_REQUIRED: "DELEGATION REQUIRED",
     SINGLE_TASK_ONLY: "SINGLE TASK ONLY",

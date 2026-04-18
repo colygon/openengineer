@@ -5,7 +5,7 @@ import { join } from "node:path"
 import { randomUUID } from "node:crypto"
 import type { PluginInput } from "@opencode-ai/plugin"
 import { createTechnicalLeadHook } from "./technical-lead-hook"
-import { clearBoulderState, writeBoulderState } from "../../features/boulder-state"
+import { clearPlanState, writePlanState } from "../../features/plan-state"
 import { _resetForTesting, clearSessionAgent, registerAgentName, setSessionAgent } from "../../features/claude-code-session-state"
 
 // Force process isolation in CI runner (globalThis.setTimeout override conflicts with other technicalLead tests)
@@ -100,7 +100,7 @@ describe("technical-lead background task retry", () => {
     globalThis.setTimeout = originalSetTimeout
     globalThis.clearTimeout = originalClearTimeout
     _resetForTesting()
-    clearBoulderState(testDir)
+    clearPlanState(testDir)
     if (existsSync(testDir)) {
       rmSync(testDir, { recursive: true, force: true })
     }
@@ -110,7 +110,7 @@ describe("technical-lead background task retry", () => {
     // given
     const planPath = join(testDir, "test-plan.md")
     writeFileSync(planPath, "# Plan\n- [ ] Task 1\n- [ ] Task 2")
-    writeBoulderState(testDir, {
+    writePlanState(testDir, {
       active_plan: planPath,
       started_at: "2026-01-02T10:00:00Z",
       session_ids: [sessionID],
@@ -151,7 +151,7 @@ describe("technical-lead background task retry", () => {
     // given
     const planPath = join(testDir, "test-plan.md")
     writeFileSync(planPath, "# Plan\n- [ ] Task 1\n- [ ] Task 2")
-    writeBoulderState(testDir, {
+    writePlanState(testDir, {
       active_plan: planPath,
       started_at: "2026-01-02T10:00:00Z",
       session_ids: [sessionID],
@@ -194,7 +194,7 @@ describe("technical-lead background task retry", () => {
     // given
     const planPath = join(testDir, "test-plan.md")
     writeFileSync(planPath, "# Plan\n- [ ] Task 1\n- [ ] Task 2")
-    writeBoulderState(testDir, {
+    writePlanState(testDir, {
       active_plan: planPath,
       started_at: "2026-01-02T10:00:00Z",
       session_ids: [sessionID],
@@ -247,7 +247,7 @@ describe("technical-lead background task retry", () => {
     // given
     const planPath = join(testDir, "test-plan.md")
     writeFileSync(planPath, "# Plan\n- [ ] Task 1\n- [ ] Task 2")
-    writeBoulderState(testDir, {
+    writePlanState(testDir, {
       active_plan: planPath,
       started_at: "2026-01-02T10:00:00Z",
       session_ids: [sessionID],
@@ -303,7 +303,7 @@ describe("technical-lead background task retry", () => {
     // given
     const planPath = join(testDir, "test-plan.md")
     writeFileSync(planPath, "# Plan\n- [ ] Task 1\n- [ ] Task 2")
-    writeBoulderState(testDir, {
+    writePlanState(testDir, {
       active_plan: planPath,
       started_at: "2026-01-02T10:00:00Z",
       session_ids: [sessionID],
@@ -351,7 +351,7 @@ describe("technical-lead background task retry", () => {
     setSessionAgent(descendantSessionID, "technical-lead")
     const planPath = join(testDir, "test-plan.md")
     writeFileSync(planPath, "# Plan\n- [ ] Task 1\n- [ ] Task 2")
-    writeBoulderState(testDir, {
+    writePlanState(testDir, {
       active_plan: planPath,
       started_at: "2026-01-02T10:00:00Z",
       session_ids: [sessionID, descendantSessionID],
@@ -414,7 +414,7 @@ describe("technical-lead background task retry", () => {
     // given
     const planPath = join(testDir, "test-plan.md")
     writeFileSync(planPath, "# Plan\n- [ ] Task 1\n- [ ] Task 2")
-    writeBoulderState(testDir, {
+    writePlanState(testDir, {
       active_plan: planPath,
       started_at: "2026-01-02T10:00:00Z",
       session_ids: [sessionID],
@@ -449,7 +449,7 @@ describe("technical-lead background task retry", () => {
     // given
     const planPath = join(testDir, "test-plan.md")
     writeFileSync(planPath, "# Plan\n- [ ] Task 1\n- [ ] Task 2")
-    writeBoulderState(testDir, {
+    writePlanState(testDir, {
       active_plan: planPath,
       started_at: "2026-01-02T10:00:00Z",
       session_ids: [sessionID],
@@ -500,7 +500,7 @@ describe("technical-lead background task retry", () => {
     // given
     const planPath = join(testDir, "test-plan.md")
     writeFileSync(planPath, "# Plan\n- [ ] Task 1\n- [ ] Task 2")
-    writeBoulderState(testDir, {
+    writePlanState(testDir, {
       active_plan: planPath,
       started_at: "2026-01-02T10:00:00Z",
       session_ids: [sessionID],

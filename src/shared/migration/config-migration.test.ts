@@ -11,7 +11,7 @@ const createdDirectories: string[] = []
 const MIGRATION_KEY = "model-version:anthropic/claude-opus-4-5->anthropic/claude-opus-4-6"
 
 function createWorkdir(): string {
-  const workdir = mkdtempSync(join(tmpdir(), "omo-config-migration-"))
+  const workdir = mkdtempSync(join(tmpdir(), "oe-config-migration-"))
   createdDirectories.push(workdir)
   return workdir
 }

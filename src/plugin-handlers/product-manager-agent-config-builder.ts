@@ -100,7 +100,7 @@ export async function buildProductManagerAgentConfig(params: {
     mode: "primary",
     prompt: getProductManagerPrompt(resolvedModel, params.disabledTools),
     permission: PRODUCT_MANAGER_PERMISSION,
-    description: `${(params.configAgentPlan?.description as string) ?? "Plan agent"} (ProductManager - OhMyOpenCode)`,
+    description: `${(params.configAgentPlan?.description as string) ?? "Plan agent"} (ProductManager - Open Engineer)`,
     color: (params.configAgentPlan?.color as string) ?? "#FF5722",
     ...(temperatureToUse !== undefined ? { temperature: temperatureToUse } : {}),
     ...(topPToUse !== undefined ? { top_p: topPToUse } : {}),

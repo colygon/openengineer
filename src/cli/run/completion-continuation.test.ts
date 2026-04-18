@@ -4,7 +4,7 @@ import { join } from "node:path"
 import { tmpdir } from "node:os"
 import type { RunContext } from "./types"
 import { _resetForTesting, setSessionAgent } from "../../features/claude-code-session-state"
-import { writeState as writeRalphLoopState } from "../../hooks/ralph-loop/storage"
+import { writeState as writeAutoLoopState } from "../../hooks/auto-loop/storage"
 
 const testDirs: string[] = []
 
@@ -19,7 +19,7 @@ afterEach(() => {
 })
 
 function createTempDir(): string {
-  const dir = mkdtempSync(join(tmpdir(), "omo-run-continuation-"))
+  const dir = mkdtempSync(join(tmpdir(), "oe-run-continuation-"))
   testDirs.push(dir)
   return dir
 }
@@ -46,7 +46,7 @@ function createMockContext(directory: string): RunContext {
   }
 }
 
-function writeBoulderStateFile(
+function writePlanStateFile(
   directory: string,
   activePlanPath: string,
   sessionIDs: string[],
@@ -76,7 +76,7 @@ describe("checkCompletionConditions continuation coverage", () => {
     const planPath = join(directory, ".openengineer", "plans", "active-plan.md")
     mkdirSync(join(directory, ".openengineer", "plans"), { recursive: true })
     writeFileSync(planPath, "- [ ] incomplete task\n", "utf-8")
-    writeBoulderStateFile(directory, planPath, ["test-session"])
+    writePlanStateFile(directory, planPath, ["test-session"])
     const ctx = createMockContext(directory)
     const { checkCompletionConditions } = await import("./completion")
 
@@ -94,7 +94,7 @@ describe("checkCompletionConditions continuation coverage", () => {
     const planPath = join(directory, ".openengineer", "plans", "done-plan.md")
     mkdirSync(join(directory, ".openengineer", "plans"), { recursive: true })
     writeFileSync(planPath, "- [x] completed task\n", "utf-8")
-    writeBoulderStateFile(directory, planPath, ["test-session"])
+    writePlanStateFile(directory, planPath, ["test-session"])
     const ctx = createMockContext(directory)
     const { checkCompletionConditions } = await import("./completion")
 
@@ -112,7 +112,7 @@ describe("checkCompletionConditions continuation coverage", () => {
     const planPath = join(directory, ".openengineer", "plans", "active-descendant-plan.md")
     mkdirSync(join(directory, ".openengineer", "plans"), { recursive: true })
     writeFileSync(planPath, "- [ ] unfinished task\n", "utf-8")
-    writeBoulderStateFile(directory, planPath, ["root-session", "child-session"], {
+    writePlanStateFile(directory, planPath, ["root-session", "child-session"], {
       "root-session": "direct",
       "child-session": "appended",
     })
@@ -148,7 +148,7 @@ describe("checkCompletionConditions continuation coverage", () => {
     const planPath = join(directory, ".openengineer", "plans", "lineage-non-subagent-plan.md")
     mkdirSync(join(directory, ".openengineer", "plans"), { recursive: true })
     writeFileSync(planPath, "- [ ] unfinished task\n", "utf-8")
-    writeBoulderStateFile(directory, planPath, ["root-session"])
+    writePlanStateFile(directory, planPath, ["root-session"])
 
     const ctx = createMockContext(directory)
     ctx.sessionID = "lineage-only-session"
@@ -176,7 +176,7 @@ describe("checkCompletionConditions continuation coverage", () => {
     const planPath = join(directory, ".openengineer", "plans", "lineage-agent-mismatch-plan.md")
     mkdirSync(join(directory, ".openengineer", "plans"), { recursive: true })
     writeFileSync(planPath, "- [ ] unfinished task\n", "utf-8")
-    writeBoulderStateFile(directory, planPath, ["root-session", "mismatch-subagent-session"], {
+    writePlanStateFile(directory, planPath, ["root-session", "mismatch-subagent-session"], {
       "root-session": "direct",
       "mismatch-subagent-session": "appended",
     })
@@ -211,7 +211,7 @@ describe("checkCompletionConditions continuation coverage", () => {
     const planPath = join(directory, ".openengineer", "plans", "appended-mismatch-plan.md")
     mkdirSync(join(directory, ".openengineer", "plans"), { recursive: true })
     writeFileSync(planPath, "- [ ] unfinished task\n", "utf-8")
-    writeBoulderStateFile(directory, planPath, ["root-session", "appended-mismatch-session"], {
+    writePlanStateFile(directory, planPath, ["root-session", "appended-mismatch-session"], {
       "root-session": "direct",
       "appended-mismatch-session": "appended",
     })
@@ -246,7 +246,7 @@ describe("checkCompletionConditions continuation coverage", () => {
     const planPath = join(directory, ".openengineer", "plans", "appended-unresolved-lineage-plan.md")
     mkdirSync(join(directory, ".openengineer", "plans"), { recursive: true })
     writeFileSync(planPath, "- [ ] unfinished task\n", "utf-8")
-    writeBoulderStateFile(directory, planPath, ["root-session", "ses_appended_descendant"], {
+    writePlanStateFile(directory, planPath, ["root-session", "ses_appended_descendant"], {
       "root-session": "direct",
       "ses_appended_descendant": "appended",
     })
@@ -278,7 +278,7 @@ describe("checkCompletionConditions continuation coverage", () => {
     const planPath = join(directory, ".openengineer", "plans", "direct-tracked-child-plan.md")
     mkdirSync(join(directory, ".openengineer", "plans"), { recursive: true })
     writeFileSync(planPath, "- [ ] unfinished task\n", "utf-8")
-    writeBoulderStateFile(directory, planPath, ["ses_direct_child"])
+    writePlanStateFile(directory, planPath, ["ses_direct_child"])
 
     const ctx = createMockContext(directory)
     ctx.sessionID = "ses_direct_child"
@@ -305,7 +305,7 @@ describe("checkCompletionConditions continuation coverage", () => {
     const planPath = join(directory, ".openengineer", "plans", "multi-tracked-direct-plan.md")
     mkdirSync(join(directory, ".openengineer", "plans"), { recursive: true })
     writeFileSync(planPath, "- [ ] unfinished task\n", "utf-8")
-    writeBoulderStateFile(directory, planPath, ["ses_other_tracked", "ses_direct_tracked"], {
+    writePlanStateFile(directory, planPath, ["ses_other_tracked", "ses_direct_tracked"], {
       "ses_other_tracked": "direct",
       "ses_direct_tracked": "direct",
     })
@@ -335,7 +335,7 @@ describe("checkCompletionConditions continuation coverage", () => {
     const planPath = join(directory, ".openengineer", "plans", "unknown-origin-multi-session-plan.md")
     mkdirSync(join(directory, ".openengineer", "plans"), { recursive: true })
     writeFileSync(planPath, "- [ ] unfinished task\n", "utf-8")
-    writeBoulderStateFile(directory, planPath, ["ses_root_tracked", "ses_unknown_child"])
+    writePlanStateFile(directory, planPath, ["ses_root_tracked", "ses_unknown_child"])
 
     const ctx = createMockContext(directory)
     ctx.sessionID = "ses_unknown_child"
@@ -359,7 +359,7 @@ describe("checkCompletionConditions continuation coverage", () => {
     const planPath = join(directory, ".openengineer", "plans", "multi-tracked-direct-child-plan.md")
     mkdirSync(join(directory, ".openengineer", "plans"), { recursive: true })
     writeFileSync(planPath, "- [ ] unfinished task\n", "utf-8")
-    writeBoulderStateFile(directory, planPath, ["ses_root_tracked", "ses_direct_child"], {
+    writePlanStateFile(directory, planPath, ["ses_root_tracked", "ses_direct_child"], {
       "ses_root_tracked": "direct",
       "ses_direct_child": "direct",
     })
@@ -394,7 +394,7 @@ describe("checkCompletionConditions continuation coverage", () => {
     const planPath = join(directory, ".openengineer", "plans", "compaction-descendant-plan.md")
     mkdirSync(join(directory, ".openengineer", "plans"), { recursive: true })
     writeFileSync(planPath, "- [ ] unfinished task\n", "utf-8")
-    writeBoulderStateFile(directory, planPath, ["root-session", "ses_child_after_compaction"], {
+    writePlanStateFile(directory, planPath, ["root-session", "ses_child_after_compaction"], {
       "root-session": "direct",
       "ses_child_after_compaction": "appended",
     })
@@ -433,7 +433,7 @@ describe("checkCompletionConditions continuation coverage", () => {
     const planPath = join(directory, ".openengineer", "plans", "sqlite-ordered-descendant-plan.md")
     mkdirSync(join(directory, ".openengineer", "plans"), { recursive: true })
     writeFileSync(planPath, "- [ ] unfinished task\n", "utf-8")
-    writeBoulderStateFile(directory, planPath, ["root-session"])
+    writePlanStateFile(directory, planPath, ["root-session"])
 
     const ctx = createMockContext(directory)
     ctx.sessionID = "ses_sqlite_descendant"
@@ -469,7 +469,7 @@ describe("checkCompletionConditions continuation coverage", () => {
     const planPath = join(directory, ".openengineer", "plans", "session-agent-fallback-plan.md")
     mkdirSync(join(directory, ".openengineer", "plans"), { recursive: true })
     writeFileSync(planPath, "- [ ] unfinished task\n", "utf-8")
-    writeBoulderStateFile(directory, planPath, ["ses_root_tracked", "ses_appended_child"], {
+    writePlanStateFile(directory, planPath, ["ses_root_tracked", "ses_appended_child"], {
       "ses_root_tracked": "direct",
       "ses_appended_child": "appended",
     })
@@ -494,11 +494,11 @@ describe("checkCompletionConditions continuation coverage", () => {
     expect(result).toBe(false)
   })
 
-  it("returns false when active ralph-loop continuation exists for this session", async () => {
+  it("returns false when active auto-loop continuation exists for this session", async () => {
     // given
     spyOn(console, "log").mockImplementation(() => {})
     const directory = createTempDir()
-    writeRalphLoopState(directory, {
+    writeAutoLoopState(directory, {
       active: true,
       iteration: 2,
       max_iterations: 10,
@@ -517,11 +517,11 @@ describe("checkCompletionConditions continuation coverage", () => {
     expect(result).toBe(false)
   })
 
-  it("returns true when active ralph-loop is bound to another session", async () => {
+  it("returns true when active auto-loop is bound to another session", async () => {
     // given
     spyOn(console, "log").mockImplementation(() => {})
     const directory = createTempDir()
-    writeRalphLoopState(directory, {
+    writeAutoLoopState(directory, {
       active: true,
       iteration: 2,
       max_iterations: 10,

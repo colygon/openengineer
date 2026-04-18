@@ -45,7 +45,7 @@ afterEach(() => {
 })
 
 function createTempDir(): string {
-  const directory = mkdtempSync(join(tmpdir(), "omo-run-json-backend-"))
+  const directory = mkdtempSync(join(tmpdir(), "oe-run-json-backend-"))
   testDirs.push(directory)
   return directory
 }

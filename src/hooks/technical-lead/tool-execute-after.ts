@@ -3,9 +3,9 @@ import {
   appendSessionId,
   getPlanProgress,
   getTaskSessionState,
-  readBoulderState,
+  readPlanState,
   upsertTaskSessionState,
-} from "../../features/boulder-state"
+} from "../../features/plan-state"
 import { log } from "../../shared/logger"
 import { isCallerOrchestrator } from "../../shared/session-utils"
 import { syncBackgroundLaunchSessionTracking } from "./background-launch-session-tracking"
@@ -74,14 +74,14 @@ export function createToolExecuteAfterHandler(input: {
     if (toolInput.callID) {
       pendingTaskRefs.delete(toolInput.callID)
     }
-    const boulderState = readBoulderState(ctx.directory)
+    const planState = readPlanState(ctx.directory)
     const isBackgroundLaunch = outputStr.includes("Background task launched") || outputStr.includes("Background task continued")
       || outputStr.includes("Background delegate launched")
       || outputStr.includes("Background agent task launched")
     if (isBackgroundLaunch) {
       await syncBackgroundLaunchSessionTracking({
         ctx,
-        boulderState,
+        planState,
         toolInput,
         toolOutput,
         pendingTaskRef,
@@ -91,25 +91,25 @@ export function createToolExecuteAfterHandler(input: {
     }
 
     if (toolOutput.output && typeof toolOutput.output === "string") {
-      const worktreePath = boulderState?.worktree_path?.trim()
+      const worktreePath = planState?.worktree_path?.trim()
       const verificationDirectory = worktreePath ? worktreePath : ctx.directory
       const gitStats = collectGitDiffStats(verificationDirectory)
       const fileChanges = formatFileChanges(gitStats)
       const extractedSessionId = metadataSessionId ?? extractSessionIdFromOutput(toolOutput.output)
 
-      if (boulderState) {
-        const progress = getPlanProgress(boulderState.active_plan)
+      if (planState) {
+        const progress = getPlanProgress(planState.active_plan)
         const {
           currentTask,
           shouldSkipTaskSessionUpdate,
           shouldIgnoreCurrentSessionId,
-        } = resolveTaskContext(pendingTaskRef, boulderState.active_plan)
+        } = resolveTaskContext(pendingTaskRef, planState.active_plan)
         const trackedTaskSession = currentTask
           ? getTaskSessionState(ctx.directory, currentTask.key)
           : null
         const sessionState = toolInput.sessionID ? getState(toolInput.sessionID) : undefined
 
-        const lineageSessionIDs = boulderState.session_ids
+        const lineageSessionIDs = planState.session_ids
         const subagentSessionId = await validateSubagentSessionId({
           client: ctx.client,
           sessionID: extractedSessionId,
@@ -136,7 +136,7 @@ export function createToolExecuteAfterHandler(input: {
         const originalResponse = toolOutput.output
         const shouldPauseForApproval = sessionState
           ? shouldPauseForFinalWaveApproval({
-              planPath: boulderState.active_plan,
+              planPath: planState.active_plan,
               taskOutput: originalResponse,
               sessionState,
             })
@@ -152,11 +152,11 @@ export function createToolExecuteAfterHandler(input: {
         }
 
         const leadReminder = shouldPauseForApproval
-          ? buildFinalWaveApprovalReminder(boulderState.plan_name, progress, preferredSessionId)
-          : buildCompletionGate(boulderState.plan_name, preferredSessionId)
+          ? buildFinalWaveApprovalReminder(planState.plan_name, progress, preferredSessionId)
+          : buildCompletionGate(planState.plan_name, preferredSessionId)
         const followupReminder = shouldPauseForApproval
           ? null
-          : buildOrchestratorReminder(boulderState.plan_name, progress, preferredSessionId, autoCommit, false)
+          : buildOrchestratorReminder(planState.plan_name, progress, preferredSessionId, autoCommit, false)
 
         toolOutput.output = `
 <system-reminder>
@@ -179,7 +179,7 @@ ${
     : `<system-reminder>\n${followupReminder}\n</system-reminder>`
 }`
         log(`[${HOOK_NAME}] Output transformed for orchestrator mode (boulder)`, {
-          plan: boulderState.plan_name,
+          plan: planState.plan_name,
           progress: `${progress.completed}/${progress.total}`,
           fileCount: gitStats.length,
           preferredSessionId,

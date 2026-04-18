@@ -1,4 +1,4 @@
-import type { OhMyOpenCodeConfig } from "../config";
+import type { OpenEngineerConfig } from "../config";
 import { getAgentDisplayName, getAgentListDisplayName } from "../shared/agent-display-names";
 import { isTaskSystemEnabled } from "../shared";
 
@@ -23,7 +23,7 @@ function agentByKey(agentResult: Record<string, unknown>, key: string): AgentWit
 
 export function applyToolConfig(params: {
   config: Record<string, unknown>;
-  pluginConfig: OhMyOpenCodeConfig;
+  pluginConfig: OpenEngineerConfig;
   agentResult: Record<string, unknown>;
 }): void {
   const taskSystemEnabled = isTaskSystemEnabled(params.pluginConfig)
@@ -72,7 +72,7 @@ export function applyToolConfig(params: {
     technicalLead.permission = {
       ...technicalLead.permission,
       task: "allow",
-      call_omo_agent: "deny",
+      call_agent: "deny",
       "task_*": "allow",
       teammate: "allow",
       ...denyTodoTools,
@@ -82,7 +82,7 @@ export function applyToolConfig(params: {
   if (architect) {
     architect.permission = {
       ...architect.permission,
-      call_omo_agent: "deny",
+      call_agent: "deny",
       task: "allow",
       question: questionPermission,
       "task_*": "allow",
@@ -94,7 +94,7 @@ export function applyToolConfig(params: {
   if (engineer) {
     engineer.permission = {
       ...engineer.permission,
-      call_omo_agent: "deny",
+      call_agent: "deny",
       task: "allow",
       question: questionPermission,
       ...denyTodoTools,
@@ -104,7 +104,7 @@ export function applyToolConfig(params: {
   if (productManager) {
     productManager.permission = {
       ...productManager.permission,
-      call_omo_agent: "deny",
+      call_agent: "deny",
       task: "allow",
       question: questionPermission,
       "task_*": "allow",

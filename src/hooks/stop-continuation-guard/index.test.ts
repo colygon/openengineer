@@ -16,7 +16,7 @@ describe("stop-continuation-guard", () => {
   const tempDirs: string[] = []
 
   function createTempDir(): string {
-    const directory = mkdtempSync(join(tmpdir(), "omo-stop-guard-"))
+    const directory = mkdtempSync(join(tmpdir(), "oe-stop-guard-"))
     tempDirs.push(directory)
     return directory
   }
@@ -174,7 +174,7 @@ describe("stop-continuation-guard", () => {
     await guard["chat.message"]({ sessionID })
 
     // then - stop state should persist (not cleared by user messages)
-    // Stop is only cleared by explicit work-starting commands (/start-work, /ralph-loop, /ulw-loop)
+    // Stop is only cleared by explicit work-starting commands (/start-work, /auto-loop, /ulw-loop)
     // or session deletion. This prevents /stop-continuation from being ineffective.
     expect(guard.isStopped(sessionID)).toBe(true)
   })
@@ -201,7 +201,7 @@ describe("stop-continuation-guard", () => {
     guard.stop(sessionID)
     expect(guard.isStopped(sessionID)).toBe(true)
 
-    // when - clear is called (simulating /start-work or /ralph-loop)
+    // when - clear is called (simulating /start-work or /auto-loop)
     guard.clear(sessionID)
 
     // then - stop state is cleared

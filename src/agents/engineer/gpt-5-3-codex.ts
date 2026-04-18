@@ -533,7 +533,7 @@ export function createEngineerAgent(
 
   return {
     description:
-      "Autonomous Deep Worker - goal-oriented execution with GPT 5.4 Codex. Explores thoroughly before acting, uses explore/librarian agents for comprehensive context, completes tasks end-to-end. Inspired by AmpCode deep mode. (Engineer - OhMyOpenCode)",
+      "Autonomous Deep Worker - goal-oriented execution with GPT 5.4 Codex. Explores thoroughly before acting, uses explore/librarian agents for comprehensive context, completes tasks end-to-end. Inspired by AmpCode deep mode. (Engineer - Open Engineer)",
     mode: MODE,
     model,
     maxTokens: 32000,
@@ -541,7 +541,7 @@ export function createEngineerAgent(
     color: "#D97706", // Forged Amber - Golden heated metal, divine craftsman
     permission: {
       question: "allow",
-      call_omo_agent: "deny",
+      call_agent: "deny",
     } as AgentConfig["permission"],
     reasoningEffort: "medium",
   };

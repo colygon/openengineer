@@ -2,7 +2,7 @@ import type { CommandDefinition } from "../claude-code-command-loader"
 import { isAgentRegistered } from "../claude-code-session-state"
 import type { BuiltinCommandName, BuiltinCommands } from "./types"
 import { INIT_DEEP_TEMPLATE } from "./templates/init-deep"
-import { RALPH_LOOP_TEMPLATE, ULW_LOOP_TEMPLATE, CANCEL_RALPH_TEMPLATE } from "./templates/ralph-loop"
+import { AUTO_LOOP_TEMPLATE, ULW_LOOP_TEMPLATE, CANCEL_LOOP_TEMPLATE } from "./templates/auto-loop"
 import { STOP_CONTINUATION_TEMPLATE } from "./templates/stop-continuation"
 import { REFACTOR_TEMPLATE } from "./templates/refactor"
 import { START_WORK_TEMPLATE } from "./templates/start-work"
@@ -36,10 +36,10 @@ $ARGUMENTS
 </user-request>`,
       argumentHint: "[--create-new] [--max-depth=N]",
     },
-     "ralph-loop": {
+     "auto-loop": {
        description: "(builtin) Start self-referential development loop until completion",
        template: `<command-instruction>
-${RALPH_LOOP_TEMPLATE}
+${AUTO_LOOP_TEMPLATE}
 </command-instruction>
 
 <user-task>
@@ -58,10 +58,10 @@ $ARGUMENTS
 </user-task>`,
         argumentHint: '"task description" [--completion-promise=TEXT] [--strategy=reset|continue]',
       },
-    "cancel-ralph": {
-      description: "(builtin) Cancel active Ralph Loop",
+    "cancel-loop": {
+      description: "(builtin) Cancel active Auto Loop",
       template: `<command-instruction>
-${CANCEL_RALPH_TEMPLATE}
+${CANCEL_LOOP_TEMPLATE}
 </command-instruction>`,
     },
     refactor: {
@@ -90,7 +90,7 @@ $ARGUMENTS
       argumentHint: "[plan-name]",
     },
     "stop-continuation": {
-      description: "(builtin) Stop all continuation mechanisms (ralph loop, todo continuation, boulder) for this session",
+      description: "(builtin) Stop all continuation mechanisms (auto loop, todo continuation, plan state) for this session",
       template: `<command-instruction>
 ${STOP_CONTINUATION_TEMPLATE}
 </command-instruction>`,

@@ -1,6 +1,6 @@
 import pc from "picocolors"
 import type { RunOptions } from "./types"
-import type { OhMyOpenCodeConfig } from "../../config"
+import type { OpenEngineerConfig } from "../../config"
 import { getAgentConfigKey, getAgentDisplayName, getAgentRuntimeName } from "../../shared/agent-display-names"
 
 const CORE_AGENT_ORDER = ["architect", "engineer", "product-manager", "technical-lead"] as const
@@ -30,7 +30,7 @@ const normalizeAgentName = (agent?: string): ResolvedAgent | undefined => {
   }
 }
 
-const isAgentDisabled = (agentConfigKey: string, config: OhMyOpenCodeConfig): boolean => {
+const isAgentDisabled = (agentConfigKey: string, config: OpenEngineerConfig): boolean => {
   const lowered = agentConfigKey.toLowerCase()
   if (lowered === DEFAULT_AGENT && config.architect_agent?.disabled === true) {
     return true
@@ -40,7 +40,7 @@ const isAgentDisabled = (agentConfigKey: string, config: OhMyOpenCodeConfig): bo
   )
 }
 
-const pickFallbackAgent = (config: OhMyOpenCodeConfig): CoreAgentKey => {
+const pickFallbackAgent = (config: OpenEngineerConfig): CoreAgentKey => {
   for (const agent of CORE_AGENT_ORDER) {
     if (!isAgentDisabled(agent, config)) {
       return agent
@@ -51,7 +51,7 @@ const pickFallbackAgent = (config: OhMyOpenCodeConfig): CoreAgentKey => {
 
 export const resolveRunAgent = (
   options: RunOptions,
-  pluginConfig: OhMyOpenCodeConfig,
+  pluginConfig: OpenEngineerConfig,
   env: EnvVars = process.env
 ): string => {
   const cliAgent = normalizeAgentName(options.agent)

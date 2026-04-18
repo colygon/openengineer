@@ -25,7 +25,7 @@ describe("slashcommand discovery and execution compatibility", () => {
   let originalOpencodeConfigDir: string | undefined
 
   beforeEach(() => {
-    tempDir = mkdtempSync(join(tmpdir(), "omo-slashcommand-compat-test-"))
+    tempDir = mkdtempSync(join(tmpdir(), "oe-slashcommand-compat-test-"))
     originalWorkingDirectory = process.cwd()
     originalOpencodeConfigDir = process.env.OPENCODE_CONFIG_DIR
   })

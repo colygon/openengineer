@@ -16,7 +16,7 @@ const VERSION = packageJson.version
 const program = new Command()
 
 program
-  .name("oh-my-opencode")
+  .name("openengineer")
   .description("The ultimate OpenCode plugin - multi-model orchestration, LSP tools, and more")
   .version(VERSION, "-v, --version", "Show version number")
   .enablePositionalOptions()

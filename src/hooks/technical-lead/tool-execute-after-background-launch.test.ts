@@ -6,7 +6,7 @@ import { tmpdir } from "node:os"
 import { join } from "node:path"
 import type { PluginInput } from "@opencode-ai/plugin"
 import type { Project } from "@opencode-ai/sdk"
-import { readBoulderState, writeBoulderState } from "../../features/boulder-state"
+import { readPlanState, writePlanState } from "../../features/plan-state"
 import { createToolExecuteBeforeHandler } from "./tool-execute-before"
 
 const isCallerOrchestratorMock = mock(async () => true)
@@ -110,12 +110,12 @@ describe("createToolExecuteAfterHandler background launch detection", () => {
     })
   }
 
-  describe("#given a call_omo_agent background launch result", () => {
+  describe("#given a call_agent background launch result", () => {
     describe("#when tool.execute.after handles it", () => {
       it("#then it should treat the launch as still running", async () => {
         const handler = createHandler()
         const output = {
-          title: "call_omo_agent",
+          title: "call_agent",
           output: "Background agent task launched successfully.",
           metadata: {
             sessionId: "ses_child123",
@@ -124,7 +124,7 @@ describe("createToolExecuteAfterHandler background launch detection", () => {
 
         await handler(
           {
-            tool: "call_omo_agent",
+            tool: "call_agent",
             sessionID: "ses_parent",
           },
           output,
@@ -157,7 +157,7 @@ describe("createToolExecuteAfterHandler background launch detection", () => {
 - [ ] 1. Implement auth flow
 `)
 
-        writeBoulderState(testDirectory, {
+        writePlanState(testDirectory, {
           active_plan: planPath,
           started_at: "2026-01-02T10:00:00Z",
           session_ids: [sessionID],
@@ -205,9 +205,9 @@ describe("createToolExecuteAfterHandler background launch detection", () => {
 
         expect(output.output).toContain("Background task launched.")
         expect(collectGitDiffStatsMock).not.toHaveBeenCalled()
-        expect(readBoulderState(testDirectory)?.session_ids).toContain(childSessionID)
-        expect(readBoulderState(testDirectory)?.session_origins?.[childSessionID]).toBe("appended")
-        expect(readBoulderState(testDirectory)?.task_sessions?.["todo:1"]?.session_id).toBe(childSessionID)
+        expect(readPlanState(testDirectory)?.session_ids).toContain(childSessionID)
+        expect(readPlanState(testDirectory)?.session_origins?.[childSessionID]).toBe("appended")
+        expect(readPlanState(testDirectory)?.task_sessions?.["todo:1"]?.session_id).toBe(childSessionID)
       })
 
       it("#then it should not track spawned child when child lookup fails", async () => {
@@ -234,7 +234,7 @@ describe("createToolExecuteAfterHandler background launch detection", () => {
 - [ ] 1. Implement auth flow
 `)
 
-        writeBoulderState(testDirectory, {
+        writePlanState(testDirectory, {
           active_plan: planPath,
           started_at: "2026-01-02T10:00:00Z",
           session_ids: [sessionID],
@@ -280,7 +280,7 @@ describe("createToolExecuteAfterHandler background launch detection", () => {
           output,
         )
 
-        expect(readBoulderState(testDirectory)?.session_ids).not.toContain(childSessionID)
+        expect(readPlanState(testDirectory)?.session_ids).not.toContain(childSessionID)
       })
 
       it("#then it should not track an extracted child session outside active lineage", async () => {
@@ -304,7 +304,7 @@ describe("createToolExecuteAfterHandler background launch detection", () => {
 - [ ] 1. Implement auth flow
 `)
 
-        writeBoulderState(testDirectory, {
+        writePlanState(testDirectory, {
           active_plan: planPath,
           started_at: "2026-01-02T10:00:00Z",
           session_ids: [sessionID],
@@ -350,7 +350,7 @@ describe("createToolExecuteAfterHandler background launch detection", () => {
           output,
         )
 
-        expect(readBoulderState(testDirectory)?.session_ids).not.toContain(childSessionID)
+        expect(readPlanState(testDirectory)?.session_ids).not.toContain(childSessionID)
       })
 
       it("#then it should not append an unrelated launcher session into active boulder", async () => {
@@ -374,7 +374,7 @@ describe("createToolExecuteAfterHandler background launch detection", () => {
 - [ ] 1. Implement auth flow
 `)
 
-        writeBoulderState(testDirectory, {
+        writePlanState(testDirectory, {
           active_plan: planPath,
           started_at: "2026-01-02T10:00:00Z",
           session_ids: ["ses_boulder_root"],
@@ -421,8 +421,8 @@ describe("createToolExecuteAfterHandler background launch detection", () => {
           output,
         )
 
-        expect(readBoulderState(testDirectory)?.session_ids).not.toContain(sessionID)
-        expect(readBoulderState(testDirectory)?.session_ids).not.toContain(childSessionID)
+        expect(readPlanState(testDirectory)?.session_ids).not.toContain(sessionID)
+        expect(readPlanState(testDirectory)?.session_ids).not.toContain(childSessionID)
       })
     })
   })

@@ -8,7 +8,7 @@ describe("findPackageJsonUp", () => {
   let workdir: string
 
   beforeEach(() => {
-    workdir = mkdtempSync(join(tmpdir(), "omo-pkg-locator-"))
+    workdir = mkdtempSync(join(tmpdir(), "oe-pkg-locator-"))
   })
 
   afterEach(() => {

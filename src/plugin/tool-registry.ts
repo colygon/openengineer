@@ -4,7 +4,7 @@ import type { SkillLoadOptions } from "../tools/skill/types"
 import type {
   AvailableCategory,
 } from "../agents/dynamic-agent-prompt-builder"
-import type { OhMyOpenCodeConfig } from "../config"
+import type { OpenEngineerConfig } from "../config"
 import { isInteractiveBashEnabled } from "../create-runtime-tmux-config"
 import * as openclawRuntimeDispatch from "../openclaw/runtime-dispatch"
 import type { PluginContext, ToolsRecord } from "./types"
@@ -12,7 +12,7 @@ import type { PluginContext, ToolsRecord } from "./types"
 import {
   builtinTools,
   createBackgroundTools,
-  createCallOmoAgent,
+  createCallAgent,
   createLookAt,
   createSkillMcpTool,
   createSkillTool,
@@ -40,7 +40,7 @@ import { normalizeToolArgSchemas } from "./normalize-tool-arg-schemas"
 type ToolRegistryFactories = {
   builtinTools: typeof builtinTools
   createBackgroundTools: typeof createBackgroundTools
-  createCallOmoAgent: typeof createCallOmoAgent
+  createCallAgent: typeof createCallAgent
   createLookAt: typeof createLookAt
   createSkillMcpTool: typeof createSkillMcpTool
   createSkillTool: typeof createSkillTool
@@ -61,7 +61,7 @@ type ToolRegistryFactories = {
 const defaultToolRegistryFactories: ToolRegistryFactories = {
   builtinTools,
   createBackgroundTools,
-  createCallOmoAgent,
+  createCallAgent,
   createLookAt,
   createSkillMcpTool,
   createSkillTool,
@@ -91,7 +91,7 @@ const LOW_PRIORITY_TOOL_ORDER = [
   "session_info",
   "interactive_bash",
   "look_at",
-  "call_omo_agent",
+  "call_agent",
   "task_create",
   "task_get",
   "task_list",
@@ -143,7 +143,7 @@ export function trimToolsToCap(filteredTools: ToolsRecord, maxTools: number): vo
 
 export function createToolRegistry(args: {
   ctx: PluginContext
-  pluginConfig: OhMyOpenCodeConfig
+  pluginConfig: OpenEngineerConfig
   managers: Pick<Managers, "backgroundManager" | "tmuxSessionManager" | "skillMcpManager">
   skillContext: SkillContext
   availableCategories: AvailableCategory[]
@@ -164,7 +164,7 @@ export function createToolRegistry(args: {
     ...toolFactories,
   }
   const backgroundTools = factories.createBackgroundTools(managers.backgroundManager, ctx.client)
-  const callOmoAgent = factories.createCallOmoAgent(
+  const callAgent = factories.createCallAgent(
     ctx,
     managers.backgroundManager,
     pluginConfig.disabled_agents ?? [],
@@ -266,7 +266,7 @@ export function createToolRegistry(args: {
     ...factories.createAstGrepTools(ctx),
     ...factories.createSessionManagerTools(ctx),
     ...backgroundTools,
-    call_omo_agent: callOmoAgent,
+    call_agent: callAgent,
     ...(lookAt ? { look_at: lookAt } : {}),
     task: delegateTask,
     skill_mcp: skillMcpTool,

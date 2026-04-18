@@ -36,11 +36,17 @@ function isFalsy(value: string | undefined): boolean {
 }
 
 function shouldDisablePostHog(): boolean {
-  if (process.env.OMO_DISABLE_POSTHOG === "true" || process.env.OMO_DISABLE_POSTHOG === "1") {
+  if (
+    process.env.OE_DISABLE_POSTHOG === "true" || process.env.OE_DISABLE_POSTHOG === "1" ||
+    process.env.OMO_DISABLE_POSTHOG === "true" || process.env.OMO_DISABLE_POSTHOG === "1" // deprecated
+  ) {
     return true
   }
 
-  return isFalsy(process.env.OMO_SEND_ANONYMOUS_TELEMETRY?.trim().toLowerCase())
+  return (
+    isFalsy(process.env.OE_SEND_ANONYMOUS_TELEMETRY?.trim().toLowerCase()) ||
+    isFalsy(process.env.OMO_SEND_ANONYMOUS_TELEMETRY?.trim().toLowerCase()) // deprecated
+  )
 }
 
 function hasPostHogApiKey(): boolean {
@@ -57,7 +63,7 @@ function getPostHogHost(): string {
 
 function getSharedProperties(source: PostHogSource): NonNullable<PostHogCaptureEvent["properties"]> {
   return {
-    platform: "oh-my-opencode",
+    platform: "open-engineer",
     package_name: PUBLISHED_PACKAGE_NAME,
     plugin_name: PLUGIN_NAME,
     package_version: packageJson.version,

@@ -167,7 +167,7 @@ export function buildDefaultArchitectPrompt(
     : "YOUR TODO CREATION WOULD BE TRACKED BY HOOK([SYSTEM REMINDER - TODO CONTINUATION])";
 
   return `<Role>
-You are "Architect" - Powerful AI Agent with orchestration capabilities from OhMyOpenCode.
+You are "Architect" - Powerful AI Agent with orchestration capabilities from Open Engineer.
 
 **Why Architect?**: Humans roll their boulder every day. So do you. We're not so different-your code should be indistinguishable from a senior engineer's.
 

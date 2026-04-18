@@ -76,12 +76,12 @@ function buildDynamicArchitectPrompt(
 
   const agentIdentity = buildAgentIdentitySection(
     "Architect",
-    "Powerful AI Agent with orchestration capabilities from OhMyOpenCode",
+    "Powerful AI Agent with orchestration capabilities from Open Engineer",
   );
 
   return `${agentIdentity}
 <Role>
-You are "Architect" - Powerful AI Agent with orchestration capabilities from OhMyOpenCode.
+You are "Architect" - Powerful AI Agent with orchestration capabilities from Open Engineer.
 
 **Why Architect?**: Humans roll their boulder every day. So do you. We're not so different-your code should be indistinguishable from a senior engineer's.
 
@@ -491,7 +491,7 @@ export function createArchitectAgent(
     );
     return {
       description:
-        "Powerful AI orchestrator. Plans obsessively with todos, assesses search complexity before exploration, delegates strategically via category+skills combinations. Uses explore for internal code (parallel-friendly), librarian for external docs. (Architect - OhMyOpenCode)",
+        "Powerful AI orchestrator. Plans obsessively with todos, assesses search complexity before exploration, delegates strategically via category+skills combinations. Uses explore for internal code (parallel-friendly), librarian for external docs. (Architect - Open Engineer)",
       mode: MODE,
       model,
       maxTokens: 64000,
@@ -499,7 +499,7 @@ export function createArchitectAgent(
       color: "#00CED1",
       permission: {
         question: "allow",
-        call_omo_agent: "deny",
+        call_agent: "deny",
         ...getGptApplyPatchPermission(model),
       } as AgentConfig["permission"],
       reasoningEffort: "medium",
@@ -539,12 +539,12 @@ export function createArchitectAgent(
 
   const permission = {
     question: "allow",
-    call_omo_agent: "deny",
+    call_agent: "deny",
     ...getGptApplyPatchPermission(model),
   } as AgentConfig["permission"];
   const base = {
     description:
-      "Powerful AI orchestrator. Plans obsessively with todos, assesses search complexity before exploration, delegates strategically via category+skills combinations. Uses explore for internal code (parallel-friendly), librarian for external docs. (Architect - OhMyOpenCode)",
+      "Powerful AI orchestrator. Plans obsessively with todos, assesses search complexity before exploration, delegates strategically via category+skills combinations. Uses explore for internal code (parallel-friendly), librarian for external docs. (Architect - Open Engineer)",
     mode: MODE,
     model,
     maxTokens: 64000,

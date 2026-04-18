@@ -22,9 +22,9 @@ import { createPluginPostHog, getPostHogDistinctId } from "./shared/posthog"
 
 let activePluginDispose: PluginDispose | null = null
 
-const OhMyOpenCodePlugin: Plugin = async (ctx) => {
+const OpenEngineerPlugin: Plugin = async (ctx) => {
   initConfigContext("opencode", null)
-  log("[OhMyOpenCodePlugin] ENTRY - plugin loading", {
+  log("[OpenEngineerPlugin] ENTRY - plugin loading", {
     directory: ctx.directory,
   })
   logLegacyPluginStartupWarning()
@@ -121,7 +121,7 @@ const OhMyOpenCodePlugin: Plugin = async (ctx) => {
   activePluginDispose = dispose
 
   return {
-    name: "oh-my-openagent",
+    name: "open-engineer",
     ...pluginInterface,
 
     "experimental.session.compacting": async (
@@ -141,10 +141,10 @@ const OhMyOpenCodePlugin: Plugin = async (ctx) => {
   }
 }
 
-export default OhMyOpenCodePlugin
+export default OpenEngineerPlugin
 
 export type {
-  OhMyOpenCodeConfig,
+  OpenEngineerConfig,
   AgentName,
   AgentOverrideConfig,
   AgentOverrides,

@@ -1,9 +1,9 @@
 export {
-  OhMyOpenCodeConfigSchema,
+  OpenEngineerConfigSchema,
 } from "./schema"
 
 export type {
-  OhMyOpenCodeConfig,
+  OpenEngineerConfig,
   AgentOverrideConfig,
   AgentOverrides,
   McpName,
@@ -13,7 +13,7 @@ export type {
   ArchitectAgentConfig,
   ExperimentalConfig,
   DynamicContextPruningConfig,
-  RalphLoopConfig,
+  AutoLoopConfig,
   TmuxConfig,
   TmuxLayout,
   ArchitectConfig,

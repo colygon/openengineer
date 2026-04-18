@@ -1,5 +1,5 @@
 import type { PluginInput } from "@opencode-ai/plugin"
-import { appendSessionId, type BoulderState, upsertTaskSessionState } from "../../features/boulder-state"
+import { appendSessionId, type PlanState, upsertTaskSessionState } from "../../features/plan-state"
 import { log } from "../../shared/logger"
 import { HOOK_NAME } from "./hook-name"
 import { extractSessionIdFromOutput, validateSubagentSessionId } from "./subagent-session-id"
@@ -8,19 +8,19 @@ import type { PendingTaskRef, ToolExecuteAfterInput, ToolExecuteAfterOutput } fr
 
 export async function syncBackgroundLaunchSessionTracking(input: {
   ctx: PluginInput
-  boulderState: BoulderState | null
+  planState: PlanState | null
   toolInput: ToolExecuteAfterInput
   toolOutput: ToolExecuteAfterOutput
   pendingTaskRef: PendingTaskRef | undefined
   metadataSessionId?: string
 }): Promise<void> {
-  const { ctx, boulderState, toolInput, toolOutput, pendingTaskRef, metadataSessionId } = input
-  if (!boulderState) {
+  const { ctx, planState, toolInput, toolOutput, pendingTaskRef, metadataSessionId } = input
+  if (!planState) {
     return
   }
 
   const extractedSessionId = metadataSessionId ?? extractSessionIdFromOutput(toolOutput.output)
-  const lineageSessionIDs = boulderState.session_ids
+  const lineageSessionIDs = planState.session_ids
   const subagentSessionId = await validateSubagentSessionId({
     client: ctx.client,
     sessionID: extractedSessionId,
@@ -40,7 +40,7 @@ export async function syncBackgroundLaunchSessionTracking(input: {
 
   const { currentTask, shouldSkipTaskSessionUpdate } = resolveTaskContext(
     pendingTaskRef,
-    boulderState.active_plan,
+    planState.active_plan,
   )
 
   if (currentTask && !shouldSkipTaskSessionUpdate) {

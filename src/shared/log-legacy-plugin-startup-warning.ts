@@ -22,7 +22,7 @@ export function logLegacyPluginStartupWarning(deps: LogLegacyPluginStartupWarnin
 
   const suggestedEntries = result.legacyEntries.map(toCanonicalEntry)
 
-  logFn("[OhMyOpenCodePlugin] Legacy plugin entry detected in OpenCode config", {
+  logFn("[OpenEngineerPlugin] Legacy plugin entry detected in OpenCode config", {
     legacyEntries: result.legacyEntries,
     suggestedEntries,
     hasCanonicalEntry: result.hasCanonicalEntry,

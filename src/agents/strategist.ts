@@ -252,7 +252,7 @@ export function createStrategistAgent(model: string): AgentConfig {
 
   const base = {
     description:
-      "Read-only consultation agent. High-IQ reasoning specialist for debugging hard problems and high-difficulty architecture design. (Strategist - OhMyOpenCode)",
+      "Read-only consultation agent. High-IQ reasoning specialist for debugging hard problems and high-difficulty architecture design. (Strategist - Open Engineer)",
     mode: MODE,
     model,
     temperature: 0.1,

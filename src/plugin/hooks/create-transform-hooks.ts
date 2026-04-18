@@ -1,6 +1,6 @@
-import type { OhMyOpenCodeConfig } from "../../config"
+import type { OpenEngineerConfig } from "../../config"
 import type { PluginContext } from "../types"
-import type { RalphLoopHook } from "../../hooks/ralph-loop"
+import type { AutoLoopHook } from "../../hooks/auto-loop"
 
 import {
   createClaudeCodeHooksHook,
@@ -24,12 +24,12 @@ export type TransformHooks = {
 
 export function createTransformHooks(args: {
   ctx: PluginContext
-  pluginConfig: OhMyOpenCodeConfig
+  pluginConfig: OpenEngineerConfig
   isHookEnabled: (hookName: string) => boolean
   safeHookEnabled?: boolean
-  ralphLoop?: RalphLoopHook | null
+  autoLoop?: AutoLoopHook | null
 }): TransformHooks {
-  const { ctx, pluginConfig, isHookEnabled, ralphLoop } = args
+  const { ctx, pluginConfig, isHookEnabled, autoLoop } = args
   const safeHookEnabled = args.safeHookEnabled ?? true
 
   const claudeCodeHooks = isHookEnabled("claude-code-hooks")
@@ -51,7 +51,7 @@ export function createTransformHooks(args: {
   const keywordDetector = isHookEnabled("keyword-detector")
     ? safeCreateHook(
         "keyword-detector",
-        () => createKeywordDetectorHook(ctx, contextCollector, ralphLoop ?? undefined),
+        () => createKeywordDetectorHook(ctx, contextCollector, autoLoop ?? undefined),
         { enabled: safeHookEnabled },
       )
     : null

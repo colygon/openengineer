@@ -2,7 +2,7 @@ import { log } from "../../shared/logger"
 import { SYSTEM_DIRECTIVE_PREFIX } from "../../shared/system-directive"
 import { isCallerOrchestrator } from "../../shared/session-utils"
 import type { PluginInput } from "@opencode-ai/plugin"
-import { readBoulderState, readCurrentTopLevelTask } from "../../features/boulder-state"
+import { readPlanState, readCurrentTopLevelTask } from "../../features/plan-state"
 import { HOOK_NAME } from "./hook-name"
 import { ORCHESTRATOR_DELEGATION_REQUIRED, SINGLE_TASK_DIRECTIVE } from "./system-reminder-templates"
 import { isArchitectPath } from "./architect-path"
@@ -58,9 +58,9 @@ export function createToolExecuteBeforeHandler(input: {
             reason: "explicit_resume",
           })
         } else {
-          const boulderState = readBoulderState(ctx.directory)
-          const currentTask = boulderState
-            ? readCurrentTopLevelTask(boulderState.active_plan)
+          const planState = readPlanState(ctx.directory)
+          const currentTask = planState
+            ? readCurrentTopLevelTask(planState.active_plan)
             : null
           if (currentTask) {
             const task = {

@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test"
-import { ULW_LOOP_TEMPLATE } from "./ralph-loop"
+import { ULW_LOOP_TEMPLATE } from "./auto-loop"
 
 describe("ULW_LOOP_TEMPLATE", () => {
   test("returns the documented iteration caps for ultrawork and normal modes", () => {

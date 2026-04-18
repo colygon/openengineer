@@ -399,11 +399,11 @@ describe("product-manager-md-only", () => {
       expect(output.args.prompt).toContain(SYSTEM_DIRECTIVE_PREFIX)
     })
 
-    test("should inject planning warning when ProductManager calls call_omo_agent", async () => {
+    test("should inject planning warning when ProductManager calls call_agent", async () => {
       // given
       const hook = createProductManagerMdOnlyHook(createMockPluginInput())
       const input = {
-        tool: "call_omo_agent",
+        tool: "call_agent",
         sessionID: TEST_SESSION_ID,
         callID: "call-1",
       }
@@ -486,15 +486,15 @@ describe("product-manager-md-only", () => {
   })
 
   describe("boulder state priority over message files (fixes #927)", () => {
-    const BOULDER_DIR = join(tmpdir(), `boulder-test-${randomUUID()}`)
-    const BOULDER_FILE = join(BOULDER_DIR, ".openengineer", "boulder.json")
+    const PLAN_DIR = join(tmpdir(), `boulder-test-${randomUUID()}`)
+    const PLAN_FILE = join(PLAN_DIR, ".openengineer", "boulder.json")
 
     beforeEach(() => {
-      mkdirSync(join(BOULDER_DIR, ".openengineer"), { recursive: true })
+      mkdirSync(join(PLAN_DIR, ".openengineer"), { recursive: true })
     })
 
     afterEach(() => {
-      rmSync(BOULDER_DIR, { recursive: true, force: true })
+      rmSync(PLAN_DIR, { recursive: true, force: true })
     })
 
     //#given session was started with productManager (first message), but /start-work set boulder agent to technicalLead
@@ -504,7 +504,7 @@ describe("product-manager-md-only", () => {
       setupMessageStorage(TEST_SESSION_ID, undefined)
       
       // given - technicalLead in boulder state (from /start-work)
-      writeFileSync(BOULDER_FILE, JSON.stringify({
+      writeFileSync(PLAN_FILE, JSON.stringify({
         active_plan: "/test/plan.md",
         started_at: new Date().toISOString(),
         session_ids: [TEST_SESSION_ID],
@@ -514,7 +514,7 @@ describe("product-manager-md-only", () => {
 
       const hook = createProductManagerMdOnlyHook({
         client: {},
-        directory: BOULDER_DIR,
+        directory: PLAN_DIR,
       } as never)
 
       const input = {
@@ -537,7 +537,7 @@ describe("product-manager-md-only", () => {
       setupMessageStorage(TEST_SESSION_ID, "technical-lead", { useSessionAgent: false })
       
       // given - productManager in boulder state (edge case, but should honor it)
-      writeFileSync(BOULDER_FILE, JSON.stringify({
+      writeFileSync(PLAN_FILE, JSON.stringify({
         active_plan: "/test/plan.md",
         started_at: new Date().toISOString(),
         session_ids: [TEST_SESSION_ID],
@@ -547,7 +547,7 @@ describe("product-manager-md-only", () => {
 
       const hook = createProductManagerMdOnlyHook({
         client: {},
-        directory: BOULDER_DIR,
+        directory: PLAN_DIR,
       } as never)
 
       const input = {
@@ -570,7 +570,7 @@ describe("product-manager-md-only", () => {
       setupMessageStorage(TEST_SESSION_ID, "product-manager")
       
       // given - boulder state exists but for different session
-      writeFileSync(BOULDER_FILE, JSON.stringify({
+      writeFileSync(PLAN_FILE, JSON.stringify({
         active_plan: "/test/plan.md",
         started_at: new Date().toISOString(),
         session_ids: ["ses_other_session_id"],
@@ -580,7 +580,7 @@ describe("product-manager-md-only", () => {
 
       const hook = createProductManagerMdOnlyHook({
         client: {},
-        directory: BOULDER_DIR,
+        directory: PLAN_DIR,
       } as never)
 
       const input = {

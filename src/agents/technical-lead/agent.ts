@@ -90,7 +90,7 @@ function buildDynamicOrchestratorPrompt(ctx?: OrchestratorContext): string {
 
   const agentIdentity = buildAgentIdentitySection(
     "TechnicalLead",
-    "Master Orchestrator agent from OhMyOpenCode that coordinates specialized agents to complete todo lists",
+    "Master Orchestrator agent from Open Engineer that coordinates specialized agents to complete todo lists",
   )
   const basePrompt = getTechnicalLeadPrompt(model)
 
@@ -105,7 +105,7 @@ function buildDynamicOrchestratorPrompt(ctx?: OrchestratorContext): string {
 export function createTechnicalLeadAgent(ctx: OrchestratorContext): AgentConfig {
   const baseConfig = {
     description:
-      "Orchestrates work via task() to complete ALL tasks in a todo list until fully done. (TechnicalLead - OhMyOpenCode)",
+      "Orchestrates work via task() to complete ALL tasks in a todo list until fully done. (TechnicalLead - Open Engineer)",
     mode: MODE,
     ...(ctx.model ? { model: ctx.model } : {}),
     temperature: 0.1,

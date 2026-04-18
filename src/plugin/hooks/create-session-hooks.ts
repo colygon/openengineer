@@ -1,4 +1,4 @@
-import type { OhMyOpenCodeConfig, HookName } from "../../config"
+import type { OpenEngineerConfig, HookName } from "../../config"
 import type { ModelCacheState } from "../../plugin-state"
 import type { PluginContext } from "../types"
 
@@ -13,7 +13,7 @@ import {
   createAgentUsageReminderHook,
   createNonInteractiveEnvHook,
   createInteractiveBashSessionHook,
-  createRalphLoopHook,
+  createAutoLoopHook,
   createEditErrorRecoveryHook,
   createDelegateTaskRetryHook,
   createTaskResumeInfoHook,
@@ -50,7 +50,7 @@ export type SessionHooks = {
   agentUsageReminder: ReturnType<typeof createAgentUsageReminderHook> | null
   nonInteractiveEnv: ReturnType<typeof createNonInteractiveEnvHook> | null
   interactiveBashSession: ReturnType<typeof createInteractiveBashSessionHook> | null
-  ralphLoop: ReturnType<typeof createRalphLoopHook> | null
+  autoLoop: ReturnType<typeof createAutoLoopHook> | null
   editErrorRecovery: ReturnType<typeof createEditErrorRecoveryHook> | null
   delegateTaskRetry: ReturnType<typeof createDelegateTaskRetryHook> | null
   startWork: ReturnType<typeof createStartWorkHook> | null
@@ -67,7 +67,7 @@ export type SessionHooks = {
 
 export function createSessionHooks(args: {
   ctx: PluginContext
-  pluginConfig: OhMyOpenCodeConfig
+  pluginConfig: OpenEngineerConfig
   modelCacheState: ModelCacheState
   isHookEnabled: (hookName: HookName) => boolean
   safeHookEnabled: boolean
@@ -203,10 +203,10 @@ export function createSessionHooks(args: {
     ? safeHook("interactive-bash-session", () => createInteractiveBashSessionHook(ctx))
     : null
 
-  const ralphLoop = isHookEnabled("ralph-loop")
-    ? safeHook("ralph-loop", () =>
-        createRalphLoopHook(ctx, {
-          config: pluginConfig.ralph_loop,
+  const autoLoop = isHookEnabled("auto-loop")
+    ? safeHook("auto-loop", () =>
+        createAutoLoopHook(ctx, {
+          config: pluginConfig.auto_loop,
           checkSessionExists: async (sessionId) => await sessionExists(sessionId),
         }))
     : null
@@ -282,7 +282,7 @@ export function createSessionHooks(args: {
     agentUsageReminder,
     nonInteractiveEnv,
     interactiveBashSession,
-    ralphLoop,
+    autoLoop,
     editErrorRecovery,
     delegateTaskRetry,
     startWork,

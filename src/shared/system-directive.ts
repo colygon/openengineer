@@ -1,5 +1,5 @@
 /**
- * Unified system directive prefix for oh-my-opencode internal messages.
+ * Unified system directive prefix for Open Engineer internal messages.
  * All system-generated messages should use this prefix for consistent filtering.
  *
  * Format: [SYSTEM DIRECTIVE: OH-MY-OPENCODE - {TYPE}]
@@ -19,7 +19,7 @@ export function createSystemDirective(type: string): string {
 }
 
 /**
- * Checks if a message starts with the oh-my-opencode system directive prefix.
+ * Checks if a message starts with the Open Engineer system directive prefix.
  * Used by keyword-detector and other hooks to skip system-generated messages.
  * @param text - The message text to check
  * @returns true if the message is a system directive
@@ -55,7 +55,7 @@ export function removeSystemReminders(text: string): string {
 
 export const SystemDirectiveTypes = {
   TODO_CONTINUATION: "TODO CONTINUATION",
-  RALPH_LOOP: "RALPH LOOP",
+  AUTO_LOOP: "RALPH LOOP",
   BOULDER_CONTINUATION: "BOULDER CONTINUATION",
   DELEGATION_REQUIRED: "DELEGATION REQUIRED",
   SINGLE_TASK_ONLY: "SINGLE TASK ONLY",

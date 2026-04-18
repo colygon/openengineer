@@ -291,7 +291,7 @@ export function createQaEngineerAgent(model: string): AgentConfig {
 
   const base = {
     description:
-      "Expert reviewer for evaluating work plans against rigorous clarity, verifiability, and completeness standards. (QaEngineer - OhMyOpenCode)",
+      "Expert reviewer for evaluating work plans against rigorous clarity, verifiability, and completeness standards. (QaEngineer - Open Engineer)",
     mode: MODE,
     model,
     temperature: 0.1,

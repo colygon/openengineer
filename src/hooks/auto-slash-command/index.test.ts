@@ -48,7 +48,7 @@ describe("createAutoSlashCommandHook", () => {
     spyOn(shared, "log").mockImplementation((message: string, data?: unknown) => {
       logCalls.push([message, data])
     })
-    tempDir = mkdtempSync(join(tmpdir(), "omo-auto-slash-hook-test-"))
+    tempDir = mkdtempSync(join(tmpdir(), "oe-auto-slash-hook-test-"))
     originalWorkingDirectory = process.cwd()
 
     const autoSlashCommandModule = await import(`./hook?test=${Date.now()}-${Math.random()}`)
@@ -165,12 +165,12 @@ describe("createAutoSlashCommandHook", () => {
   })
 
   describe("excluded commands", () => {
-    it("should NOT trigger for ralph-loop command", async () => {
-      // given ralph-loop command
+    it("should NOT trigger for auto-loop command", async () => {
+      // given auto-loop command
       const hook = createAutoSlashCommandHook()
       const sessionID = `test-session-ralph-${Date.now()}`
       const input = createMockInput(sessionID)
-      const output = createMockOutput("/ralph-loop do something")
+      const output = createMockOutput("/auto-loop do something")
       const originalText = output.parts[0].text
 
       // when hook is called
@@ -180,12 +180,12 @@ describe("createAutoSlashCommandHook", () => {
       expect(output.parts[0].text).toBe(originalText)
     })
 
-    it("should NOT trigger for cancel-ralph command", async () => {
-      // given cancel-ralph command
+    it("should NOT trigger for cancel-loop command", async () => {
+      // given cancel-loop command
       const hook = createAutoSlashCommandHook()
       const sessionID = `test-session-cancel-${Date.now()}`
       const input = createMockInput(sessionID)
-      const output = createMockOutput("/cancel-ralph")
+      const output = createMockOutput("/cancel-loop")
       const originalText = output.parts[0].text
 
       // when hook is called
@@ -339,10 +339,10 @@ describe("createAutoSlashCommandHook", () => {
       expect(output.parts.length).toBe(0)
     })
 
-    it("should inject template for known builtin commands like ralph-loop", async () => {
+    it("should inject template for known builtin commands like auto-loop", async () => {
       //#given
       const hook = createAutoSlashCommandHook()
-      const input = createCommandInput("ralph-loop")
+      const input = createCommandInput("auto-loop")
       const output = createCommandOutput("original")
 
       //#when
@@ -350,7 +350,7 @@ describe("createAutoSlashCommandHook", () => {
 
       //#then
       expect(output.parts[0].text).toContain("<auto-slash-command>")
-      expect(output.parts[0].text).toContain("/ralph-loop Command")
+      expect(output.parts[0].text).toContain("/auto-loop Command")
     })
 
     it("should inject template for known builtin commands like ulw-loop", async () => {

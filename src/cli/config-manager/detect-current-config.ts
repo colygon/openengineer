@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from "node:fs"
 import { parseJsonc, LEGACY_PLUGIN_NAME, PLUGIN_NAME } from "../../shared"
 import type { DetectedConfig } from "../types"
-import { getOmoConfigPath } from "./config-context"
+import { getConfigPath } from "./config-context"
 import { detectConfigFormat } from "./opencode-config-format"
 import { parseOpenCodeConfigFileWithError } from "./parse-opencode-config-file"
 import { extractVersionFromPluginEntry } from "./version-compatibility"
@@ -14,7 +14,7 @@ function detectProvidersFromOmoConfig(): {
   hasOpencodeGo: boolean
   hasVercelAiGateway: boolean
 } {
-  const omoConfigPath = getOmoConfigPath()
+  const omoConfigPath = getConfigPath()
   if (!existsSync(omoConfigPath)) {
     return {
       hasOpenAI: true,

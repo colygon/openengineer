@@ -41,7 +41,7 @@ export function getConfigJsonc(): string {
   return getConfigContext().paths.configJsonc
 }
 
-export function getOmoConfigPath(): string {
+export function getConfigPath(): string {
   const configDir = getConfigContext().paths.configDir
   const detected = detectPluginConfigFile(configDir)
   if (detected.format !== "none") return detected.path

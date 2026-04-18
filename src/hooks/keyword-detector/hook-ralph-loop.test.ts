@@ -20,7 +20,7 @@ function createMockPluginInput() {
   } as any
 }
 
-function createMockRalphLoop(startLoopCalls: StartLoopCall[], cancelLoopCalls: CancelLoopCall[] = []) {
+function createMockAutoLoop(startLoopCalls: StartLoopCall[], cancelLoopCalls: CancelLoopCall[] = []) {
   return {
     startLoop: (sessionID: string, prompt: string, options?: Record<string, unknown>): boolean => {
       startLoopCalls.push({ sessionID, prompt, options: options ?? {} })
@@ -48,8 +48,8 @@ describe("keyword-detector ultrawork routing", () => {
     // given
     setMainSession("main-session")
     const startLoopCalls: StartLoopCall[] = []
-    const ralphLoop = createMockRalphLoop(startLoopCalls)
-    const hook = createKeywordDetectorHook(createMockPluginInput(), undefined, ralphLoop)
+    const autoLoop = createMockAutoLoop(startLoopCalls)
+    const hook = createKeywordDetectorHook(createMockPluginInput(), undefined, autoLoop)
     const output = {
       message: {} as Record<string, unknown>,
       parts: [{ type: "text", text: "ulw build a multi-agent backend architecture" }],
@@ -68,8 +68,8 @@ describe("keyword-detector ultrawork routing", () => {
     // given
     setMainSession("main-session")
     const startLoopCalls: StartLoopCall[] = []
-    const ralphLoop = createMockRalphLoop(startLoopCalls)
-    const hook = createKeywordDetectorHook(createMockPluginInput(), undefined, ralphLoop)
+    const autoLoop = createMockAutoLoop(startLoopCalls)
+    const hook = createKeywordDetectorHook(createMockPluginInput(), undefined, autoLoop)
     const output = {
       message: {} as Record<string, unknown>,
       parts: [{ type: "text", text: "ultrawork ship the dashboard" }],
@@ -88,8 +88,8 @@ describe("keyword-detector ultrawork routing", () => {
     // given
     setMainSession("main-session")
     const startLoopCalls: StartLoopCall[] = []
-    const ralphLoop = createMockRalphLoop(startLoopCalls)
-    const hook = createKeywordDetectorHook(createMockPluginInput(), undefined, ralphLoop)
+    const autoLoop = createMockAutoLoop(startLoopCalls)
+    const hook = createKeywordDetectorHook(createMockPluginInput(), undefined, autoLoop)
     const output = {
       message: {} as Record<string, unknown>,
       parts: [{ type: "text", text: "please ulw fix the flaky keyword tests" }],
@@ -107,8 +107,8 @@ describe("keyword-detector ultrawork routing", () => {
     // given
     setMainSession("main-session")
     const startLoopCalls: StartLoopCall[] = []
-    const ralphLoop = createMockRalphLoop(startLoopCalls)
-    const hook = createKeywordDetectorHook(createMockPluginInput(), undefined, ralphLoop)
+    const autoLoop = createMockAutoLoop(startLoopCalls)
+    const hook = createKeywordDetectorHook(createMockPluginInput(), undefined, autoLoop)
     const output = {
       message: {} as Record<string, unknown>,
       parts: [{ type: "text", text: "what is ultrawork?" }],
@@ -122,12 +122,12 @@ describe("keyword-detector ultrawork routing", () => {
     expect(output.parts[0]?.text).toContain("what is ultrawork?")
   })
 
-  test("#given non-ulw message #when chat.message fires #then ralph-loop startLoop is not invoked", async () => {
+  test("#given non-ulw message #when chat.message fires #then auto-loop startLoop is not invoked", async () => {
     // given
     setMainSession("main-session")
     const startLoopCalls: StartLoopCall[] = []
-    const ralphLoop = createMockRalphLoop(startLoopCalls)
-    const hook = createKeywordDetectorHook(createMockPluginInput(), undefined, ralphLoop)
+    const autoLoop = createMockAutoLoop(startLoopCalls)
+    const hook = createKeywordDetectorHook(createMockPluginInput(), undefined, autoLoop)
     const output = {
       message: {} as Record<string, unknown>,
       parts: [{ type: "text", text: "just a normal message" }],
@@ -140,12 +140,12 @@ describe("keyword-detector ultrawork routing", () => {
     expect(startLoopCalls).toHaveLength(0)
   })
 
-  test("#given ulw keyword with planner agent #when chat.message fires #then ralph-loop startLoop is not invoked", async () => {
+  test("#given ulw keyword with planner agent #when chat.message fires #then auto-loop startLoop is not invoked", async () => {
     // given
     setMainSession("main-session")
     const startLoopCalls: StartLoopCall[] = []
-    const ralphLoop = createMockRalphLoop(startLoopCalls)
-    const hook = createKeywordDetectorHook(createMockPluginInput(), undefined, ralphLoop)
+    const autoLoop = createMockAutoLoop(startLoopCalls)
+    const hook = createKeywordDetectorHook(createMockPluginInput(), undefined, autoLoop)
     const output = {
       message: {} as Record<string, unknown>,
       parts: [{ type: "text", text: "ulw plan this feature" }],
@@ -158,12 +158,12 @@ describe("keyword-detector ultrawork routing", () => {
     expect(startLoopCalls).toHaveLength(0)
   })
 
-  test("#given ulw keyword with non-OMO agent #when chat.message fires #then ralph-loop startLoop is not invoked", async () => {
+  test("#given ulw keyword with non-OMO agent #when chat.message fires #then auto-loop startLoop is not invoked", async () => {
     // given
     setMainSession("main-session")
     const startLoopCalls: StartLoopCall[] = []
-    const ralphLoop = createMockRalphLoop(startLoopCalls)
-    const hook = createKeywordDetectorHook(createMockPluginInput(), undefined, ralphLoop)
+    const autoLoop = createMockAutoLoop(startLoopCalls)
+    const hook = createKeywordDetectorHook(createMockPluginInput(), undefined, autoLoop)
     const output = {
       message: {} as Record<string, unknown>,
       parts: [{ type: "text", text: "ulw build feature" }],
@@ -176,7 +176,7 @@ describe("keyword-detector ultrawork routing", () => {
     expect(startLoopCalls).toHaveLength(0)
   })
 
-  test("#given ulw keyword without ralphLoop dependency #when chat.message fires #then no error is thrown and prompt is still injected", async () => {
+  test("#given ulw keyword without autoLoop dependency #when chat.message fires #then no error is thrown and prompt is still injected", async () => {
     // given
     setMainSession("main-session")
     const hook = createKeywordDetectorHook(createMockPluginInput())
@@ -194,12 +194,12 @@ describe("keyword-detector ultrawork routing", () => {
     expect(textPart!.text).toContain("do this")
   })
 
-  test("#given partial 'ulw' substring in StatefulWidget #when chat.message fires #then ralph-loop startLoop is not invoked", async () => {
+  test("#given partial 'ulw' substring in StatefulWidget #when chat.message fires #then auto-loop startLoop is not invoked", async () => {
     // given
     _resetForTesting()
     const startLoopCalls: StartLoopCall[] = []
-    const ralphLoop = createMockRalphLoop(startLoopCalls)
-    const hook = createKeywordDetectorHook(createMockPluginInput(), undefined, ralphLoop)
+    const autoLoop = createMockAutoLoop(startLoopCalls)
+    const hook = createKeywordDetectorHook(createMockPluginInput(), undefined, autoLoop)
     const output = {
       message: {} as Record<string, unknown>,
       parts: [{ type: "text", text: "refactor the StatefulWidget component" }],
@@ -212,12 +212,12 @@ describe("keyword-detector ultrawork routing", () => {
     expect(startLoopCalls).toHaveLength(0)
   })
 
-  test("#given ulw keyword inside system-reminder block #when chat.message fires #then ralph-loop startLoop is not invoked", async () => {
+  test("#given ulw keyword inside system-reminder block #when chat.message fires #then auto-loop startLoop is not invoked", async () => {
     // given
     setMainSession("main-session")
     const startLoopCalls: StartLoopCall[] = []
-    const ralphLoop = createMockRalphLoop(startLoopCalls)
-    const hook = createKeywordDetectorHook(createMockPluginInput(), undefined, ralphLoop)
+    const autoLoop = createMockAutoLoop(startLoopCalls)
+    const hook = createKeywordDetectorHook(createMockPluginInput(), undefined, autoLoop)
     const output = {
       message: {} as Record<string, unknown>,
       parts: [{
@@ -239,8 +239,8 @@ The system mentions ulw mode in passing.
     // given
     setMainSession("main-session")
     const startLoopCalls: StartLoopCall[] = []
-    const ralphLoop = createMockRalphLoop(startLoopCalls)
-    const hook = createKeywordDetectorHook(createMockPluginInput(), undefined, ralphLoop)
+    const autoLoop = createMockAutoLoop(startLoopCalls)
+    const hook = createKeywordDetectorHook(createMockPluginInput(), undefined, autoLoop)
     const output = {
       message: {} as Record<string, unknown>,
       parts: [{ type: "text", text: "ulw refactor the codebase" }],

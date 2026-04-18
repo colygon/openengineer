@@ -553,7 +553,7 @@ describe("migration maps", () => {
     expect(AGENT_NAME_MAP["omo"]).toBe("architect")
     expect(AGENT_NAME_MAP["OmO"]).toBe("architect")
     expect(AGENT_NAME_MAP["OmO-Plan"]).toBe("product-manager")
-    expect(AGENT_NAME_MAP["omo-plan"]).toBe("product-manager")
+    expect(AGENT_NAME_MAP["oe-plan"]).toBe("product-manager")
     expect(AGENT_NAME_MAP["Planner-Architect"]).toBe("product-manager")
     expect(AGENT_NAME_MAP["plan-consultant"]).toBe("consultant")
   })

@@ -9,11 +9,11 @@ import { createStartWorkHook } from "./index"
 import { buildStartWorkContextInfo } from "./context-info-builder"
 import { createTechnicalLeadHook } from "../technical-lead"
 import {
-  writeBoulderState,
-  clearBoulderState,
-  readBoulderState,
-} from "../../features/boulder-state"
-import type { BoulderState } from "../../features/boulder-state"
+  writePlanState,
+  clearPlanState,
+  readPlanState,
+} from "../../features/plan-state"
+import type { PlanState } from "../../features/plan-state"
 import * as sessionState from "../../features/claude-code-session-state"
 import * as worktreeDetector from "./worktree-detector"
 
@@ -56,12 +56,12 @@ You are starting a Architect work session.
     if (!existsSync(architectDir)) {
       mkdirSync(architectDir, { recursive: true })
     }
-    clearBoulderState(testDir)
+    clearPlanState(testDir)
   })
 
   afterEach(() => {
     sessionState._resetForTesting()
-    clearBoulderState(testDir)
+    clearPlanState(testDir)
     if (existsSync(testDir)) {
       rmSync(testDir, { recursive: true, force: true })
     }
@@ -121,7 +121,7 @@ You are starting a Architect work session.
 
       // then
       expect(output.parts[0].text).toBe("<session-context>Some context here</session-context>")
-      expect(readBoulderState(testDir)).toBeNull()
+      expect(readPlanState(testDir)).toBeNull()
     })
 
     test("should detect start-work command via session-context tag", async () => {
@@ -151,13 +151,13 @@ You are starting a Architect work session.
       const planPath = join(testDir, "test-plan.md")
       writeFileSync(planPath, "# Plan\n- [ ] Task 1\n- [x] Task 2")
 
-      const state: BoulderState = {
+      const state: PlanState = {
         active_plan: planPath,
         started_at: "2026-01-02T10:00:00Z",
         session_ids: ["session-1"],
         plan_name: "test-plan",
       }
-      writeBoulderState(testDir, state)
+      writePlanState(testDir, state)
 
       const hook = createStartWorkHook(createMockPluginInput())
       const output = {
@@ -320,13 +320,13 @@ You are starting a Architect work session.
       writeFileSync(newPlanPath, "# New Plan\n- [ ] New Task 1")
 
       // Set up stale boulder state pointing to old plan
-      const staleState: BoulderState = {
+      const staleState: PlanState = {
         active_plan: oldPlanPath,
         started_at: "2026-01-01T10:00:00Z",
         session_ids: ["old-session"],
         plan_name: "old-plan",
       }
-      writeBoulderState(testDir, staleState)
+      writePlanState(testDir, staleState)
 
       const hook = createStartWorkHook(createMockPluginInput())
       const output = {
@@ -692,7 +692,7 @@ You are starting a Architect work session.
       // then
       expect(output.message.agent).toBe("architect")
       expect(sessionState.getSessionAgent("ses-product-manager-to-worker")).toBe("architect")
-      expect(readBoulderState(testDir)?.agent).toBe("architect")
+      expect(readPlanState(testDir)?.agent).toBe("architect")
     })
 
     test("should rewrite stale ProductManager boulder state to Architect when resuming without TechnicalLead", async () => {
@@ -704,7 +704,7 @@ You are starting a Architect work session.
 
       const planPath = join(testDir, "resume-plan.md")
       writeFileSync(planPath, "# Plan\n- [ ] Task 1")
-      writeBoulderState(testDir, {
+      writePlanState(testDir, {
         active_plan: planPath,
         started_at: "2026-01-02T10:00:00Z",
         session_ids: ["old-session"],
@@ -726,7 +726,7 @@ You are starting a Architect work session.
 
       // then
       expect(output.message.agent).toBe("architect")
-      expect(readBoulderState(testDir)?.agent).toBe("architect")
+      expect(readPlanState(testDir)?.agent).toBe("architect")
     })
 
     test("#given start-work hands the session to TechnicalLead #when TechnicalLead later receives session.idle #then the same session continues the selected plan", async () => {
@@ -761,8 +761,8 @@ You are starting a Architect work session.
 
       // then
       expect(output.message.agent).toBe("technical-lead")
-      expect(readBoulderState(testDir)?.session_ids).toContain("session-123")
-      expect(readBoulderState(testDir)?.agent).toBe("technical-lead")
+      expect(readPlanState(testDir)?.session_ids).toContain("session-123")
+      expect(readPlanState(testDir)?.agent).toBe("technical-lead")
       expect(promptAsyncMock).toHaveBeenCalledTimes(1)
       promptAsyncMock.mockRestore()
     })
@@ -851,8 +851,8 @@ You are starting a Architect work session.
 
         // then
         expect(output.message.agent).toBe("technical-lead")
-        expect(readBoulderState(testDir)?.session_ids).toContain("session-123")
-        expect(readBoulderState(testDir)?.agent).toBe("technical-lead")
+        expect(readPlanState(testDir)?.session_ids).toContain("session-123")
+        expect(readPlanState(testDir)?.agent).toBe("technical-lead")
         expect(promptAsyncMock).toHaveBeenCalledTimes(1)
       } finally {
         globalThis.setTimeout = originalSetTimeout
@@ -932,7 +932,7 @@ You are starting a Architect work session.
       await hook["chat.message"]({ sessionID: "session-123" }, output)
 
       // then - boulder.json has worktree_path
-      const state = readBoulderState(testDir)
+      const state = readPlanState(testDir)
       expect(state?.worktree_path).toBe("/valid/wt")
     })
 
@@ -952,7 +952,7 @@ You are starting a Architect work session.
       await hook["chat.message"]({ sessionID: "session-123" }, output)
 
       // then - worktree_path absent, setup instructions present
-      const state = readBoulderState(testDir)
+      const state = readPlanState(testDir)
       expect(state?.worktree_path).toBeUndefined()
       expect(output.parts[0].text).toContain("needs setup")
       expect(output.parts[0].text).toContain("git worktree add /nonexistent/wt")
@@ -962,14 +962,14 @@ You are starting a Architect work session.
       // given - existing boulder with old worktree, user provides new worktree
       const planPath = join(testDir, "plan.md")
       writeFileSync(planPath, "# Plan\n- [ ] Task 1")
-      const existingState: BoulderState = {
+      const existingState: PlanState = {
         active_plan: planPath,
         started_at: "2026-01-01T00:00:00Z",
         session_ids: ["old-session"],
         plan_name: "plan",
         worktree_path: "/old/wt",
       }
-      writeBoulderState(testDir, existingState)
+      writePlanState(testDir, existingState)
       detectSpy.mockReturnValue("/new/wt")
 
       const hook = createStartWorkHook(createMockPluginInput())
@@ -981,7 +981,7 @@ You are starting a Architect work session.
       await hook["chat.message"]({ sessionID: "session-456" }, output)
 
       // then - boulder reflects updated worktree and new session appended
-      const state = readBoulderState(testDir)
+      const state = readPlanState(testDir)
       expect(state?.worktree_path).toBe("/new/wt")
       expect(state?.session_ids).toContain("session-456")
     })
@@ -990,14 +990,14 @@ You are starting a Architect work session.
       // given - existing boulder already has worktree_path, no flag given
       const planPath = join(testDir, "plan.md")
       writeFileSync(planPath, "# Plan\n- [ ] Task 1")
-      const existingState: BoulderState = {
+      const existingState: PlanState = {
         active_plan: planPath,
         started_at: "2026-01-01T00:00:00Z",
         session_ids: ["old-session"],
         plan_name: "plan",
         worktree_path: "/existing/wt",
       }
-      writeBoulderState(testDir, existingState)
+      writePlanState(testDir, existingState)
 
       const hook = createStartWorkHook(createMockPluginInput())
       const output = {

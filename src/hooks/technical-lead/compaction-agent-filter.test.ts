@@ -5,9 +5,9 @@ import { tmpdir } from "node:os"
 import { join } from "node:path"
 import { randomUUID } from "node:crypto"
 
-import { clearBoulderState, writeBoulderState } from "../../features/boulder-state"
+import { clearPlanState, writePlanState } from "../../features/plan-state"
 import { _resetForTesting, registerAgentName } from "../../features/claude-code-session-state"
-import type { BoulderState } from "../../features/boulder-state"
+import type { PlanState } from "../../features/plan-state"
 
 const TEST_STORAGE_ROOT = join(tmpdir(), `technicalLead-compaction-storage-${randomUUID()}`)
 const TEST_MESSAGE_STORAGE = join(TEST_STORAGE_ROOT, "message")
@@ -66,14 +66,14 @@ describe("technical-lead hook compaction agent filtering", () => {
   beforeEach(() => {
     testDirectory = join(tmpdir(), `technicalLead-compaction-test-${randomUUID()}`)
     mkdirSync(testDirectory, { recursive: true })
-    clearBoulderState(testDirectory)
+    clearPlanState(testDirectory)
     _resetForTesting()
     registerAgentName("technical-lead")
     registerAgentName("architect")
   })
 
   afterEach(() => {
-    clearBoulderState(testDirectory)
+    clearPlanState(testDirectory)
     rmSync(testDirectory, { recursive: true, force: true })
     _resetForTesting()
   })
@@ -84,14 +84,14 @@ describe("technical-lead hook compaction agent filtering", () => {
     const planPath = join(testDirectory, "test-plan.md")
     writeFileSync(planPath, "# Plan\n- [ ] Task 1\n- [ ] Task 2")
 
-    const state: BoulderState = {
+    const state: PlanState = {
       active_plan: planPath,
       started_at: "2026-01-02T10:00:00Z",
       session_ids: [sessionID],
       plan_name: "test-plan",
       agent: "technical-lead",
     }
-    writeBoulderState(testDirectory, state)
+    writePlanState(testDirectory, state)
     writeMessage(sessionID, "msg_001.json", "technical-lead")
     writeMessage(sessionID, "msg_002.json", "compaction")
 

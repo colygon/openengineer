@@ -3,7 +3,7 @@ import type { CreatedHooks } from "../create-hooks"
 import { log } from "../shared"
 import { stripInvisibleAgentCharacters } from "../shared/agent-display-names"
 import type { PluginContext } from "./types"
-import { readState, writeState } from "../hooks/ralph-loop/storage"
+import { readState, writeState } from "../hooks/auto-loop/storage"
 
 const VERIFICATION_ATTEMPT_PATTERN = /<ulw_verification_attempt_id>(.*?)<\/ulw_verification_attempt_id>/i
 

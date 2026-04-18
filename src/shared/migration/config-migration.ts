@@ -93,10 +93,45 @@ export function migrateConfigFile(
     needsWrite = true
   }
 
+  // Migrate ralph_loop → auto_loop config key
+  const oldLoopKey = "ralph" + "_loop" // avoid sed replacing this
+  if (oldLoopKey in copy && !("auto_loop" in copy)) {
+    copy.auto_loop = copy[oldLoopKey]
+    delete copy[oldLoopKey]
+    needsWrite = true
+  }
+
   if (copy.omo_agent) {
     copy.architect_agent = copy.omo_agent
     delete copy.omo_agent
     needsWrite = true
+  }
+
+  // Migrate disable_omo_env → disable_env_context
+  if (copy.experimental && typeof copy.experimental === "object") {
+    const exp = copy.experimental as Record<string, unknown>
+    const oldEnvKey = "disable_omo" + "_env" // avoid sed replacing this
+    if (oldEnvKey in exp && !("disable_env_context" in exp)) {
+      exp.disable_env_context = exp[oldEnvKey]
+      delete exp[oldEnvKey]
+      needsWrite = true
+    }
+  }
+
+  // Migrate call_omo_agent → call_agent in agent permission overrides
+  if (copy.agents && typeof copy.agents === "object") {
+    const oldToolKey = "call_omo" + "_agent" // avoid sed replacing this
+    const newToolKey = "call_agent"
+    for (const agentConfig of Object.values(copy.agents as Record<string, unknown>)) {
+      if (agentConfig && typeof agentConfig === "object" && "permission" in (agentConfig as Record<string, unknown>)) {
+        const perm = (agentConfig as Record<string, unknown>).permission as Record<string, unknown> | undefined
+        if (perm && oldToolKey in perm && !(newToolKey in perm)) {
+          perm[newToolKey] = perm[oldToolKey]
+          delete perm[oldToolKey]
+          needsWrite = true
+        }
+      }
+    }
   }
 
   if (copy.experimental && typeof copy.experimental === "object") {

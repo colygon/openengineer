@@ -1,14 +1,14 @@
 import { statSync } from "node:fs"
 import {
   appendSessionId,
-  clearBoulderState,
-  createBoulderState,
+  clearPlanState,
+  createPlanState,
   findProductManagerPlans,
   getPlanName,
   getPlanProgress,
-  readBoulderState,
-  writeBoulderState,
-} from "../../features/boulder-state"
+  readPlanState,
+  writePlanState,
+} from "../../features/plan-state"
 import { log } from "../../shared/logger"
 import { createWorktreeActiveBlock } from "./worktree-block"
 import type { PluginInput } from "@opencode-ai/plugin"
@@ -54,8 +54,8 @@ function buildAutoSelectedPlanContext(params: {
 }): string {
   const { planPath, sessionId, timestamp, activeAgent, worktreePath, worktreeBlock, directory } = params
   const progress = getPlanProgress(planPath)
-  const newState = createBoulderState(planPath, sessionId, activeAgent, worktreePath)
-  writeBoulderState(directory, newState)
+  const newState = createPlanState(planPath, sessionId, activeAgent, worktreePath)
+  writePlanState(directory, newState)
 
   return `
 ## Auto-Selected Plan
@@ -100,7 +100,7 @@ Ask the user which plan to work on.`
 
 function buildExplicitPlanContext(params: {
   explicitPlanName: string
-  existingState: ReturnType<typeof readBoulderState>
+  existingState: ReturnType<typeof readPlanState>
   sessionId: string
   timestamp: string
   activeAgent: string
@@ -127,7 +127,7 @@ function buildExplicitPlanContext(params: {
   }
 
   if (existingState) {
-    clearBoulderState(directory)
+    clearPlanState(directory)
   }
 
   return buildAutoSelectedPlanContext({
@@ -142,7 +142,7 @@ function buildExplicitPlanContext(params: {
 }
 
 function buildExistingSessionContext(params: {
-  existingState: NonNullable<ReturnType<typeof readBoulderState>>
+  existingState: NonNullable<ReturnType<typeof readPlanState>>
   sessionId: string
   activeAgent: string
   worktreePath: string | undefined
@@ -167,7 +167,7 @@ Looking for new plans...`
   const shouldRewriteState = existingState.agent !== activeAgent || worktreePath !== undefined
 
   if (shouldRewriteState) {
-    writeBoulderState(directory, {
+    writePlanState(directory, {
       ...existingState,
       agent: activeAgent,
       ...(worktreePath !== undefined ? { worktree_path: worktreePath } : {}),
@@ -197,7 +197,7 @@ Read the plan file and continue from the first unchecked task.`
 }
 
 function shouldDiscoverPlans(
-  existingState: ReturnType<typeof readBoulderState>,
+  existingState: ReturnType<typeof readPlanState>,
   explicitPlanName: string | null,
 ): boolean {
   return (!existingState && !explicitPlanName)
@@ -271,7 +271,7 @@ ${worktreeBlock}
 export function buildStartWorkContextInfo(params: {
   ctx: PluginInput
   explicitPlanName: string | null
-  existingState: ReturnType<typeof readBoulderState>
+  existingState: ReturnType<typeof readPlanState>
   sessionId: string
   timestamp: string
   activeAgent: string

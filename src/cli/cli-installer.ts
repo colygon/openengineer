@@ -6,7 +6,7 @@ import {
   detectCurrentConfig,
   getOpenCodeVersion,
   isOpenCodeInstalled,
-  writeOmoConfig,
+  writeConfig,
 } from "./config-manager"
 import {
   SYMBOLS,
@@ -107,7 +107,7 @@ export async function runCliInstaller(args: InstallArgs, version: string): Promi
   )
 
   printStep(step++, totalSteps, `Writing ${PLUGIN_NAME} configuration...`)
-  const omoResult = writeOmoConfig(config)
+  const omoResult = writeConfig(config)
   if (!omoResult.success) {
     printError(`Failed: ${omoResult.error}`)
     try {
@@ -149,7 +149,7 @@ export async function runCliInstaller(args: InstallArgs, version: string): Promi
   console.log()
 
   printInfo(
-    "Anonymous telemetry is enabled by default. Disable it with OMO_SEND_ANONYMOUS_TELEMETRY=0 or OMO_DISABLE_POSTHOG=1.",
+    "Anonymous telemetry is enabled by default. Disable it with OE_SEND_ANONYMOUS_TELEMETRY=0 or OE_DISABLE_POSTHOG=1.",
   )
   printInfo("Docs: docs/legal/privacy-policy.md and docs/legal/terms-of-service.md")
   console.log()

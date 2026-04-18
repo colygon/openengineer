@@ -1,15 +1,15 @@
 import { statSync } from "node:fs"
 import type { PluginInput } from "@opencode-ai/plugin"
 import {
-  readBoulderState,
-  writeBoulderState,
+  readPlanState,
+  writePlanState,
   appendSessionId,
   findProductManagerPlans,
   getPlanProgress,
-  createBoulderState,
+  createPlanState,
   getPlanName,
-  clearBoulderState,
-} from "../../features/boulder-state"
+  clearPlanState,
+} from "../../features/plan-state"
 import { log } from "../../shared/logger"
 import {
   isAgentRegistered,
@@ -87,7 +87,7 @@ export function createStartWorkHook(ctx: PluginInput) {
       output.message["agent"] = resolveRegisteredAgentName(activeAgent) ?? activeAgent
     }
 
-    const existingState = readBoulderState(ctx.directory)
+    const existingState = readPlanState(ctx.directory)
     const sessionId = input.sessionID
     const timestamp = new Date().toISOString()
 

@@ -29,7 +29,7 @@ import { buildGeminiJuniorArchitectPrompt } from "./gemini"
 const MODE: AgentMode = "subagent"
 
 // Core tools that Architect-Junior must NEVER have access to
-// Note: call_omo_agent is ALLOWED so subagents can spawn explore/librarian
+// Note: call_agent is ALLOWED so subagents can spawn explore/librarian
 const BLOCKED_TOOLS = ["task"]
 const GPT_BLOCKED_TOOLS = ["task", "apply_patch"]
 
@@ -103,7 +103,7 @@ export function createJuniorArchitectAgentWithOverrides(
   for (const tool of blockedTools) {
     merged[tool] = "deny"
   }
-  merged.call_omo_agent = "allow"
+  merged.call_agent = "allow"
   const toolsConfig = { permission: { ...merged, ...basePermission } as Record<string, PermissionValue> }
   const permission: Record<string, PermissionValue> = {
     ...toolsConfig.permission,
@@ -112,7 +112,7 @@ export function createJuniorArchitectAgentWithOverrides(
 
   const base: AgentConfig = {
     description: override?.description ??
-      "Focused task executor. Same discipline, no delegation. (Architect-Junior - OhMyOpenCode)",
+      "Focused task executor. Same discipline, no delegation. (Architect-Junior - Open Engineer)",
     mode: MODE,
     model,
     temperature,

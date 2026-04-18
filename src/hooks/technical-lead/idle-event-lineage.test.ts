@@ -4,8 +4,8 @@ import { randomUUID } from "node:crypto"
 import { existsSync, mkdirSync, rmSync, writeFileSync } from "node:fs"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
-import { clearBoulderState, readBoulderState, writeBoulderState } from "../../features/boulder-state"
-import type { BoulderState } from "../../features/boulder-state"
+import { clearPlanState, readPlanState, writePlanState } from "../../features/plan-state"
+import type { PlanState } from "../../features/plan-state"
 import { _resetForTesting, registerAgentName, setSessionAgent, subagentSessions } from "../../features/claude-code-session-state"
 
 const { createTechnicalLeadHook } = await import("./index")
@@ -16,11 +16,11 @@ describe("technical-lead hook idle-event session lineage", () => {
   let testDirectory = ""
   let promptCalls: Array<unknown> = []
 
-  function writeIncompleteBoulder(overrides: Partial<BoulderState> = {}): void {
+  function writeIncompleteBoulder(overrides: Partial<PlanState> = {}): void {
     const planPath = join(testDirectory, "test-plan.md")
     writeFileSync(planPath, "# Plan\n- [ ] Task 1\n- [ ] Task 2")
 
-    const state: BoulderState = {
+    const state: PlanState = {
       active_plan: planPath,
       started_at: "2026-01-02T10:00:00Z",
       session_ids: [MAIN_SESSION_ID],
@@ -28,7 +28,7 @@ describe("technical-lead hook idle-event session lineage", () => {
       ...overrides,
     }
 
-    writeBoulderState(testDirectory, state)
+    writePlanState(testDirectory, state)
   }
 
   function createHook(parentSessionIDs?: Record<string, string | undefined>) {
@@ -62,7 +62,7 @@ describe("technical-lead hook idle-event session lineage", () => {
     }
 
     promptCalls = []
-    clearBoulderState(testDirectory)
+    clearPlanState(testDirectory)
     _resetForTesting()
     registerAgentName("technical-lead")
     registerAgentName("architect")
@@ -70,7 +70,7 @@ describe("technical-lead hook idle-event session lineage", () => {
   })
 
   afterEach(() => {
-    clearBoulderState(testDirectory)
+    clearPlanState(testDirectory)
     if (existsSync(testDirectory)) {
       rmSync(testDirectory, { recursive: true, force: true })
     }
@@ -96,7 +96,7 @@ describe("technical-lead hook idle-event session lineage", () => {
       },
     })
 
-    assert.equal(readBoulderState(testDirectory)?.session_ids.includes(unrelatedSubagentSessionID), false)
+    assert.equal(readPlanState(testDirectory)?.session_ids.includes(unrelatedSubagentSessionID), false)
     assert.equal(promptCalls.length, 0)
   })
 
@@ -120,7 +120,7 @@ describe("technical-lead hook idle-event session lineage", () => {
       },
     })
 
-    assert.equal(readBoulderState(testDirectory)?.session_ids.includes(subagentSessionID), false)
+    assert.equal(readPlanState(testDirectory)?.session_ids.includes(subagentSessionID), false)
     assert.equal(promptCalls.length, 0)
   })
 
@@ -142,7 +142,7 @@ describe("technical-lead hook idle-event session lineage", () => {
       },
     })
 
-    assert.equal(readBoulderState(testDirectory)?.session_ids.includes(subagentSessionID), false)
+    assert.equal(readPlanState(testDirectory)?.session_ids.includes(subagentSessionID), false)
     assert.equal(promptCalls.length, 0)
   })
 
@@ -164,7 +164,7 @@ describe("technical-lead hook idle-event session lineage", () => {
       },
     })
 
-    assert.equal(readBoulderState(testDirectory)?.session_ids.includes(subagentSessionID), false)
+    assert.equal(readPlanState(testDirectory)?.session_ids.includes(subagentSessionID), false)
     assert.equal(promptCalls.length, 0)
   })
 

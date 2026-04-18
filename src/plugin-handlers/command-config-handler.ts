@@ -1,4 +1,4 @@
-import type { OhMyOpenCodeConfig } from "../config";
+import type { OpenEngineerConfig } from "../config";
 import {
   getAgentConfigKey,
   getAgentListDisplayName,
@@ -29,7 +29,7 @@ import type { PluginComponents } from "./plugin-components-loader";
 
 export async function applyCommandConfig(params: {
   config: Record<string, unknown>;
-  pluginConfig: OhMyOpenCodeConfig;
+  pluginConfig: OpenEngineerConfig;
   ctx: { directory: string };
   pluginComponents: PluginComponents;
 }): Promise<void> {

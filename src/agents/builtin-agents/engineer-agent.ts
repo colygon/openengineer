@@ -21,7 +21,7 @@ export function maybeCreateEngineerConfig(input: {
   mergedCategories: Record<string, CategoryConfig>
   directory?: string
   useTaskSystem: boolean
-  disableOmoEnv?: boolean
+  disableEnvContext?: boolean
 }): AgentConfig | undefined {
   const {
     disabledAgents,
@@ -35,7 +35,7 @@ export function maybeCreateEngineerConfig(input: {
     mergedCategories,
     directory,
     useTaskSystem,
-    disableOmoEnv = false,
+    disableEnvContext = false,
   } = input
 
   if (disabledAgents.includes("engineer")) return undefined
@@ -82,7 +82,7 @@ export function maybeCreateEngineerConfig(input: {
     engineerConfig = applyCategoryOverride(engineerConfig, hepOverrideCategory, mergedCategories)
   }
 
-  engineerConfig = applyEnvironmentContext(engineerConfig, directory, { disableOmoEnv })
+  engineerConfig = applyEnvironmentContext(engineerConfig, directory, { disableEnvContext })
 
   if (engineerOverride) {
     engineerConfig = mergeAgentConfig(engineerConfig, engineerOverride, directory)

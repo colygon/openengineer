@@ -2,9 +2,9 @@ import type { PluginInput } from "@opencode-ai/plugin"
 import {
   getPlanProgress,
   getTaskSessionState,
-  readBoulderState,
+  readPlanState,
   readCurrentTopLevelTask,
-} from "../../features/boulder-state"
+} from "../../features/plan-state"
 import { getSessionAgent } from "../../features/claude-code-session-state"
 import { getLastAgentFromSession } from "./session-last-agent"
 import { isSessionInBoulderLineage } from "./boulder-session-lineage"
@@ -51,7 +51,7 @@ async function injectContinuation(input: {
   input.sessionState.isInjectingContinuation = true
 
   try {
-    const currentBoulder = readBoulderState(input.ctx.directory)
+    const currentBoulder = readPlanState(input.ctx.directory)
     const currentTask = currentBoulder
       ? readCurrentTopLevelTask(currentBoulder.active_plan)
       : null
@@ -159,7 +159,7 @@ function scheduleRetry(input: {
       return
     }
 
-    const currentBoulder = readBoulderState(ctx.directory)
+    const currentBoulder = readPlanState(ctx.directory)
     if (!currentBoulder) return
     if (!currentBoulder.session_ids?.includes(sessionID)) return
 
@@ -212,30 +212,30 @@ export async function handleTechnicalLeadSessionIdle(input: {
     return
   }
 
-  const { boulderState, progress, appendedSession } = activeBoulderSession
+  const { planState, progress, appendedSession } = activeBoulderSession
   if (progress.isComplete) {
-    log(`[${HOOK_NAME}] Boulder complete`, { sessionID, plan: boulderState.plan_name })
+    log(`[${HOOK_NAME}] Boulder complete`, { sessionID, plan: planState.plan_name })
     return
   }
 
   if (appendedSession) {
     log(`[${HOOK_NAME}] Appended subagent session to boulder during idle`, {
       sessionID,
-      plan: boulderState.plan_name,
+      plan: planState.plan_name,
     })
   }
 
   const canContinueSession = await canContinueTrackedBoulderSession({
     client: ctx.client,
     sessionID,
-    sessionOrigin: boulderState.session_origins?.[sessionID],
-    boulderSessionIDs: boulderState.session_ids,
-    requiredAgent: boulderState.agent,
+    sessionOrigin: planState.session_origins?.[sessionID],
+    boulderSessionIDs: planState.session_ids,
+    requiredAgent: planState.agent,
   })
   if (!canContinueSession) {
     log(`[${HOOK_NAME}] Skipped: tracked descendant agent does not match boulder agent`, {
       sessionID,
-      requiredAgent: boulderState.agent ?? "technical-lead",
+      requiredAgent: planState.agent ?? "technical-lead",
     })
     return
   }
@@ -296,10 +296,10 @@ export async function handleTechnicalLeadSessionIdle(input: {
     sessionID,
     sessionState,
     options,
-    planName: boulderState.plan_name,
+    planName: planState.plan_name,
     progress,
-    agent: boulderState.agent,
-    worktreePath: boulderState.worktree_path,
+    agent: planState.agent,
+    worktreePath: planState.worktree_path,
   })
 }
 

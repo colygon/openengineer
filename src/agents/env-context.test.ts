@@ -11,8 +11,8 @@ describe("createEnvContext", () => {
     const result = createEnvContext()
 
     // #then
-    expect(result).toContain("<omo-env>")
-    expect(result).toContain("</omo-env>")
+    expect(result).toContain("<env-context>")
+    expect(result).toContain("</env-context>")
     expect(result).toContain("Timezone:")
     expect(result).toContain("Locale:")
     expect(result).not.toContain("Current date:")

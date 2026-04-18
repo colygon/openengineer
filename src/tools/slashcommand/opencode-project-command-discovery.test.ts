@@ -24,7 +24,7 @@ describe("opencode project command discovery", () => {
   let tempDir = ""
 
   beforeEach(() => {
-    tempDir = mkdtempSync(join(tmpdir(), "omo-opencode-project-command-discovery-"))
+    tempDir = mkdtempSync(join(tmpdir(), "oe-opencode-project-command-discovery-"))
   })
 
   afterEach(() => {

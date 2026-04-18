@@ -10,7 +10,7 @@ import {
   ExperimentalConfigSchema,
   GitMasterConfigSchema,
   HookNameSchema,
-  OhMyOpenCodeConfigSchema,
+  OpenEngineerConfigSchema,
 } from "./schema"
 
 describe("disabled_mcps schema", () => {
@@ -21,7 +21,7 @@ describe("disabled_mcps schema", () => {
     }
 
     // when
-    const result = OhMyOpenCodeConfigSchema.safeParse(config)
+    const result = OpenEngineerConfigSchema.safeParse(config)
 
     // then
     expect(result.success).toBe(true)
@@ -37,7 +37,7 @@ describe("disabled_mcps schema", () => {
     }
 
     // when
-    const result = OhMyOpenCodeConfigSchema.safeParse(config)
+    const result = OpenEngineerConfigSchema.safeParse(config)
 
     // then
     expect(result.success).toBe(true)
@@ -53,7 +53,7 @@ describe("disabled_mcps schema", () => {
     }
 
     // when
-    const result = OhMyOpenCodeConfigSchema.safeParse(config)
+    const result = OpenEngineerConfigSchema.safeParse(config)
 
     // then
     expect(result.success).toBe(true)
@@ -69,7 +69,7 @@ describe("disabled_mcps schema", () => {
     }
 
     // when
-    const result = OhMyOpenCodeConfigSchema.safeParse(config)
+    const result = OpenEngineerConfigSchema.safeParse(config)
 
     // then
     expect(result.success).toBe(true)
@@ -85,7 +85,7 @@ describe("disabled_mcps schema", () => {
     }
 
     // when
-    const result = OhMyOpenCodeConfigSchema.safeParse(config)
+    const result = OpenEngineerConfigSchema.safeParse(config)
 
     // then
     expect(result.success).toBe(false)
@@ -96,7 +96,7 @@ describe("disabled_mcps schema", () => {
     const config = {}
 
     // when
-    const result = OhMyOpenCodeConfigSchema.safeParse(config)
+    const result = OpenEngineerConfigSchema.safeParse(config)
 
     // then
     expect(result.success).toBe(true)
@@ -112,7 +112,7 @@ describe("disabled_mcps schema", () => {
     }
 
     // when
-    const result = OhMyOpenCodeConfigSchema.safeParse(config)
+    const result = OpenEngineerConfigSchema.safeParse(config)
 
     // then
     expect(result.success).toBe(false)
@@ -131,7 +131,7 @@ describe("disabled_mcps schema", () => {
     }
 
     // when
-    const result = OhMyOpenCodeConfigSchema.safeParse(config)
+    const result = OpenEngineerConfigSchema.safeParse(config)
 
     // then
     expect(result.success).toBe(true)
@@ -147,7 +147,7 @@ describe("disabled_mcps schema", () => {
   })
 })
 
-describe("OhMyOpenCodeConfigSchema - model_capabilities", () => {
+describe("OpenEngineerConfigSchema - model_capabilities", () => {
   test("accepts valid model capabilities config", () => {
     const input = {
       model_capabilities: {
@@ -158,7 +158,7 @@ describe("OhMyOpenCodeConfigSchema - model_capabilities", () => {
       },
     }
 
-    const result = OhMyOpenCodeConfigSchema.safeParse(input)
+    const result = OpenEngineerConfigSchema.safeParse(input)
 
     expect(result.success).toBe(true)
     if (result.success) {
@@ -167,7 +167,7 @@ describe("OhMyOpenCodeConfigSchema - model_capabilities", () => {
   })
 
   test("rejects invalid model capabilities config", () => {
-    const result = OhMyOpenCodeConfigSchema.safeParse({
+    const result = OpenEngineerConfigSchema.safeParse({
       model_capabilities: {
         refresh_timeout_ms: -1,
         source_url: "not-a-url",
@@ -484,7 +484,7 @@ describe("Architect-Junior agent override", () => {
     }
 
     // when
-    const result = OhMyOpenCodeConfigSchema.safeParse(config)
+    const result = OpenEngineerConfigSchema.safeParse(config)
 
     // then
     expect(result.success).toBe(true)
@@ -506,7 +506,7 @@ describe("Architect-Junior agent override", () => {
     }
 
     // when
-    const result = OhMyOpenCodeConfigSchema.safeParse(config)
+    const result = OpenEngineerConfigSchema.safeParse(config)
 
     // then
     expect(result.success).toBe(true)
@@ -531,7 +531,7 @@ describe("Architect-Junior agent override", () => {
     }
 
     // when
-    const result = OhMyOpenCodeConfigSchema.safeParse(config)
+    const result = OpenEngineerConfigSchema.safeParse(config)
 
     // then
     expect(result.success).toBe(true)
@@ -560,7 +560,7 @@ describe("Architect-Junior agent override", () => {
     }
 
     // when
-    const result = OhMyOpenCodeConfigSchema.safeParse(config)
+    const result = OpenEngineerConfigSchema.safeParse(config)
 
     // then
     expect(result.success).toBe(true)
@@ -585,7 +585,7 @@ describe("Architect-Junior agent override", () => {
     }
 
     // when
-    const result = OhMyOpenCodeConfigSchema.safeParse(config)
+    const result = OpenEngineerConfigSchema.safeParse(config)
 
     // then
     expect(result.success).toBe(true)
@@ -680,7 +680,7 @@ describe("BrowserAutomationConfigSchema", () => {
   })
 })
 
-describe("OhMyOpenCodeConfigSchema - browser_automation_engine", () => {
+describe("OpenEngineerConfigSchema - browser_automation_engine", () => {
   test("accepts browser_automation_engine config", () => {
     // given
     const input = {
@@ -690,7 +690,7 @@ describe("OhMyOpenCodeConfigSchema - browser_automation_engine", () => {
     }
 
     // when
-    const result = OhMyOpenCodeConfigSchema.safeParse(input)
+    const result = OpenEngineerConfigSchema.safeParse(input)
 
     // then
     expect(result.success).toBe(true)
@@ -702,7 +702,7 @@ describe("OhMyOpenCodeConfigSchema - browser_automation_engine", () => {
     const input = {}
 
     // when
-    const result = OhMyOpenCodeConfigSchema.safeParse(input)
+    const result = OpenEngineerConfigSchema.safeParse(input)
 
     // then
     expect(result.success).toBe(true)
@@ -714,7 +714,7 @@ describe("OhMyOpenCodeConfigSchema - browser_automation_engine", () => {
     const input = { browser_automation_engine: { provider: "playwright-cli" } }
 
     // when
-    const result = OhMyOpenCodeConfigSchema.safeParse(input)
+    const result = OpenEngineerConfigSchema.safeParse(input)
 
     // then
     expect(result.success).toBe(true)
@@ -722,13 +722,13 @@ describe("OhMyOpenCodeConfigSchema - browser_automation_engine", () => {
   })
 })
 
-describe("OhMyOpenCodeConfigSchema - hashline_edit", () => {
+describe("OpenEngineerConfigSchema - hashline_edit", () => {
   test("accepts hashline_edit as true", () => {
     //#given
     const input = { hashline_edit: true }
 
     //#when
-    const result = OhMyOpenCodeConfigSchema.safeParse(input)
+    const result = OpenEngineerConfigSchema.safeParse(input)
 
     //#then
     expect(result.success).toBe(true)
@@ -740,7 +740,7 @@ describe("OhMyOpenCodeConfigSchema - hashline_edit", () => {
     const input = { hashline_edit: false }
 
     //#when
-    const result = OhMyOpenCodeConfigSchema.safeParse(input)
+    const result = OpenEngineerConfigSchema.safeParse(input)
 
     //#then
     expect(result.success).toBe(true)
@@ -752,7 +752,7 @@ describe("OhMyOpenCodeConfigSchema - hashline_edit", () => {
     const input = { auto_update: true }
 
     //#when
-    const result = OhMyOpenCodeConfigSchema.safeParse(input)
+    const result = OpenEngineerConfigSchema.safeParse(input)
 
     //#then
     expect(result.success).toBe(true)
@@ -764,7 +764,7 @@ describe("OhMyOpenCodeConfigSchema - hashline_edit", () => {
     const input = { hashline_edit: "true" }
 
     //#when
-    const result = OhMyOpenCodeConfigSchema.safeParse(input)
+    const result = OpenEngineerConfigSchema.safeParse(input)
 
     //#then
     expect(result.success).toBe(false)
@@ -826,9 +826,9 @@ describe("ExperimentalConfigSchema feature flags", () => {
     }
   })
 
-  test("accepts disable_omo_env as true", () => {
+  test("accepts disable_env_context as true", () => {
     //#given
-    const config = { disable_omo_env: true }
+    const config = { disable_env_context: true }
 
     //#when
     const result = ExperimentalConfigSchema.safeParse(config)
@@ -836,13 +836,13 @@ describe("ExperimentalConfigSchema feature flags", () => {
     //#then
     expect(result.success).toBe(true)
     if (result.success) {
-      expect(result.data.disable_omo_env).toBe(true)
+      expect(result.data.disable_env_context).toBe(true)
     }
   })
 
-  test("accepts disable_omo_env as false", () => {
+  test("accepts disable_env_context as false", () => {
     //#given
-    const config = { disable_omo_env: false }
+    const config = { disable_env_context: false }
 
     //#when
     const result = ExperimentalConfigSchema.safeParse(config)
@@ -850,11 +850,11 @@ describe("ExperimentalConfigSchema feature flags", () => {
     //#then
     expect(result.success).toBe(true)
     if (result.success) {
-      expect(result.data.disable_omo_env).toBe(false)
+      expect(result.data.disable_env_context).toBe(false)
     }
   })
 
-  test("disable_omo_env is optional", () => {
+  test("disable_env_context is optional", () => {
     //#given
     const config = { safe_hook_creation: true }
 
@@ -864,13 +864,13 @@ describe("ExperimentalConfigSchema feature flags", () => {
     //#then
     expect(result.success).toBe(true)
     if (result.success) {
-      expect(result.data.disable_omo_env).toBeUndefined()
+      expect(result.data.disable_env_context).toBeUndefined()
     }
   })
 
-  test("rejects non-boolean disable_omo_env", () => {
+  test("rejects non-boolean disable_env_context", () => {
     //#given
-    const config = { disable_omo_env: "true" }
+    const config = { disable_env_context: "true" }
 
     //#when
     const result = ExperimentalConfigSchema.safeParse(config)
@@ -969,13 +969,13 @@ describe("GitMasterConfigSchema", () => {
   })
 })
 
-describe("OhMyOpenCodeConfigSchema - git_master defaults (#2040)", () => {
+describe("OpenEngineerConfigSchema - git_master defaults (#2040)", () => {
   test("git_master defaults are applied when section is missing from config", () => {
     //#given
     const config = {}
 
     //#when
-    const result = OhMyOpenCodeConfigSchema.safeParse(config)
+    const result = OpenEngineerConfigSchema.safeParse(config)
 
     //#then
     expect(result.success).toBe(true)
@@ -997,7 +997,7 @@ describe("OhMyOpenCodeConfigSchema - git_master defaults (#2040)", () => {
     }
 
     //#when
-    const result = OhMyOpenCodeConfigSchema.safeParse(config)
+    const result = OpenEngineerConfigSchema.safeParse(config)
 
     //#then
     expect(result.success).toBe(true)
@@ -1018,7 +1018,7 @@ describe("skills schema", () => {
     }
 
     //#when
-    const result = OhMyOpenCodeConfigSchema.safeParse(config)
+    const result = OpenEngineerConfigSchema.safeParse(config)
 
     //#then
     expect(result.success).toBe(true)

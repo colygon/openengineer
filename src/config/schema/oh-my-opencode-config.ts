@@ -15,7 +15,7 @@ import { GitMasterConfigSchema } from "./git-master"
 import { NotificationConfigSchema } from "./notification"
 import { OpenClawConfigSchema } from "./openclaw"
 import { ModelCapabilitiesConfigSchema } from "./model-capabilities"
-import { RalphLoopConfigSchema } from "./ralph-loop"
+import { AutoLoopConfigSchema } from "./auto-loop"
 import { RuntimeFallbackConfigSchema } from "./runtime-fallback"
 import { SkillsConfigSchema } from "./skills"
 import { ArchitectConfigSchema } from "./architect"
@@ -24,11 +24,11 @@ import { TmuxConfigSchema } from "./tmux"
 import { StartWorkConfigSchema } from "./start-work"
 import { WebsearchConfigSchema } from "./websearch"
 
-export const OhMyOpenCodeConfigSchema = z.object({
+export const OpenEngineerConfigSchema = z.object({
   $schema: z.string().optional(),
   /** Enable new task system (default: false) */
   new_task_system_enabled: z.boolean().optional(),
-  /** Default agent name for `oh-my-opencode run` (env: OPENCODE_DEFAULT_AGENT) */
+  /** Default agent name for `openengineer run` (env: OPENCODE_DEFAULT_AGENT) */
   default_run_agent: z.string().optional(),
   /** Paths to external agent definition files (.md or .json) */
   agent_definitions: AgentDefinitionsConfigSchema,
@@ -52,7 +52,7 @@ export const OhMyOpenCodeConfigSchema = z.object({
   experimental: ExperimentalConfigSchema.optional(),
   auto_update: z.boolean().optional(),
   skills: SkillsConfigSchema.optional(),
-  ralph_loop: RalphLoopConfigSchema.optional(),
+  auto_loop: AutoLoopConfigSchema.optional(),
   /**
    * Enable runtime fallback (default: false)
    * Set to false to disable, or use object for advanced config:
@@ -78,4 +78,8 @@ export const OhMyOpenCodeConfigSchema = z.object({
   _migrations: z.array(z.string()).optional(),
 })
 
-export type OhMyOpenCodeConfig = z.infer<typeof OhMyOpenCodeConfigSchema>
+export type OpenEngineerConfig = z.infer<typeof OpenEngineerConfigSchema>
+
+// Backward compatibility aliases
+export const OhMyOpenCodeConfigSchema = OpenEngineerConfigSchema
+export type OhMyOpenCodeConfig = OpenEngineerConfig

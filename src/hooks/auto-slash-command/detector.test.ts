@@ -173,18 +173,18 @@ After`
   })
 
   describe("isExcludedCommand", () => {
-    it("should exclude ralph-loop", () => {
-      // given ralph-loop command
+    it("should exclude auto-loop", () => {
+      // given auto-loop command
       // when checking exclusion
       // then should be excluded
-      expect(isExcludedCommand("ralph-loop")).toBe(true)
+      expect(isExcludedCommand("auto-loop")).toBe(true)
     })
 
-    it("should exclude cancel-ralph", () => {
-      // given cancel-ralph command
+    it("should exclude cancel-loop", () => {
+      // given cancel-loop command
       // when checking exclusion
       // then should be excluded
-      expect(isExcludedCommand("cancel-ralph")).toBe(true)
+      expect(isExcludedCommand("cancel-loop")).toBe(true)
     })
 
     it("should be case-insensitive for exclusion", () => {
@@ -244,7 +244,7 @@ After`
 
     it("should NOT detect excluded commands", () => {
       // given excluded command
-      const text = "/ralph-loop do something"
+      const text = "/auto-loop do something"
 
       // when detecting
       const result = detectSlashCommand(text)

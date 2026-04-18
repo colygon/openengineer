@@ -23,7 +23,7 @@ export function maybeCreateArchitectConfig(input: {
   directory?: string
   userCategories?: CategoriesConfig
   useTaskSystem: boolean
-  disableOmoEnv?: boolean
+  disableEnvContext?: boolean
 }): AgentConfig | undefined {
   const {
     disabledAgents,
@@ -38,7 +38,7 @@ export function maybeCreateArchitectConfig(input: {
     mergedCategories,
     directory,
     useTaskSystem,
-    disableOmoEnv = false,
+    disableEnvContext = false,
   } = input
 
   const architectOverride = agentOverrides["architect"]
@@ -89,7 +89,7 @@ export function maybeCreateArchitectConfig(input: {
   }
 
   architectConfig = applyEnvironmentContext(architectConfig, directory, {
-    disableOmoEnv,
+    disableEnvContext,
   })
 
   return architectConfig

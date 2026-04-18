@@ -113,7 +113,7 @@ describe("runTuiInstaller", () => {
         success: true,
         configPath: "/tmp/opencode.jsonc",
       }),
-      spyOn(configManager, "writeOmoConfig").mockReturnValue({
+      spyOn(configManager, "writeConfig").mockReturnValue({
         success: true,
         configPath: "/tmp/oh-my-opencode.jsonc",
       }),

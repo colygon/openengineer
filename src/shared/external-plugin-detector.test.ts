@@ -13,8 +13,8 @@ describe("external-plugin-detector", () => {
   let tempHomeDir: string
 
   beforeEach(() => {
-    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "omo-test-"))
-    tempHomeDir = fs.mkdtempSync(path.join(os.tmpdir(), "omo-home-"))
+    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "oe-test-"))
+    tempHomeDir = fs.mkdtempSync(path.join(os.tmpdir(), "oe-home-"))
   })
 
   afterEach(() => {

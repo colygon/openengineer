@@ -8,10 +8,10 @@ import { createChatMessageHandler } from "./chat-message"
 import { createAutoSlashCommandHook } from "../hooks/auto-slash-command"
 import { createKeywordDetectorHook } from "../hooks/keyword-detector"
 import { createStartWorkHook } from "../hooks/start-work"
-import { readBoulderState } from "../features/boulder-state"
+import { readPlanState } from "../features/plan-state"
 import { _resetForTesting, setMainSession, subagentSessions, registerAgentName, updateSessionAgent, getSessionAgent } from "../features/claude-code-session-state"
 import { getAgentListDisplayName } from "../shared/agent-display-names"
-import { getOmoOpenCodeCacheDir, getOpenCodeCacheDir } from "../shared/data-path"
+import { getPluginCacheDir, getOpenCodeCacheDir } from "../shared/data-path"
 import { clearSessionModel, getSessionModel, setSessionModel } from "../shared/session-model-state"
 
 type ChatMessagePart = { type: string; text?: string; [key: string]: unknown }
@@ -69,7 +69,7 @@ function createMockHandlerArgs(overrides?: {
       claudeCodeHooks: null,
       autoSlashCommand: null,
       startWork: null,
-      ralphLoop: null,
+      autoLoop: null,
     } as any,
     _appliedSessions: appliedSessions,
   }
@@ -107,8 +107,8 @@ describe("createChatMessageHandler - cache warning behavior", () => {
   test("does not show provider cache warning when provider-models cache exists", async () => {
     // given
     const toastCalls: Array<{ body: { title: string; message: string } }> = []
-    const providerModelsCachePath = join(getOmoOpenCodeCacheDir(), "provider-models.json")
-    mkdirSync(getOmoOpenCodeCacheDir(), { recursive: true })
+    const providerModelsCachePath = join(getPluginCacheDir(), "provider-models.json")
+    mkdirSync(getPluginCacheDir(), { recursive: true })
     writeFileSync(providerModelsCachePath, JSON.stringify({
       models: {
         openai: [{ id: "gpt-5.4" }],
@@ -215,7 +215,7 @@ describe("createChatMessageHandler - /start-work integration", () => {
     expect(output.parts[0].text).toContain("Auto-Selected Plan")
     expect(output.parts[0].text).toContain("boulder.json has been created")
     expect(getSessionAgent("test-session")).toBe("architect")
-    expect(readBoulderState(testDir)?.agent).toBe("architect")
+    expect(readPlanState(testDir)?.agent).toBe("architect")
   })
 
   test("smoke: resolves quoted human-readable plan names through the full /start-work chat.message path", async () => {
@@ -243,7 +243,7 @@ describe("createChatMessageHandler - /start-work integration", () => {
     expect(output.parts[0].text).toContain("<auto-slash-command>")
     expect(output.parts[0].text).toContain("Auto-Selected Plan")
     expect(output.parts[0].text).toContain("my-feature-plan")
-    expect(readBoulderState(testDir)?.plan_name).toBe("my-feature-plan")
+    expect(readPlanState(testDir)?.plan_name).toBe("my-feature-plan")
   })
 })
 
@@ -277,7 +277,7 @@ describe("createChatMessageHandler - stop continuation clearing for raw slash fa
     const startLoopCalls: Array<{ sessionID: string; prompt: string; ultrawork: boolean }> = []
     const args = createMockHandlerArgs()
     args.hooks.stopContinuationGuard = stopContinuationGuard.guard
-    args.hooks.ralphLoop = {
+    args.hooks.autoLoop = {
       startLoop: (sessionID: string, prompt: string, options?: { ultrawork?: boolean }) => {
         startLoopCalls.push({ sessionID, prompt, ultrawork: options?.ultrawork === true })
         return true
@@ -301,13 +301,13 @@ describe("createChatMessageHandler - stop continuation clearing for raw slash fa
     expect(stopContinuationGuard.clearCalls).toEqual(["test-session"])
   })
 
-  test("clears stop state before raw /ralph-loop resumes work through chat.message", async () => {
+  test("clears stop state before raw /auto-loop resumes work through chat.message", async () => {
     // given
     const stopContinuationGuard = createStopContinuationGuardMock(true)
     const startLoopCalls: Array<{ sessionID: string; prompt: string; ultrawork: boolean }> = []
     const args = createMockHandlerArgs()
     args.hooks.stopContinuationGuard = stopContinuationGuard.guard
-    args.hooks.ralphLoop = {
+    args.hooks.autoLoop = {
       startLoop: (sessionID: string, prompt: string, options?: { ultrawork?: boolean }) => {
         startLoopCalls.push({ sessionID, prompt, ultrawork: options?.ultrawork === true })
         return true
@@ -317,7 +317,7 @@ describe("createChatMessageHandler - stop continuation clearing for raw slash fa
     const handler = createChatMessageHandler(args)
     const output: ChatMessageHandlerOutput = {
       message: {},
-      parts: [{ type: "text", text: "/ralph-loop keep going" }],
+      parts: [{ type: "text", text: "/auto-loop keep going" }],
     }
 
     // when
@@ -368,7 +368,7 @@ describe("createChatMessageHandler - stop continuation clearing for raw slash fa
         startWorkCalls.push(input.sessionID)
       },
     }
-    args.hooks.ralphLoop = {
+    args.hooks.autoLoop = {
       startLoop: (sessionID: string, prompt: string, options?: { ultrawork?: boolean }) => {
         startLoopCalls.push({ sessionID, prompt, ultrawork: options?.ultrawork === true })
         return true
@@ -388,7 +388,7 @@ describe("createChatMessageHandler - stop continuation clearing for raw slash fa
     })
     await handler(createMockInput("architect"), {
       message: {},
-      parts: [{ type: "text", text: "/ralph-loop continue" }],
+      parts: [{ type: "text", text: "/auto-loop continue" }],
     })
 
     // then
@@ -420,7 +420,7 @@ describe("createChatMessageHandler - /ulw-loop raw slash fallback", () => {
     }> = []
     const args = createMockHandlerArgs()
     args.hooks.autoSlashCommand = createAutoSlashCommandHook({ skills: [] })
-    args.hooks.ralphLoop = {
+    args.hooks.autoLoop = {
       startLoop: (sessionID: string, prompt: string, options?: Record<string, unknown>) => {
         startLoopCalls.push({ sessionID, prompt, options: options ?? {} })
         return true
@@ -460,7 +460,7 @@ describe("createChatMessageHandler - /ulw-loop raw slash fallback", () => {
       options: Record<string, unknown>
     }> = []
     const args = createMockHandlerArgs()
-    args.hooks.ralphLoop = {
+    args.hooks.autoLoop = {
       startLoop: (sessionID: string, prompt: string, options?: Record<string, unknown>) => {
         startLoopCalls.push({ sessionID, prompt, options: options ?? {} })
         return true
@@ -507,7 +507,7 @@ describe("createChatMessageHandler - plain ultrawork keyword routing", () => {
       prompt: string
       options: Record<string, unknown>
     }> = []
-    const ralphLoop = {
+    const autoLoop = {
       startLoop: (sessionID: string, prompt: string, options?: Record<string, unknown>) => {
         startLoopCalls.push({ sessionID, prompt, options: options ?? {} })
         return true
@@ -515,8 +515,8 @@ describe("createChatMessageHandler - plain ultrawork keyword routing", () => {
       cancelLoop: () => true,
     }
     const args = createMockHandlerArgs()
-    args.hooks.ralphLoop = ralphLoop
-    args.hooks.keywordDetector = createKeywordDetectorHook(args.ctx as never, undefined, ralphLoop)
+    args.hooks.autoLoop = autoLoop
+    args.hooks.keywordDetector = createKeywordDetectorHook(args.ctx as never, undefined, autoLoop)
     const handler = createChatMessageHandler(args)
     const input = createMockInput("architect")
     const output: ChatMessageHandlerOutput = {

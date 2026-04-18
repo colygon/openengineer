@@ -171,7 +171,7 @@ function createHarness(args: {
     claudeCodeHooks: null,
     autoSlashCommand: null,
     startWork: null,
-    ralphLoop: null,
+    autoLoop: null,
   }
 
   if (args.mode === "model" || args.mode === "both") {

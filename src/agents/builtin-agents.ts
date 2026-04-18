@@ -71,7 +71,7 @@ export async function createBuiltinAgents(
   uiSelectedModel?: string,
   disabledSkills?: Set<string>,
   useTaskSystem = false,
-  disableOmoEnv = false
+  disableEnvContext = false
 ): Promise<Record<string, AgentConfig>> {
 
   const connectedProviders = readConnectedProvidersCache()
@@ -116,7 +116,7 @@ export async function createBuiltinAgents(
     availableModels,
     isFirstRunNoCache,
     disabledSkills,
-    disableOmoEnv,
+    disableEnvContext,
   })
 
   const architectConfig = maybeCreateArchitectConfig({
@@ -133,7 +133,7 @@ export async function createBuiltinAgents(
     directory,
     userCategories: categories,
     useTaskSystem,
-    disableOmoEnv,
+    disableEnvContext,
   })
   if (architectConfig) {
     result["architect"] = architectConfig
@@ -151,7 +151,7 @@ export async function createBuiltinAgents(
     mergedCategories,
     directory,
     useTaskSystem,
-    disableOmoEnv,
+    disableEnvContext,
   })
   if (engineerConfig) {
     result["engineer"] = engineerConfig

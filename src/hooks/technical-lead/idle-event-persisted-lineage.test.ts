@@ -5,9 +5,9 @@ import { tmpdir } from "node:os"
 import { join } from "node:path"
 import { randomUUID } from "node:crypto"
 
-import { clearBoulderState, readBoulderState, writeBoulderState } from "../../features/boulder-state"
+import { clearPlanState, readPlanState, writePlanState } from "../../features/plan-state"
 import { _resetForTesting, registerAgentName } from "../../features/claude-code-session-state"
-import type { BoulderState } from "../../features/boulder-state"
+import type { PlanState } from "../../features/plan-state"
 
 const TEST_STORAGE_ROOT = join(tmpdir(), `technicalLead-persisted-lineage-storage-${randomUUID()}`)
 const TEST_MESSAGE_STORAGE = join(TEST_STORAGE_ROOT, "message")
@@ -39,11 +39,11 @@ describe("technical-lead hook idle-event persisted lineage", () => {
   let testDirectory = ""
   let promptCalls: Array<unknown> = []
 
-  function writeIncompleteBoulder(overrides: Partial<BoulderState> = {}): void {
+  function writeIncompleteBoulder(overrides: Partial<PlanState> = {}): void {
     const planPath = join(testDirectory, "test-plan.md")
     writeFileSync(planPath, "# Plan\n- [ ] Task 1\n- [ ] Task 2")
 
-    const state: BoulderState = {
+    const state: PlanState = {
       active_plan: planPath,
       started_at: "2026-01-02T10:00:00Z",
       session_ids: [MAIN_SESSION_ID],
@@ -51,7 +51,7 @@ describe("technical-lead hook idle-event persisted lineage", () => {
       ...overrides,
     }
 
-    writeBoulderState(testDirectory, state)
+    writePlanState(testDirectory, state)
   }
 
   function createHook(
@@ -86,14 +86,14 @@ describe("technical-lead hook idle-event persisted lineage", () => {
     testDirectory = join(tmpdir(), `technicalLead-persisted-lineage-${randomUUID()}`)
     mkdirSync(testDirectory, { recursive: true })
     promptCalls = []
-    clearBoulderState(testDirectory)
+    clearPlanState(testDirectory)
     _resetForTesting()
     registerAgentName("technical-lead")
     registerAgentName("architect")
   })
 
   afterEach(() => {
-    clearBoulderState(testDirectory)
+    clearPlanState(testDirectory)
     rmSync(testDirectory, { recursive: true, force: true })
     _resetForTesting()
   })
@@ -123,7 +123,7 @@ describe("technical-lead hook idle-event persisted lineage", () => {
     })
 
     // then
-    expect(readBoulderState(testDirectory)?.session_ids).not.toContain(descendantSessionID)
+    expect(readPlanState(testDirectory)?.session_ids).not.toContain(descendantSessionID)
     expect(promptCalls.length).toBe(0)
   })
 

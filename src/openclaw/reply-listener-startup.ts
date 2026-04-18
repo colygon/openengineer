@@ -21,7 +21,8 @@ export function createReplyListenerStartupToken(): string {
 }
 
 export function getReplyListenerStartupTimeoutMs(): number {
-  const raw = process.env.OMO_OPENCLAW_REPLY_LISTENER_STARTUP_TIMEOUT_MS
+  const raw = process.env.OE_OPENCLAW_REPLY_LISTENER_STARTUP_TIMEOUT_MS
+    ?? process.env.OMO_OPENCLAW_REPLY_LISTENER_STARTUP_TIMEOUT_MS // deprecated
   if (!raw) return DEFAULT_REPLY_LISTENER_STARTUP_TIMEOUT_MS
 
   const parsed = Number.parseInt(raw, 10)

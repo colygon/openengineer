@@ -4,11 +4,11 @@ import { join } from "node:path"
 import { tmpdir } from "node:os"
 import { randomUUID } from "node:crypto"
 import {
-  writeBoulderState,
-  clearBoulderState,
-  readBoulderState,
-} from "../../features/boulder-state"
-import type { BoulderState } from "../../features/boulder-state"
+  writePlanState,
+  clearPlanState,
+  readPlanState,
+} from "../../features/plan-state"
+import type { PlanState } from "../../features/plan-state"
 import { _resetForTesting, registerAgentName, subagentSessions, updateSessionAgent } from "../../features/claude-code-session-state"
 import type { PendingTaskRef } from "./types"
 
@@ -103,12 +103,12 @@ describe("technical-lead hook", () => {
     if (!existsSync(ARCHITECT_DIR)) {
       mkdirSync(ARCHITECT_DIR, { recursive: true })
     }
-    clearBoulderState(TEST_DIR)
+    clearPlanState(TEST_DIR)
   })
 
   afterEach(() => {
     _resetForTesting()
-    clearBoulderState(TEST_DIR)
+    clearPlanState(TEST_DIR)
     if (existsSync(TEST_DIR)) {
       rmSync(TEST_DIR, { recursive: true, force: true })
     }
@@ -156,13 +156,13 @@ describe("technical-lead hook", () => {
       const planPath = join(TEST_DIR, "test-plan.md")
       writeFileSync(planPath, "# Plan\n- [ ] Task 1")
 
-      const state: BoulderState = {
+      const state: PlanState = {
         active_plan: planPath,
         started_at: "2026-01-02T10:00:00Z",
         session_ids: ["session-1"],
         plan_name: "test-plan",
       }
-      writeBoulderState(TEST_DIR, state)
+      writePlanState(TEST_DIR, state)
 
       const hook = createTechnicalLeadHook(createMockPluginInput())
       const output = {
@@ -217,13 +217,13 @@ describe("technical-lead hook", () => {
       const planPath = join(TEST_DIR, "test-plan.md")
       writeFileSync(planPath, "# Plan\n- [ ] Task 1\n- [x] Task 2")
 
-      const state: BoulderState = {
+      const state: PlanState = {
         active_plan: planPath,
         started_at: "2026-01-02T10:00:00Z",
         session_ids: ["session-1"],
         plan_name: "test-plan",
       }
-      writeBoulderState(TEST_DIR, state)
+      writePlanState(TEST_DIR, state)
 
       const hook = createTechnicalLeadHook(createMockPluginInput())
       const output = {
@@ -256,13 +256,13 @@ describe("technical-lead hook", () => {
       const planPath = join(TEST_DIR, "metadata-plan.md")
       writeFileSync(planPath, "# Plan\n- [ ] Task 1")
 
-      const state: BoulderState = {
+      const state: PlanState = {
         active_plan: planPath,
         started_at: "2026-01-02T10:00:00Z",
         session_ids: ["session-1"],
         plan_name: "metadata-plan",
       }
-      writeBoulderState(TEST_DIR, state)
+      writePlanState(TEST_DIR, state)
 
       const hook = createTechnicalLeadHook(createMockPluginInput())
       const output = {
@@ -341,13 +341,13 @@ session_id: ses_standalone_def
       const planPath = join(TEST_DIR, "complete-plan.md")
       writeFileSync(planPath, "# Plan\n- [x] Task 1\n- [x] Task 2")
 
-      const state: BoulderState = {
+      const state: PlanState = {
         active_plan: planPath,
         started_at: "2026-01-02T10:00:00Z",
         session_ids: ["session-1"],
         plan_name: "complete-plan",
       }
-      writeBoulderState(TEST_DIR, state)
+      writePlanState(TEST_DIR, state)
 
       const hook = createTechnicalLeadHook(createMockPluginInput())
       const output = {
@@ -378,13 +378,13 @@ session_id: ses_standalone_def
       const planPath = join(TEST_DIR, "test-plan.md")
       writeFileSync(planPath, "# Plan\n- [ ] Task 1")
 
-      const state: BoulderState = {
+      const state: PlanState = {
         active_plan: planPath,
         started_at: "2026-01-02T10:00:00Z",
         session_ids: ["session-1"],
         plan_name: "test-plan",
       }
-      writeBoulderState(TEST_DIR, state)
+      writePlanState(TEST_DIR, state)
 
       const hook = createTechnicalLeadHook(createMockPluginInput())
       const output = {
@@ -400,7 +400,7 @@ session_id: ses_standalone_def
       )
 
       // then - unrelated current session should not be absorbed into boulder
-      const updatedState = readBoulderState(TEST_DIR)
+      const updatedState = readPlanState(TEST_DIR)
       expect(updatedState?.session_ids).not.toContain(sessionID)
       
       cleanupMessageStorage(sessionID)
@@ -414,13 +414,13 @@ session_id: ses_standalone_def
       const planPath = join(TEST_DIR, "test-plan.md")
       writeFileSync(planPath, "# Plan\n- [ ] Task 1")
 
-      const state: BoulderState = {
+      const state: PlanState = {
         active_plan: planPath,
         started_at: "2026-01-02T10:00:00Z",
         session_ids: ["session-1"],
         plan_name: "test-plan",
       }
-      writeBoulderState(TEST_DIR, state)
+      writePlanState(TEST_DIR, state)
 
       const hook = createTechnicalLeadHook(createMockPluginInput({
         sessionGetMock: mock(async () => {
@@ -440,7 +440,7 @@ session_id: ses_standalone_def
       )
 
       // then
-      const updatedState = readBoulderState(TEST_DIR)
+      const updatedState = readPlanState(TEST_DIR)
       expect(updatedState?.session_ids).not.toContain(sessionID)
 
       cleanupMessageStorage(sessionID)
@@ -454,13 +454,13 @@ session_id: ses_standalone_def
       const planPath = join(TEST_DIR, "test-plan.md")
       writeFileSync(planPath, "# Plan\n- [ ] Task 1")
 
-      const state: BoulderState = {
+      const state: PlanState = {
         active_plan: planPath,
         started_at: "2026-01-02T10:00:00Z",
         session_ids: [sessionID],
         plan_name: "test-plan",
       }
-      writeBoulderState(TEST_DIR, state)
+      writePlanState(TEST_DIR, state)
 
       const hook = createTechnicalLeadHook(createMockPluginInput())
       const output = {
@@ -476,7 +476,7 @@ session_id: ses_standalone_def
       )
 
       // then - should still have only one sessionID
-      const updatedState = readBoulderState(TEST_DIR)
+      const updatedState = readPlanState(TEST_DIR)
       const count = updatedState?.session_ids.filter((id) => id === sessionID).length
       expect(count).toBe(1)
       
@@ -491,13 +491,13 @@ session_id: ses_standalone_def
       const planPath = join(TEST_DIR, "my-feature.md")
       writeFileSync(planPath, "# Plan\n- [ ] Task 1\n- [ ] Task 2\n- [x] Task 3")
 
-      const state: BoulderState = {
+      const state: PlanState = {
         active_plan: planPath,
         started_at: "2026-01-02T10:00:00Z",
         session_ids: ["session-1"],
         plan_name: "my-feature",
       }
-      writeBoulderState(TEST_DIR, state)
+      writePlanState(TEST_DIR, state)
 
       const hook = createTechnicalLeadHook(createMockPluginInput())
       const output = {
@@ -528,13 +528,13 @@ session_id: ses_standalone_def
       const planPath = join(TEST_DIR, "test-plan.md")
       writeFileSync(planPath, "# Plan\n- [ ] Task 1")
 
-      const state: BoulderState = {
+      const state: PlanState = {
         active_plan: planPath,
         started_at: "2026-01-02T10:00:00Z",
         session_ids: ["session-1"],
         plan_name: "test-plan",
       }
-      writeBoulderState(TEST_DIR, state)
+      writePlanState(TEST_DIR, state)
 
       const hook = createTechnicalLeadHook(createMockPluginInput())
       const output = {
@@ -568,7 +568,7 @@ session_id: ses_standalone_def
 ## TODOs
 - [ ] 1. Implement auth flow
 `)
-      writeBoulderState(TEST_DIR, {
+      writePlanState(TEST_DIR, {
         active_plan: planPath,
         started_at: "2026-01-02T10:00:00Z",
         session_ids: ["session-1"],
@@ -626,13 +626,13 @@ session_id: ses_standalone_def
   - [ ] nested acceptance checkbox
 `)
 
-      const state: BoulderState = {
+      const state: PlanState = {
         active_plan: planPath,
         started_at: "2026-01-02T10:00:00Z",
         session_ids: ["session-1"],
         plan_name: "task-session-plan",
       }
-      writeBoulderState(TEST_DIR, state)
+      writePlanState(TEST_DIR, state)
 
       const hook = createTechnicalLeadHook(createMockPluginInput())
       const output = {
@@ -655,7 +655,7 @@ session_id: ses_auth_flow_123
       )
 
       // then
-     const updatedState = readBoulderState(TEST_DIR)
+     const updatedState = readPlanState(TEST_DIR)
       expect(updatedState?.task_sessions?.["todo:1"]?.session_id).toBe("ses_auth_flow_123")
       expect(updatedState?.task_sessions?.["todo:1"]?.task_title).toBe("Implement auth flow")
       expect(updatedState?.task_sessions?.["todo:1"]?.agent).toBe("junior-architect")
@@ -677,7 +677,7 @@ session_id: ses_auth_flow_123
 - [ ] 2. Add API validation
 `)
 
-      writeBoulderState(TEST_DIR, {
+      writePlanState(TEST_DIR, {
         active_plan: planPath,
         started_at: "2026-01-02T10:00:00Z",
         session_ids: ["session-1"],
@@ -717,7 +717,7 @@ session_id: ses_auth_flow_123
       )
 
       // then - the completed task session is still recorded against task 1, not task 2
-     const updatedState = readBoulderState(TEST_DIR)
+     const updatedState = readPlanState(TEST_DIR)
       expect(updatedState?.task_sessions?.["todo:1"]?.session_id).toBe("ses_auth_flow_123")
       expect(updatedState?.task_sessions?.["todo:2"]).toBeUndefined()
 
@@ -737,7 +737,7 @@ session_id: ses_auth_flow_123
 - [ ] 2. Add API validation
 `)
 
-      writeBoulderState(TEST_DIR, {
+      writePlanState(TEST_DIR, {
         active_plan: planPath,
         started_at: "2026-01-02T10:00:00Z",
         session_ids: ["session-1"],
@@ -770,7 +770,7 @@ session_id: ses_old_task_111
       )
 
       // then - TechnicalLead does not poison task 2's preferred session mapping
-      const updatedState = readBoulderState(TEST_DIR)
+      const updatedState = readPlanState(TEST_DIR)
       expect(updatedState?.task_sessions?.["todo:2"]).toBeUndefined()
       expect(output.output).not.toContain('task(session_id="ses_old_task_111"')
 
@@ -790,7 +790,7 @@ session_id: ses_old_task_111
 - [ ] 2. Add API validation
 `)
 
-      writeBoulderState(TEST_DIR, {
+      writePlanState(TEST_DIR, {
         active_plan: planPath,
         started_at: "2026-01-02T10:00:00Z",
         session_ids: ["session-1"],
@@ -847,7 +847,7 @@ session_id: ses_old_task_111
 - [ ] 2. Add API validation
 `)
 
-      writeBoulderState(TEST_DIR, {
+      writePlanState(TEST_DIR, {
         active_plan: planPath,
         started_at: "2026-01-02T10:00:00Z",
         session_ids: ["session-1"],
@@ -904,7 +904,7 @@ session_id: ses_parallel_collision_222
           title: "Implement auth flow",
         },
       })
-      const updatedState = readBoulderState(TEST_DIR)
+      const updatedState = readPlanState(TEST_DIR)
       expect(updatedState?.task_sessions?.["todo:1"]).toBeUndefined()
 
       cleanupMessageStorage(sessionID)
@@ -922,7 +922,7 @@ session_id: ses_parallel_collision_222
 - [ ] 1. Implement auth flow
 `)
 
-      writeBoulderState(TEST_DIR, {
+      writePlanState(TEST_DIR, {
         active_plan: planPath,
         started_at: "2026-01-02T10:00:00Z",
         session_ids: ["session-1"],
@@ -954,7 +954,7 @@ session_id: ses_untrusted_999
       )
 
       // then
-      const updatedState = readBoulderState(TEST_DIR)
+      const updatedState = readPlanState(TEST_DIR)
       expect(updatedState?.task_sessions?.["todo:1"]).toBeUndefined()
       expect(output.output).not.toContain('task(session_id="ses_untrusted_999"')
       expect(output.output).toContain('task(session_id="<session_id>"')
@@ -978,13 +978,13 @@ session_id: ses_untrusted_999
         const planPath = join(TEST_DIR, "test-plan.md")
         writeFileSync(planPath, "# Plan\n- [ ] Task 1\n- [x] Task 2")
 
-        const state: BoulderState = {
+        const state: PlanState = {
           active_plan: planPath,
           started_at: "2026-01-02T10:00:00Z",
           session_ids: ["session-1"],
           plan_name: "test-plan",
         }
-        writeBoulderState(TEST_DIR, state)
+        writePlanState(TEST_DIR, state)
 
         const hook = createTechnicalLeadHook(createMockPluginInput())
         const output = {
@@ -1013,13 +1013,13 @@ session_id: ses_untrusted_999
         const planPath = join(TEST_DIR, "test-plan.md")
         writeFileSync(planPath, "# Plan\n- [ ] Task 1\n- [x] Task 2")
 
-        const state: BoulderState = {
+        const state: PlanState = {
           active_plan: planPath,
           started_at: "2026-01-02T10:00:00Z",
           session_ids: ["session-1"],
           plan_name: "test-plan",
         }
-        writeBoulderState(TEST_DIR, state)
+        writePlanState(TEST_DIR, state)
 
         const hook = createTechnicalLeadHook(createMockPluginInput())
         const output = {
@@ -1052,13 +1052,13 @@ session_id: ses_untrusted_999
         const planPath = join(TEST_DIR, "test-plan.md")
         writeFileSync(planPath, "# Plan\n- [ ] Task 1\n- [x] Task 2")
 
-        const state: BoulderState = {
+        const state: PlanState = {
           active_plan: planPath,
           started_at: "2026-01-02T10:00:00Z",
           session_ids: ["session-1"],
           plan_name: "test-plan",
         }
-        writeBoulderState(TEST_DIR, state)
+        writePlanState(TEST_DIR, state)
 
         const hook = createTechnicalLeadHook(createMockPluginInput())
         const output = {
@@ -1329,13 +1329,13 @@ session_id: ses_untrusted_999
       const planPath = join(TEST_DIR, "test-plan.md")
       writeFileSync(planPath, "# Plan\n- [ ] Task 1\n- [x] Task 2\n- [ ] Task 3")
 
-      const state: BoulderState = {
+      const state: PlanState = {
         active_plan: planPath,
         started_at: "2026-01-02T10:00:00Z",
         session_ids: [MAIN_SESSION_ID],
         plan_name: "test-plan",
       }
-      writeBoulderState(TEST_DIR, state)
+      writePlanState(TEST_DIR, state)
 
       const mockInput = createMockPluginInput()
       const hook = createTechnicalLeadHook(mockInput)
@@ -1378,13 +1378,13 @@ session_id: ses_untrusted_999
       const planPath = join(TEST_DIR, "test-plan.md")
       writeFileSync(planPath, "# Plan\n- [ ] Task 1\n- [ ] Task 2")
 
-      const state: BoulderState = {
+      const state: PlanState = {
         active_plan: planPath,
         started_at: "2026-01-02T10:00:00Z",
         session_ids: ["some-other-session-id"],
         plan_name: "test-plan",
       }
-      writeBoulderState(TEST_DIR, state)
+      writePlanState(TEST_DIR, state)
 
       const mockInput = createMockPluginInput()
       const hook = createTechnicalLeadHook(mockInput)
@@ -1407,13 +1407,13 @@ session_id: ses_untrusted_999
       const planPath = join(TEST_DIR, "test-plan.md")
       writeFileSync(planPath, "# Plan\n- [ ] Task 1\n- [ ] Task 2")
 
-      const state: BoulderState = {
+      const state: PlanState = {
         active_plan: planPath,
         started_at: "2026-01-02T10:00:00Z",
         session_ids: [MAIN_SESSION_ID],
         plan_name: "test-plan",
       }
-      writeBoulderState(TEST_DIR, state)
+      writePlanState(TEST_DIR, state)
       subagentSessions.add(subagentSessionID)
       updateSessionAgent(subagentSessionID, "technical-lead")
 
@@ -1429,7 +1429,7 @@ session_id: ses_untrusted_999
       })
 
       // then - lineage alone is not enough to absorb the session into boulder
-      expect(readBoulderState(TEST_DIR)?.session_ids).not.toContain(subagentSessionID)
+      expect(readPlanState(TEST_DIR)?.session_ids).not.toContain(subagentSessionID)
       expect(mockInput._promptMock).not.toHaveBeenCalled()
     })
 
@@ -1440,14 +1440,14 @@ session_id: ses_untrusted_999
       const planPath = join(TEST_DIR, "test-plan.md")
       writeFileSync(planPath, "# Plan\n- [ ] Task 1\n- [ ] Task 2")
 
-      const state: BoulderState = {
+      const state: PlanState = {
         active_plan: planPath,
         started_at: "2026-01-02T10:00:00Z",
         session_ids: [MAIN_SESSION_ID],
         plan_name: "test-plan",
         agent: "technical-lead",
       }
-      writeBoulderState(TEST_DIR, state)
+      writePlanState(TEST_DIR, state)
 
       const mockInput = createMockPluginInput()
       const hook = createTechnicalLeadHook(mockInput)
@@ -1470,13 +1470,13 @@ session_id: ses_untrusted_999
       const planPath = join(TEST_DIR, "complete-plan.md")
       writeFileSync(planPath, "# Plan\n- [x] Task 1\n- [x] Task 2")
 
-      const state: BoulderState = {
+      const state: PlanState = {
         active_plan: planPath,
         started_at: "2026-01-02T10:00:00Z",
         session_ids: [MAIN_SESSION_ID],
         plan_name: "complete-plan",
       }
-      writeBoulderState(TEST_DIR, state)
+      writePlanState(TEST_DIR, state)
 
       const mockInput = createMockPluginInput()
       const hook = createTechnicalLeadHook(mockInput)
@@ -1498,13 +1498,13 @@ session_id: ses_untrusted_999
       const planPath = join(TEST_DIR, "test-plan.md")
       writeFileSync(planPath, "# Plan\n- [ ] Task 1")
 
-      const state: BoulderState = {
+      const state: PlanState = {
         active_plan: planPath,
         started_at: "2026-01-02T10:00:00Z",
         session_ids: [MAIN_SESSION_ID],
         plan_name: "test-plan",
       }
-      writeBoulderState(TEST_DIR, state)
+      writePlanState(TEST_DIR, state)
 
       const mockInput = createMockPluginInput()
       const hook = createTechnicalLeadHook(mockInput)
@@ -1535,13 +1535,13 @@ session_id: ses_untrusted_999
        const planPath = join(TEST_DIR, "test-plan.md")
        writeFileSync(planPath, "# Plan\n- [ ] Task 1")
 
-       const state: BoulderState = {
+       const state: PlanState = {
          active_plan: planPath,
          started_at: "2026-01-02T10:00:00Z",
          session_ids: [MAIN_SESSION_ID],
          plan_name: "test-plan",
        }
-       writeBoulderState(TEST_DIR, state)
+       writePlanState(TEST_DIR, state)
 
        const mockBackgroundManager = {
          getTasksByParentSession: () => [{ status: "running" }],
@@ -1570,13 +1570,13 @@ session_id: ses_untrusted_999
        const planPath = join(TEST_DIR, "test-plan.md")
        writeFileSync(planPath, "# Plan\n- [ ] Task 1\n- [ ] Task 2")
 
-       const state: BoulderState = {
+       const state: PlanState = {
          active_plan: planPath,
          started_at: "2026-01-02T10:00:00Z",
          session_ids: [MAIN_SESSION_ID],
          plan_name: "test-plan",
        }
-       writeBoulderState(TEST_DIR, state)
+       writePlanState(TEST_DIR, state)
 
        const mockInput = createMockPluginInput()
        const hook = createTechnicalLeadHook(mockInput, {
@@ -1601,13 +1601,13 @@ session_id: ses_untrusted_999
       const planPath = join(TEST_DIR, "test-plan.md")
       writeFileSync(planPath, "# Plan\n- [ ] Task 1")
 
-      const state: BoulderState = {
+      const state: PlanState = {
         active_plan: planPath,
         started_at: "2026-01-02T10:00:00Z",
         session_ids: [MAIN_SESSION_ID],
         plan_name: "test-plan",
       }
-      writeBoulderState(TEST_DIR, state)
+      writePlanState(TEST_DIR, state)
 
       const mockInput = createMockPluginInput()
       const hook = createTechnicalLeadHook(mockInput)
@@ -1644,13 +1644,13 @@ session_id: ses_untrusted_999
       const planPath = join(TEST_DIR, "progress-plan.md")
       writeFileSync(planPath, "# Plan\n- [x] Task 1\n- [x] Task 2\n- [ ] Task 3\n- [ ] Task 4")
 
-      const state: BoulderState = {
+      const state: PlanState = {
         active_plan: planPath,
         started_at: "2026-01-02T10:00:00Z",
         session_ids: [MAIN_SESSION_ID],
         plan_name: "progress-plan",
       }
-      writeBoulderState(TEST_DIR, state)
+      writePlanState(TEST_DIR, state)
 
       const mockInput = createMockPluginInput()
       const hook = createTechnicalLeadHook(mockInput)
@@ -1678,7 +1678,7 @@ session_id: ses_untrusted_999
 - [ ] 1. Implement auth flow
 `)
 
-      writeBoulderState(TEST_DIR, {
+      writePlanState(TEST_DIR, {
         active_plan: planPath,
         started_at: "2026-01-02T10:00:00Z",
         session_ids: [MAIN_SESSION_ID],
@@ -1716,14 +1716,14 @@ session_id: ses_untrusted_999
        const planPath = join(TEST_DIR, "test-plan.md")
        writeFileSync(planPath, "# Plan\n- [ ] Task 1\n- [ ] Task 2")
 
-       const state: BoulderState = {
+       const state: PlanState = {
          active_plan: planPath,
          started_at: "2026-01-02T10:00:00Z",
          session_ids: [MAIN_SESSION_ID],
          plan_name: "test-plan",
          agent: "technical-lead",
        }
-       writeBoulderState(TEST_DIR, state)
+       writePlanState(TEST_DIR, state)
 
        // given - last agent is architect (typical state right after /start-work)
        cleanupMessageStorage(MAIN_SESSION_ID)
@@ -1748,14 +1748,14 @@ session_id: ses_untrusted_999
       const planPath = join(TEST_DIR, "test-plan.md")
       writeFileSync(planPath, "# Plan\n- [ ] Task 1\n- [ ] Task 2")
 
-       const state: BoulderState = {
+       const state: PlanState = {
          active_plan: planPath,
          started_at: "2026-01-02T10:00:00Z",
          session_ids: [MAIN_SESSION_ID],
          plan_name: "test-plan",
          agent: "technical-lead",
        }
-       writeBoulderState(TEST_DIR, state)
+       writePlanState(TEST_DIR, state)
 
        cleanupMessageStorage(MAIN_SESSION_ID)
        setupMessageStorage(MAIN_SESSION_ID, "engineer")
@@ -1778,14 +1778,14 @@ session_id: ses_untrusted_999
        const planPath = join(TEST_DIR, "test-plan.md")
        writeFileSync(planPath, "# Plan\n- [ ] Task 1\n- [ ] Task 2")
 
-       const state: BoulderState = {
+       const state: PlanState = {
          active_plan: planPath,
          started_at: "2026-01-02T10:00:00Z",
          session_ids: [MAIN_SESSION_ID],
          plan_name: "test-plan",
          agent: "architect",
        }
-       writeBoulderState(TEST_DIR, state)
+       writePlanState(TEST_DIR, state)
 
        cleanupMessageStorage(MAIN_SESSION_ID)
        setupMessageStorage(MAIN_SESSION_ID, "architect")
@@ -1812,14 +1812,14 @@ session_id: ses_untrusted_999
       const planPath = join(TEST_DIR, "test-plan.md")
       writeFileSync(planPath, "# Plan\n- [ ] Task 1\n- [ ] Task 2")
 
-      const state: BoulderState = {
+      const state: PlanState = {
         active_plan: planPath,
         started_at: "2026-01-02T10:00:00Z",
         session_ids: [MAIN_SESSION_ID],
         plan_name: "test-plan",
         agent: "TechnicalLead - Plan Executor",
       }
-      writeBoulderState(TEST_DIR, state)
+      writePlanState(TEST_DIR, state)
       registerAgentName("TechnicalLead - Plan Executor")
 
       const mockInput = createMockPluginInput()
@@ -1845,13 +1845,13 @@ session_id: ses_untrusted_999
       const planPath = join(TEST_DIR, "test-plan.md")
       writeFileSync(planPath, "# Plan\n- [ ] Task 1\n- [ ] Task 2")
 
-      const state: BoulderState = {
+      const state: PlanState = {
         active_plan: planPath,
         started_at: "2026-01-02T10:00:00Z",
         session_ids: [MAIN_SESSION_ID],
         plan_name: "test-plan",
       }
-      writeBoulderState(TEST_DIR, state)
+      writePlanState(TEST_DIR, state)
 
       const mockInput = createMockPluginInput()
       const hook = createTechnicalLeadHook(mockInput)
@@ -1885,13 +1885,13 @@ session_id: ses_untrusted_999
       const planPath = join(TEST_DIR, "test-plan.md")
       writeFileSync(planPath, "# Plan\n- [ ] Task 1\n- [ ] Task 2")
 
-      const state: BoulderState = {
+      const state: PlanState = {
         active_plan: planPath,
         started_at: "2026-01-02T10:00:00Z",
         session_ids: [MAIN_SESSION_ID],
         plan_name: "test-plan",
       }
-      writeBoulderState(TEST_DIR, state)
+      writePlanState(TEST_DIR, state)
 
       const promptMock = mock((): Promise<void> => Promise.reject(new Error("Bad Request")))
       const mockInput = createMockPluginInput({ promptMock })
@@ -1924,13 +1924,13 @@ session_id: ses_untrusted_999
       const planPath = join(TEST_DIR, "test-plan.md")
       writeFileSync(planPath, "# Plan\n- [ ] Task 1\n- [ ] Task 2")
 
-      const state: BoulderState = {
+      const state: PlanState = {
         active_plan: planPath,
         started_at: "2026-01-02T10:00:00Z",
         session_ids: [MAIN_SESSION_ID],
         plan_name: "test-plan",
       }
-      writeBoulderState(TEST_DIR, state)
+      writePlanState(TEST_DIR, state)
 
       const promptMock = mock((): Promise<void> => Promise.reject(new Error("Bad Request")))
       promptMock.mockImplementationOnce(() => Promise.reject(new Error("Bad Request")))
@@ -1963,13 +1963,13 @@ session_id: ses_untrusted_999
       const planPath = join(TEST_DIR, "test-plan.md")
       writeFileSync(planPath, "# Plan\n- [ ] Task 1\n- [ ] Task 2")
 
-      const state: BoulderState = {
+      const state: PlanState = {
         active_plan: planPath,
         started_at: "2026-01-02T10:00:00Z",
         session_ids: [MAIN_SESSION_ID],
         plan_name: "test-plan",
       }
-      writeBoulderState(TEST_DIR, state)
+      writePlanState(TEST_DIR, state)
 
       const promptMock = mock(() => Promise.reject(new Error("Bad Request")))
       const mockInput = createMockPluginInput({ promptMock })
@@ -2004,13 +2004,13 @@ session_id: ses_untrusted_999
       const planPath = join(TEST_DIR, "test-plan.md")
       writeFileSync(planPath, "# Plan\n- [ ] Task 1\n- [ ] Task 2")
 
-      const state: BoulderState = {
+      const state: PlanState = {
         active_plan: planPath,
         started_at: "2026-01-02T10:00:00Z",
         session_ids: [MAIN_SESSION_ID],
         plan_name: "test-plan",
       }
-      writeBoulderState(TEST_DIR, state)
+      writePlanState(TEST_DIR, state)
 
       const promptMock = mock(() => Promise.reject(new Error("Bad Request")))
       const mockInput = createMockPluginInput({ promptMock })
@@ -2045,13 +2045,13 @@ session_id: ses_untrusted_999
       const planPath = join(TEST_DIR, "test-plan.md")
       writeFileSync(planPath, "# Plan\n- [ ] Task 1\n- [ ] Task 2")
 
-      const state: BoulderState = {
+      const state: PlanState = {
         active_plan: planPath,
         started_at: "2026-01-02T10:00:00Z",
         session_ids: [MAIN_SESSION_ID],
         plan_name: "test-plan",
       }
-      writeBoulderState(TEST_DIR, state)
+      writePlanState(TEST_DIR, state)
 
       const promptMock = mock((): Promise<void> => Promise.reject(new Error("Bad Request")))
       for (let i = 0; i < 10; i++) {
@@ -2100,13 +2100,13 @@ session_id: ses_untrusted_999
       const planPath = join(TEST_DIR, "test-plan.md")
       writeFileSync(planPath, "# Plan\n- [ ] Task 1\n- [ ] Task 2")
 
-      const state: BoulderState = {
+      const state: PlanState = {
         active_plan: planPath,
         started_at: "2026-01-02T10:00:00Z",
         session_ids: [MAIN_SESSION_ID],
         plan_name: "test-plan",
       }
-      writeBoulderState(TEST_DIR, state)
+      writePlanState(TEST_DIR, state)
 
       const promptMock = mock(() => Promise.reject(new Error("Bad Request")))
       const mockInput = createMockPluginInput({ promptMock })
@@ -2145,13 +2145,13 @@ session_id: ses_untrusted_999
       const planPath = join(TEST_DIR, "test-plan.md")
       writeFileSync(planPath, "# Plan\n- [ ] Task 1")
 
-      const state: BoulderState = {
+      const state: PlanState = {
         active_plan: planPath,
         started_at: "2026-01-02T10:00:00Z",
         session_ids: [MAIN_SESSION_ID],
         plan_name: "test-plan",
       }
-      writeBoulderState(TEST_DIR, state)
+      writePlanState(TEST_DIR, state)
 
       const mockInput = createMockPluginInput()
       const hook = createTechnicalLeadHook(mockInput)
@@ -2174,7 +2174,7 @@ session_id: ses_untrusted_999
       })
 
       // Re-create boulder after deletion
-      writeBoulderState(TEST_DIR, state)
+      writePlanState(TEST_DIR, state)
 
       // Trigger idle - should inject because state was cleaned up
       await hook.handler({
@@ -2193,14 +2193,14 @@ session_id: ses_untrusted_999
       const planPath = join(TEST_DIR, "test-plan.md")
       writeFileSync(planPath, "# Plan\n- [ ] Task 1\n- [ ] Task 2")
 
-      const state: BoulderState = {
+      const state: PlanState = {
         active_plan: planPath,
         started_at: "2026-01-02T10:00:00Z",
         session_ids: [MAIN_SESSION_ID],
         plan_name: "test-plan",
         agent: "technical-lead",
       }
-      writeBoulderState(TEST_DIR, state)
+      writePlanState(TEST_DIR, state)
 
       cleanupMessageStorage(MAIN_SESSION_ID)
       setupMessageStorage(MAIN_SESSION_ID, "engineer")
@@ -2277,13 +2277,13 @@ session_id: ses_untrusted_999
         const planPath = join(TEST_DIR, "test-plan.md")
         writeFileSync(planPath, "# Plan\n- [ ] Task 1\n- [x] Task 2")
 
-        const state: BoulderState = {
+        const state: PlanState = {
           active_plan: planPath,
           started_at: "2026-01-02T10:00:00Z",
           session_ids: [MAIN_SESSION_ID],
           plan_name: "test-plan",
         }
-        writeBoulderState(TEST_DIR, state)
+        writePlanState(TEST_DIR, state)
 
         const mockInput = createMockPluginInput()
         const hook = createTechnicalLeadHook(mockInput)
@@ -2306,13 +2306,13 @@ session_id: ses_untrusted_999
         const planPath = join(TEST_DIR, "test-plan.md")
         writeFileSync(planPath, "# Plan\n- [ ] Task 1\n- [ ] Task 2")
 
-        const state: BoulderState = {
+        const state: PlanState = {
           active_plan: planPath,
           started_at: "2026-01-02T10:00:00Z",
           session_ids: [MAIN_SESSION_ID],
           plan_name: "test-plan",
         }
-        writeBoulderState(TEST_DIR, state)
+        writePlanState(TEST_DIR, state)
 
         const mockInput = createMockPluginInput()
         const hook = createTechnicalLeadHook(mockInput)
@@ -2341,13 +2341,13 @@ session_id: ses_untrusted_999
         const planPath = join(TEST_DIR, "test-plan.md")
         writeFileSync(planPath, "# Plan\n- [ ] Task 1\n- [x] Task 2")
 
-        const state: BoulderState = {
+        const state: PlanState = {
           active_plan: planPath,
           started_at: "2026-01-02T10:00:00Z",
           session_ids: [MAIN_SESSION_ID],
           plan_name: "test-plan",
         }
-        writeBoulderState(TEST_DIR, state)
+        writePlanState(TEST_DIR, state)
 
         const mockInput = createMockPluginInput()
         const hook = createTechnicalLeadHook(mockInput)
@@ -2372,13 +2372,13 @@ session_id: ses_untrusted_999
         const planPath = join(TEST_DIR, "test-plan.md")
         writeFileSync(planPath, "# Plan\n- [ ] Task 1\n- [x] Task 2")
 
-        const state: BoulderState = {
+        const state: PlanState = {
           active_plan: planPath,
           started_at: "2026-01-02T10:00:00Z",
           session_ids: [MAIN_SESSION_ID],
           plan_name: "test-plan",
         }
-        writeBoulderState(TEST_DIR, state)
+        writePlanState(TEST_DIR, state)
 
         const mockInput = createMockPluginInput()
         const hook = createTechnicalLeadHook(mockInput)
@@ -2405,13 +2405,13 @@ session_id: ses_untrusted_999
         const planPath = join(TEST_DIR, "test-plan.md")
         writeFileSync(planPath, "# Plan\n- [ ] Task 1\n- [x] Task 2")
 
-        const state: BoulderState = {
+        const state: PlanState = {
           active_plan: planPath,
           started_at: "2026-01-02T10:00:00Z",
           session_ids: [MAIN_SESSION_ID],
           plan_name: "test-plan",
         }
-        writeBoulderState(TEST_DIR, state)
+        writePlanState(TEST_DIR, state)
 
         const mockInput = createMockPluginInput()
         const hook = createTechnicalLeadHook(mockInput)
