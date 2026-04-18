@@ -1,0 +1,83 @@
+---
+title: Config Schema
+description: Complete configuration schema reference
+---
+
+The full JSON Schema is available at:
+
+```
+https://raw.githubusercontent.com/colygon/openengineer/dev/assets/openengineer.schema.json
+```
+
+## Top-Level Fields
+
+| Field | Type | Default | Description |
+|---|---|---|---|
+| `$schema` | string | — | JSON Schema URL for editor support |
+| `new_task_system_enabled` | boolean | `false` | Enable new task system |
+| `default_run_agent` | string | `"architect"` | Default agent for CLI `run` command |
+| `disabled_agents` | string[] | `[]` | Agents to disable |
+| `disabled_hooks` | string[] | `[]` | Hooks to disable |
+| `disabled_tools` | string[] | `[]` | Tools to disable |
+| `disabled_skills` | string[] | `[]` | Skills to disable |
+| `disabled_commands` | string[] | `[]` | Commands to disable |
+| `disabled_mcps` | string[] | `[]` | MCPs to disable |
+| `mcp_env_allowlist` | string[] | `[]` | Env vars exposed to MCP servers |
+| `hashline_edit` | boolean | `false` | Enable hash-based line editing |
+| `model_fallback` | boolean | `false` | Enable automatic model fallback on errors |
+| `auto_update` | boolean | — | Enable auto-update checking |
+| `agents` | object | — | [Agent overrides](#agents) |
+| `categories` | object | — | [Category overrides](#categories) |
+| `auto_loop` | object | — | [Auto loop config](#auto-loop) |
+| `git_master` | object | — | [Git config](#git-master) |
+| `experimental` | object | — | [Experimental flags](#experimental) |
+| `architect_agent` | object | — | Architect-specific config (tasks, TDD) |
+
+## Agents
+
+Each agent key accepts:
+
+```typescript
+{
+  model?: string
+  fallback_models?: (string | { model: string; variant?: string })[]
+  temperature?: number
+  top_p?: number
+  maxTokens?: number
+  prompt_append?: string
+}
+```
+
+## Categories
+
+Same schema as agents, plus category-specific fields.
+
+## Auto Loop
+
+```typescript
+{
+  enabled?: boolean
+  max_iterations?: number
+  cooldown_seconds?: number
+}
+```
+
+## Git Master
+
+```typescript
+{
+  commit_footer?: string | boolean  // default: true
+  include_co_authored_by?: boolean  // default: true
+  git_env_prefix?: string           // default: "GIT_MASTER=1"
+}
+```
+
+## Experimental
+
+```typescript
+{
+  disable_env_context?: boolean     // Disable <env-context> injection
+  safe_hook_creation?: boolean      // Wrap hooks in try/catch (default: true)
+  hashline_edit?: boolean           // Enable hashline editing
+}
+```

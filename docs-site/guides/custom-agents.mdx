@@ -1,0 +1,74 @@
+---
+title: Custom Agents
+description: Define your own agents with custom prompts and models
+---
+
+Beyond the 10 built-in agents, you can define custom agents using markdown files.
+
+## Agent Definition Files
+
+Place `.md` files in `.opencode/agents/` in your project:
+
+```
+.opencode/
+  agents/
+    security-reviewer.md
+    performance-optimizer.md
+```
+
+## Agent File Format
+
+```markdown
+---
+name: security-reviewer
+model: nebius/deepseek-ai/DeepSeek-R1-0528
+description: Reviews code for security vulnerabilities
+tools:
+  - grep
+  - read
+  - glob
+---
+
+You are a security reviewer. Analyze code for OWASP Top 10 vulnerabilities.
+
+Focus on:
+- SQL injection
+- XSS
+- Authentication bypass
+- Insecure deserialization
+
+Always provide severity ratings (Critical/High/Medium/Low) and remediation steps.
+```
+
+## Overriding Built-in Agents
+
+You can override a built-in agent's behavior by creating an agent file with the same name:
+
+```markdown
+---
+name: architect
+prompt_append: true
+---
+
+Additional instructions for the architect:
+- Always create a plan before implementing
+- Use conventional commits
+- Run tests after every change
+```
+
+When `prompt_append: true` is set, your content is appended to the existing prompt rather than replacing it.
+
+## Agent Configuration via JSON
+
+For model-only overrides without custom prompts, use `openengineer.json`:
+
+```json
+{
+  "agents": {
+    "security-reviewer": {
+      "model": "nebius/deepseek-ai/DeepSeek-R1-0528",
+      "temperature": 0.2
+    }
+  }
+}
+```

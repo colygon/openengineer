@@ -1,0 +1,67 @@
+---
+title: Categories
+description: Task routing system that matches work to the right model
+---
+
+Categories are how Open Engineer routes tasks to the right model without you specifying one. When the Architect delegates work, it picks a **category** based on the task type.
+
+## Built-in Categories
+
+| Category | Primary Model | When It's Used |
+|---|---|---|
+| **visual-engineering** | Qwen2.5 VL 72B | Frontend, UI/UX, design, styling, animation |
+| **ultrabrain** | DeepSeek R1 | Hard logic-heavy tasks requiring deep reasoning |
+| **deep** | Kimi K2.5 | Autonomous problem-solving with thorough research |
+| **artistry** | Nemotron Ultra 253B | Creative, unconventional approaches |
+| **quick** | Gemma 3 27B | Single file changes, typo fixes, simple modifications |
+| **unspecified-low** | Llama 3.3 70B | Moderate effort tasks that don't fit other categories |
+| **unspecified-high** | Qwen 3.5 397B | High effort tasks that don't fit other categories |
+| **writing** | INTELLECT-3 | Documentation, prose, technical writing |
+
+## How Categories Work
+
+When the Architect delegates a task via the `task` tool, it specifies a category:
+
+```
+task(category="visual-engineering", prompt="Build a login form with...")
+```
+
+The category determines:
+- Which model handles the task
+- What system prompt is injected
+- What prompt guidelines the agent follows
+
+## Category Prompts
+
+Each category includes a specialized prompt append that sets the agent's mindset:
+
+- **visual-engineering** enforces a 4-phase design system workflow (analyze, establish, build, verify)
+- **ultrabrain** requires strategic advisor mindset with effort estimates
+- **deep** sets autonomous problem-solver mode with extensive exploration before action
+- **quick** enforces explicit, structured prompts for smaller models
+- **writing** includes anti-AI-slop rules (no em dashes, no corporate filler)
+
+## Customizing Categories
+
+Override any category in `openengineer.json`:
+
+```json
+{
+  "categories": {
+    "quick": {
+      "model": "nebius/openai/gpt-oss-20b",
+      "temperature": 0.3
+    },
+    "deep": {
+      "model": "nebius/Qwen/Qwen3-Coder-480B-A35B-Instruct"
+    }
+  }
+}
+```
+
+Available fields per category:
+- `model` — primary model
+- `fallback_models` — array of fallback models
+- `temperature`, `top_p` — sampling parameters
+- `maxTokens` — max output tokens
+- `prompt_append` — additional prompt text

@@ -1,0 +1,86 @@
+---
+title: Category Reference
+description: Complete reference for all 8 task categories
+---
+
+Categories route delegated tasks to the right model with the right prompt.
+
+## visual-engineering
+
+Frontend, UI/UX, design, styling, animation.
+
+| Property | Value |
+|---|---|
+| **Primary Model** | `nebius/Qwen/Qwen2.5-VL-72B-Instruct` |
+| **Fallback Chain** | Nemotron Ultra 253B -> DeepSeek V3.2 -> Kimi K2.5 |
+| **Prompt** | 4-phase design system workflow (analyze, establish, build, verify) |
+
+## ultrabrain
+
+Deep logical reasoning and complex architecture tasks.
+
+| Property | Value |
+|---|---|
+| **Primary Model** | `nebius/deepseek-ai/DeepSeek-R1-0528` |
+| **Fallback Chain** | Qwen3 235B Thinking -> Hermes 4 405B -> Kimi K2-Thinking -> Nemotron Ultra 253B -> GLM-5 |
+| **Prompt** | Strategic advisor mindset, code style requirements, effort estimates |
+
+## deep
+
+Goal-oriented autonomous problem-solving with thorough research.
+
+| Property | Value |
+|---|---|
+| **Primary Model** | `nebius/moonshot-ai/Kimi-K2.5` |
+| **Fallback Chain** | Qwen3 Coder 480B -> Hermes 4 405B -> GLM-5 -> DeepSeek V3.2 |
+| **Prompt** | Autonomous explorer, 5-15 min research before action, minimal status updates |
+
+## artistry
+
+Creative and unconventional approaches to complex problems.
+
+| Property | Value |
+|---|---|
+| **Primary Model** | `nebius/nvidia/Llama-3_1-Nemotron-Ultra-253B-v1` |
+| **Fallback Chain** | MiniMax M2.5 -> GLM-4.5 -> Kimi K2.5 |
+| **Prompt** | Artistic genius mindset, radical experimentation |
+
+## quick
+
+Trivial tasks: single file changes, typo fixes, simple modifications.
+
+| Property | Value |
+|---|---|
+| **Primary Model** | `nebius/google/Gemma-3-27b-it` |
+| **Fallback Chain** | GPT-OSS 20B -> Hermes 4 70B -> Nemotron 3 Nano 30B -> Qwen3 30B Instruct |
+| **Prompt** | Fast execution, explicit structured prompts required |
+
+## unspecified-low
+
+Moderate effort tasks that don't fit other categories.
+
+| Property | Value |
+|---|---|
+| **Primary Model** | `nebius/meta-llama/Llama-3.3-70B-Instruct` |
+| **Fallback Chain** | DeepSeek V3.2 -> GPT-OSS 120B -> Hermes 4 70B -> Gemma 3 27B |
+| **Prompt** | Clear structure with MUST DO/MUST NOT DO/EXPECTED OUTPUT |
+
+## unspecified-high
+
+High effort tasks that don't fit other categories.
+
+| Property | Value |
+|---|---|
+| **Primary Model** | `nebius/Qwen/Qwen3.5-397B-A17B` |
+| **Fallback Chain** | Qwen3 Coder 480B -> DeepSeek R1 -> Hermes 4 405B -> GLM-5 |
+| **Prompt** | Substantial effort, broad impact, careful coordination |
+
+## writing
+
+Documentation, prose, technical writing.
+
+| Property | Value |
+|---|---|
+| **Primary Model** | `nebius/PrimeIntellect/INTELLECT-3` |
+| **Fallback Chain** | MiniMax M2.5 -> DeepSeek V3.2 -> GLM-4.5-Air |
+| **Prompt** | Anti-AI-slop rules, natural writing, no corporate filler |
