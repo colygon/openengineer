@@ -1,5 +1,6 @@
 import type { ToolDefinition } from "@opencode-ai/plugin"
 import type { SkillLoadOptions } from "../tools/skill/types"
+import { createRememberTool } from "../features/session-memory/memory-tool"
 
 import type {
   AvailableCategory,
@@ -274,6 +275,7 @@ export function createToolRegistry(args: {
     ...(interactiveBashEnabled ? { interactive_bash: factories.interactive_bash } : {}),
     ...taskToolsRecord,
     ...hashlineToolsRecord,
+    remember: createRememberTool(ctx.directory),
   }
 
   for (const toolDefinition of Object.values(allTools)) {

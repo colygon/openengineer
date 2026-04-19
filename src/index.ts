@@ -19,6 +19,11 @@ import { detectExternalSkillPlugin, getSkillPluginConflictWarning } from "./shar
 import { startBackgroundCheck as startTmuxCheck } from "./tools/interactive-bash"
 import { lspManager } from "./tools/lsp/client"
 import { createPluginPostHog, getPostHogDistinctId } from "./shared/posthog"
+import { initializeMemory } from "./features/session-memory"
+import { createCostTrackingHook } from "./hooks/cost-tracking-hook"
+import { getOpenCodeStorageDir } from "./shared/data-path"
+import { join } from "node:path"
+import { mkdirSync } from "node:fs"
 
 let activePluginDispose: PluginDispose | null = null
 
@@ -109,6 +114,17 @@ const OpenEngineerPlugin: Plugin = async (ctx) => {
     disposeHooks: hooks.disposeHooks,
   })
 
+  // Initialize cost tracking
+  const oeStorageDir = join(getOpenCodeStorageDir(), "openengineer")
+  try { mkdirSync(oeStorageDir, { recursive: true }) } catch {}
+  const costHook = createCostTrackingHook(oeStorageDir)
+
+  // Initialize cross-session memory (non-blocking)
+  const memoryConfig = (pluginConfig as Record<string, unknown>).memory as Record<string, unknown> | undefined
+  initializeMemory(memoryConfig ?? {}, oeStorageDir).catch((err) => {
+    log("[session-memory] Background init failed", { error: err })
+  })
+
   const pluginInterface = createPluginInterface({
     ctx,
     pluginConfig,
@@ -120,9 +136,17 @@ const OpenEngineerPlugin: Plugin = async (ctx) => {
 
   activePluginDispose = dispose
 
+  // Wrap event handler to also feed cost tracker
+  const originalEvent = pluginInterface.event
+  const wrappedEvent = async (input: { event: { type: string; properties?: unknown } }) => {
+    await originalEvent?.(input as any)
+    await costHook.event(input)
+  }
+
   return {
     name: "open-engineer",
     ...pluginInterface,
+    event: wrappedEvent as typeof pluginInterface.event,
 
     "experimental.session.compacting": async (
       _input: { sessionID: string },
@@ -137,6 +161,9 @@ const OpenEngineerPlugin: Plugin = async (ctx) => {
       if (hooks.compactionContextInjector) {
         output.context.push(hooks.compactionContextInjector.inject(_input.sessionID))
       }
+      // Add cost summary to compaction context
+      const costSummary = costHook.tracker.getCostSummary(_input.sessionID)
+      output.context.push(`[Cost: ${costSummary}]`)
     },
   }
 }
