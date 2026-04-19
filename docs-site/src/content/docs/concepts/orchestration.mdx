@@ -1,0 +1,90 @@
+---
+title: Orchestration
+description: How agents coordinate to complete complex tasks
+---
+
+import { Accordion, AccordionGroup, Card, CardGroup, Info, Note, Step, Steps, Tab, Tabs, Tip, Warning } from "~/components/legacy";
+
+
+Open Engineer's power comes from how agents work together, not just that they exist. The orchestration system handles intent classification, delegation, parallel execution, and plan management.
+
+## Intent Gate
+
+Before acting, the Architect classifies every request:
+
+| Intent | What Happens |
+|---|---|
+| **Research** | Fire Analyst + Librarian in background, return findings |
+| **Implementation** | Plan with Product Manager, execute with Technical Lead |
+| **Quick Fix** | Delegate to `quick` category directly |
+| **Architecture** | Consult Strategist, then plan if needed |
+| **Visual/UI** | Route to `visual-engineering` category |
+
+## Working Modes
+
+### Auto Mode (Default)
+
+Just describe what you want. The Architect handles everything.
+
+```
+"Add rate limiting to the API endpoints"
+```
+
+The Architect will:
+1. Fire Analyst to explore existing middleware patterns
+2. Determine this needs implementation
+3. Delegate to `deep` category with the full context
+4. Verify the result
+
+### Plan Mode
+
+For complex, multi-step work. Press **Tab** or use `@plan`:
+
+```
+@plan "migrate the database from MongoDB to PostgreSQL"
+```
+
+**Flow:**
+1. **Product Manager** interviews you about requirements, constraints, and priorities
+2. Plan is saved to `.openengineer/plans/migration.md`
+3. **QA Engineer** reviews the plan for gaps
+4. Run `/start-work` to begin execution
+5. **Technical Lead** distributes tasks to category-based agents
+6. Progress is tracked across sessions
+
+### Auto Loop
+
+For sustained autonomous work. Start a loop that keeps going until the task is complete:
+
+```
+/auto-loop "implement all the endpoints in the API spec"
+```
+
+The agent works continuously, checking its progress and continuing until done. Cancel with `/cancel-loop`.
+
+## Parallel Execution
+
+The Architect fires background agents in parallel when tasks are independent:
+
+```
+User: "Add search functionality to the app"
+
+Architect fires simultaneously:
+  [Background] Analyst: explore existing search patterns
+  [Background] Librarian: research Elasticsearch vs Algolia
+  [Background] Analyst: check current database indexes
+
+All results arrive -> Architect synthesizes -> delegates implementation
+```
+
+## Plan State
+
+Plans and execution state are stored in `.openengineer/`:
+
+```
+.openengineer/
+  plans/           -- Product Manager work plans (.md)
+  auto-loop.local.md  -- Auto loop state
+```
+
+These persist across sessions, so you can resume work after closing OpenCode.

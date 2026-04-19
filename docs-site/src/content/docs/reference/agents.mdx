@@ -1,0 +1,135 @@
+---
+title: Agent Reference
+description: Detailed reference for all 10 built-in agents
+---
+
+import { Accordion, AccordionGroup, Card, CardGroup, Info, Note, Step, Steps, Tab, Tabs, Tip, Warning } from "~/components/legacy";
+
+
+## architect
+
+The main orchestrator. Receives user requests, classifies intent, delegates to specialists, and drives tasks to completion.
+
+| Property | Value |
+|---|---|
+| **Mode** | primary |
+| **Primary Model** | `nebius/Qwen/Qwen3-Coder-480B-A35B-Instruct` |
+| **Fallback Chain** | Kimi K2.5 -> GLM-4.5 -> DeepSeek R1 -> DeepSeek V3.2 |
+| **Key Capability** | Multi-agent orchestration, parallel delegation |
+
+---
+
+## engineer
+
+Autonomous deep worker. Explores the codebase, researches patterns, and implements end-to-end without hand-holding.
+
+| Property | Value |
+|---|---|
+| **Mode** | primary |
+| **Primary Model** | `nebius/deepseek-ai/DeepSeek-V3.2` |
+| **Fallback Chain** | Llama 3.3 70B -> Qwen3 Coder 480B -> GPT-OSS 120B -> Kimi K2-Instruct |
+| **Key Capability** | Autonomous coding, deep research |
+
+---
+
+## strategist
+
+Deep reasoning agent for architecture decisions, complex debugging, and multi-system tradeoffs.
+
+| Property | Value |
+|---|---|
+| **Mode** | subagent |
+| **Primary Model** | `nebius/deepseek-ai/DeepSeek-R1-0528` |
+| **Fallback Chain** | Qwen3 235B Thinking -> Kimi K2-Thinking -> Hermes 4 405B -> GLM-4.7 |
+| **Key Capability** | Chain-of-thought reasoning, architecture analysis |
+
+---
+
+## analyst
+
+Fast codebase exploration and pattern discovery. Uses lightweight models for speed.
+
+| Property | Value |
+|---|---|
+| **Mode** | subagent |
+| **Primary Model** | `nebius/openai/gpt-oss-20b` |
+| **Fallback Chain** | Qwen3 Next 80B Thinking -> Gemma 3 27B -> Nemotron Nano V2 12B |
+| **Key Capability** | Fast grep, file search, pattern scanning |
+
+---
+
+## designer
+
+Handles visual and multimodal tasks including screenshot analysis and UI work.
+
+| Property | Value |
+|---|---|
+| **Mode** | subagent |
+| **Primary Model** | `nebius/Qwen/Qwen2.5-VL-72B-Instruct` |
+| **Fallback Chain** | DeepSeek V3.2 -> GLM-4.5-Air -> MiniMax M2.5 |
+| **Key Capability** | Vision, UI/UX, screenshot analysis |
+
+---
+
+## product-manager
+
+Strategic planner. Interviews you about requirements, identifies scope, and builds detailed work plans before any code is written.
+
+| Property | Value |
+|---|---|
+| **Mode** | subagent |
+| **Primary Model** | `nebius/moonshot-ai/Kimi-K2.5` |
+| **Fallback Chain** | Qwen 3.5 397B -> Hermes 4 405B -> DeepSeek R1 -> GLM-5 |
+| **Key Capability** | Interview-based planning, plan generation |
+
+---
+
+## consultant
+
+Architecture advisor for unfamiliar patterns, security concerns, and multi-system tradeoffs.
+
+| Property | Value |
+|---|---|
+| **Mode** | subagent |
+| **Primary Model** | `nebius/zai-org/GLM-5` |
+| **Fallback Chain** | Kimi K2.5 -> DeepSeek R1 -> Qwen 3.5 397B -> Hermes 4 405B |
+| **Key Capability** | Read-only consultation, architecture review |
+
+---
+
+## qa-engineer
+
+Plan reviewer and validator. Reviews plans for clarity, completeness, and feasibility.
+
+| Property | Value |
+|---|---|
+| **Mode** | subagent |
+| **Primary Model** | `nebius/NousResearch/Hermes-4-405B` |
+| **Fallback Chain** | DeepSeek R1 -> Qwen3 235B Thinking -> GLM-4.5 -> Kimi K2-Thinking |
+| **Key Capability** | Plan review, gap analysis, quality gates |
+
+---
+
+## technical-lead
+
+Executes plans. Distributes tasks to category-based subagents and tracks progress.
+
+| Property | Value |
+|---|---|
+| **Mode** | primary |
+| **Primary Model** | `nebius/moonshot-ai/Kimi-K2-Instruct` |
+| **Fallback Chain** | DeepSeek V3.2 -> GPT-OSS 120B -> Qwen3 235B Instruct -> GLM-4.7 |
+| **Key Capability** | Plan execution, task distribution, progress tracking |
+
+---
+
+## junior-architect
+
+Lighter architecture and coding tasks. Uses a more affordable reasoning model.
+
+| Property | Value |
+|---|---|
+| **Mode** | subagent |
+| **Primary Model** | `nebius/openai/gpt-oss-120b` |
+| **Fallback Chain** | DeepSeek V3.2 -> INTELLECT-3 -> Gemma 3 27B -> Hermes 4 70B |
+| **Key Capability** | General coding, lighter architecture tasks |

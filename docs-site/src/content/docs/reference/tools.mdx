@@ -1,0 +1,59 @@
+---
+title: Tools Reference
+description: Built-in tools available to agents
+---
+
+import { Accordion, AccordionGroup, Card, CardGroup, Info, Note, Step, Steps, Tab, Tabs, Tip, Warning } from "~/components/legacy";
+
+
+Open Engineer extends OpenCode with specialized tools beyond the standard set.
+
+## Agent Tools
+
+| Tool | Description |
+|---|---|
+| `call_agent` | Invoke a specific subagent directly |
+| `task` | Delegate work to a category-based agent |
+
+## Code Tools
+
+| Tool | Description |
+|---|---|
+| `ast_grep` | AST-aware code search and rewriting |
+| `grep` | Enhanced ripgrep with output formatting |
+| `glob` | File pattern matching |
+| `hashline_edit` | Content-hash-based file editing (prevents conflicts) |
+| `look_at` | File viewer with context |
+
+## System Tools
+
+| Tool | Description |
+|---|---|
+| `interactive_bash` | tmux-powered persistent shell sessions |
+| `lsp` | Language Server Protocol integration (rename, go-to-def, find-refs) |
+| `session_manager` | Session state management |
+
+## Task Tools
+
+| Tool | Description |
+|---|---|
+| `task_create` | Create a task in the task system |
+| `task_update` | Update task status |
+| `task_get` | Read task details |
+| `task_list` | List all tasks |
+
+## Skill Tools
+
+| Tool | Description |
+|---|---|
+| `skill` | Invoke a loaded skill |
+| `slashcommand` | Execute a slash command |
+| `skill_mcp` | Invoke an MCP server from a skill |
+
+## Disabling Tools
+
+```json
+{
+  "disabled_tools": ["interactive_bash", "lsp"]
+}
+```

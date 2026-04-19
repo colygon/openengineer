@@ -1,0 +1,69 @@
+:root {
+  --sl-color-accent-low: #dff8ee;
+  --sl-color-accent: #0d9373;
+  --sl-color-accent-high: #066d55;
+}
+
+.legacy-card-group {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+}
+
+.legacy-card {
+  display: block;
+  padding: 1rem;
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 0.9rem;
+  background: var(--sl-color-bg-sidebar);
+  color: inherit;
+  text-decoration: none;
+}
+
+.legacy-card__title {
+  font-weight: 650;
+  margin-bottom: 0.5rem;
+}
+
+.legacy-card__body > :first-child {
+  margin-top: 0;
+}
+
+.legacy-card__body > :last-child {
+  margin-bottom: 0;
+}
+
+.legacy-accordion-group {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.legacy-accordion {
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 0.9rem;
+  background: var(--sl-color-bg-sidebar);
+}
+
+.legacy-accordion summary {
+  cursor: pointer;
+  padding: 0.9rem 1rem;
+  font-weight: 650;
+}
+
+.legacy-accordion__body {
+  padding: 0 1rem 1rem;
+}
+
+.legacy-step {
+  padding-left: 1rem;
+  border-left: 3px solid var(--sl-color-accent);
+  margin: 1.25rem 0;
+}
+
+.legacy-step h3 {
+  margin-top: 0;
+}
+
+.legacy-step__body > :last-child {
+  margin-bottom: 0;
+}

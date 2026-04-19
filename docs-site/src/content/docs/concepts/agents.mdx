@@ -1,0 +1,95 @@
+---
+title: Agents
+description: The 10 specialized AI agents that make up your team
+---
+
+import { Accordion, AccordionGroup, Card, CardGroup, Info, Note, Step, Steps, Tab, Tabs, Tip, Warning } from "~/components/legacy";
+
+
+Open Engineer provides 10 built-in agents, each with a distinct role and optimized model.
+
+## Agent Overview
+
+| Agent | Primary Model | Role |
+|---|---|---|
+| **architect** | Qwen3 Coder 480B | Main orchestrator. Plans, delegates, and drives tasks to completion. |
+| **engineer** | DeepSeek V3.2 | Autonomous deep worker. Explores codebase, implements end-to-end. |
+| **strategist** | DeepSeek R1 | Deep reasoning for architecture decisions and complex debugging. |
+| **analyst** | GPT-OSS 20B | Fast codebase exploration and pattern discovery. |
+| **designer** | Qwen2.5 VL 72B | Visual/UI tasks, screenshot analysis, multimodal work. |
+| **product-manager** | Kimi K2.5 | Strategic planner. Interviews you, builds detailed work plans. |
+| **consultant** | GLM-5 | Architecture advisor for unfamiliar patterns and tradeoffs. |
+| **qa-engineer** | Hermes 4 405B | Plan reviewer. Validates plans for clarity and completeness. |
+| **technical-lead** | Kimi K2-Instruct | Executes plans. Distributes tasks to subagents. |
+| **junior-architect** | GPT-OSS 120B | Lighter coding tasks with reasoning capability. |
+
+## Agent Modes
+
+Agents operate in one of two modes:
+
+<Tabs>
+  <Tab title="Primary">
+    **Primary agents** (architect, engineer, technical-lead) respect the UI-selected model. If you switch models in the OpenCode UI, these agents follow.
+  </Tab>
+  <Tab title="Subagent">
+    **Subagents** (strategist, analyst, librarian, etc.) use their own fallback chain regardless of the UI model. This ensures each specialist uses the right model for its task.
+  </Tab>
+</Tabs>
+
+## How Agents Collaborate
+
+The Architect acts as the orchestrator. When you send a message, it:
+
+1. **Classifies intent** via the Intent Gate (research, implementation, fix, etc.)
+2. **Delegates** to the right specialist or category
+3. **Fires background agents** in parallel when multiple tasks are independent
+4. **Verifies results** before reporting completion
+
+### Delegation Flow
+
+```
+User: "Add OAuth login with Google"
+
+Architect thinks:
+  - This needs a plan -> delegate to Product Manager
+  - Need to research existing auth patterns -> fire Analyst in background
+  - Need to check OAuth library docs -> fire Librarian in background
+
+Product Manager:
+  - Interviews user for requirements
+  - Writes plan to .openengineer/plans/oauth-login.md
+
+QA Engineer:
+  - Reviews the plan for gaps
+
+Technical Lead:
+  - Executes plan steps
+  - Delegates coding to category-based agents (deep, visual-engineering, etc.)
+```
+
+## Customizing Agents
+
+Override any agent's model in `openengineer.json`:
+
+```json
+{
+  "agents": {
+    "architect": {
+      "model": "nebius/moonshot-ai/Kimi-K2.5"
+    },
+    "analyst": {
+      "model": "nebius/google/Gemma-3-27b-it"
+    }
+  }
+}
+```
+
+You can also add `fallback_models`, adjust `temperature`, or append to the system prompt with `prompt_append`.
+
+## Disabling Agents
+
+```json
+{
+  "disabled_agents": ["consultant", "junior-architect"]
+}
+```

@@ -1,0 +1,52 @@
+---
+title: Hooks Reference
+description: Lifecycle hooks that intercept and enhance agent behavior
+---
+
+import { Accordion, AccordionGroup, Card, CardGroup, Info, Note, Step, Steps, Tab, Tabs, Tip, Warning } from "~/components/legacy";
+
+
+Open Engineer provides 40+ lifecycle hooks that intercept various stages of the coding workflow.
+
+## Key Hooks
+
+| Hook | Description |
+|---|---|
+| `auto-loop` | Self-continuing autonomous work loop |
+| `auto-slash-command` | Auto-detects and routes slash commands |
+| `background-notification` | Notifies when background tasks complete |
+| `comment-checker` | Strips AI-generated comment slop |
+| `context-window-monitor` | Tracks context usage and warns on limits |
+| `anthropic-context-window-limit-recovery` | Recovers from context window overflow |
+| `anthropic-effort` | Controls reasoning effort levels |
+| `model-fallback` | Automatic model switching on errors |
+| `runtime-fallback` | Runtime error recovery with model switching |
+| `keyword-detector` | Detects keywords for special handling |
+| `no-architect-gpt` | Prevents Architect from running on unsupported GPT models |
+| `no-engineer-non-gpt` | Prevents Engineer from running on non-GPT models |
+| `product-manager-md-only` | Enforces markdown-only output for Product Manager |
+| `technical-lead` | Technical Lead orchestration hook |
+| `start-work` | Handles `/start-work` command execution |
+| `todo-continuation-enforcer` | Keeps agents working through TODO lists |
+| `session-notification` | Session event notifications |
+
+## Disabling Hooks
+
+```json
+{
+  "disabled_hooks": [
+    "comment-checker",
+    "auto-loop"
+  ]
+}
+```
+
+## Hook Execution Order
+
+Hooks execute in a defined order per event type:
+
+1. **chat.params** — modify request parameters before sending
+2. **chat.message** — intercept and transform messages
+3. **tool.execute.before** — run before tool execution
+4. **tool.execute.after** — run after tool execution
+5. **event** — handle session lifecycle events

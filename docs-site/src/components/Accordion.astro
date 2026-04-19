@@ -1,0 +1,10 @@
+---
+const { title, icon: _icon } = Astro.props;
+---
+
+<details class="legacy-accordion">
+  <summary>{title}</summary>
+  <div class="legacy-accordion__body">
+    <slot />
+  </div>
+</details>

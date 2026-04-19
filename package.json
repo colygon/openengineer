@@ -1,6 +1,6 @@
 {
   "name": "openengineer",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Open Engineer - A diverse multi-model AI agent team for OpenCode",
   "main": "./dist/index.js",
   "types": "dist/index.d.ts",
@@ -66,6 +66,7 @@
     "diff": "^8.0.3",
     "js-yaml": "^4.1.1",
     "jsonc-parser": "^3.3.1",
+    "mem0ai": "^3.0.0",
     "picocolors": "^1.1.1",
     "picomatch": "^4.0.2",
     "posthog-node": "^5.29.2",

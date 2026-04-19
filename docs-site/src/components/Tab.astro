@@ -1,0 +1,8 @@
+---
+import { TabItem } from '@astrojs/starlight/components';
+const { title, ...props } = Astro.props;
+---
+
+<TabItem label={title} {...props}>
+  <slot />
+</TabItem>

@@ -1,0 +1,10 @@
+---
+const { title } = Astro.props;
+---
+
+<section class="legacy-step">
+  <h3>{title}</h3>
+  <div class="legacy-step__body">
+    <slot />
+  </div>
+</section>

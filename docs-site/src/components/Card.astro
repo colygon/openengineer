@@ -1,0 +1,11 @@
+---
+const { title, href, icon: _icon, ...attrs } = Astro.props;
+const Tag = href ? 'a' : 'div';
+---
+
+<Tag class="legacy-card" href={href} {...attrs}>
+  <div class="legacy-card__title">{title}</div>
+  <div class="legacy-card__body">
+    <slot />
+  </div>
+</Tag>

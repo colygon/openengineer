@@ -1,0 +1,93 @@
+---
+title: Shell Plugin
+description: Use Open Engineer directly from your terminal with the ZSH plugin
+---
+
+import { Accordion, AccordionGroup, Card, CardGroup, Info, Note, Step, Steps, Tab, Tabs, Tip, Warning } from "~/components/legacy";
+
+
+The Open Engineer shell plugin lets you invoke agents directly from your terminal using a `:` prefix, without launching the full OpenCode UI.
+
+## Install
+
+```bash
+cd /path/to/openengineer
+./shell-plugin/install.sh
+```
+
+Or manually add to your `~/.zshrc`:
+
+```bash
+source ~/.openengineer/oe.plugin.zsh
+```
+
+## Usage
+
+### Send a Prompt
+
+```bash
+: fix the login bug in auth.ts
+```
+
+This sends the prompt to the active agent (architect by default) via `opencode run`.
+
+### Target a Specific Agent
+
+```bash
+:strategist should we use Redis or Memcached for session caching?
+:analyst find all API endpoints that don't have rate limiting
+:engineer implement the caching layer we discussed
+:designer review the screenshot at ./mockup.png
+```
+
+### Planning Mode
+
+```bash
+:plan migrate the database from MongoDB to PostgreSQL
+```
+
+### Browse Conversations
+
+```bash
+:conv
+```
+
+Requires [fzf](https://github.com/junegunn/fzf) for the interactive picker.
+
+### Other Commands
+
+```bash
+:models    # List available models
+:doctor    # Run diagnostics
+:help      # Show all commands
+```
+
+## Available Agents
+
+| Command | Agent | Role |
+|---|---|---|
+| `:architect` | architect | Main orchestrator |
+| `:engineer` | engineer | Autonomous deep worker |
+| `:strategist` | strategist | Deep reasoning |
+| `:analyst` | analyst | Fast exploration |
+| `:designer` | designer | Visual/UI tasks |
+| `:product-manager` | product-manager | Strategic planning |
+| `:consultant` | consultant | Architecture advice |
+| `:qa-engineer` | qa-engineer | Plan review |
+| `:technical-lead` | technical-lead | Plan execution |
+| `:junior-architect` | junior-architect | Lighter tasks |
+| `:librarian` | librarian | Documentation search |
+
+## How It Works
+
+The plugin uses ZSH's `command_not_found_handler` to intercept commands starting with `:`. When you type `:strategist how should we handle auth?`, it translates to:
+
+```bash
+opencode run "@strategist how should we handle auth?"
+```
+
+This means the full OpenCode plugin infrastructure (model routing, fallback chains, agent prompts) is used — you just get a faster way to invoke it.
+
+## Tab Completion
+
+The plugin includes ZSH completions for agent names and commands. Type `:` and press Tab to see available options.

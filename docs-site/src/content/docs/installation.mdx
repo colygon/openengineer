@@ -1,0 +1,116 @@
+---
+title: Installation
+description: Complete setup guide for Open Engineer
+---
+
+import { Accordion, AccordionGroup, Card, CardGroup, Info, Note, Step, Steps, Tab, Tabs, Tip, Warning } from "~/components/legacy";
+
+
+## Requirements
+
+| Requirement | Version |
+|---|---|
+| [OpenCode](https://opencode.ai) | 1.4.0+ |
+| Node.js | 18+ |
+| Nebius Token Factory account | [Sign up](https://tokenfactory.nebius.com) |
+
+## Step 1: Install the Plugin
+
+```bash
+npm install openengineer
+```
+
+## Step 2: Configure OpenCode
+
+Edit `~/.config/opencode/opencode.json`:
+
+```json
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "nebius/deepseek-ai/DeepSeek-V3.2",
+  "plugin": ["openengineer"],
+  "provider": {
+    "nebius": {
+      "name": "Nebius Token Factory",
+      "npm": "@ai-sdk/openai-compatible",
+      "options": {
+        "baseURL": "https://api.tokenfactory.us-central1.nebius.com/v1"
+      }
+    }
+  }
+}
+```
+
+## Step 3: Set API Key
+
+```bash
+export NEBIUS_API_KEY="your-token-factory-api-key"
+```
+
+Add this to your shell profile (`~/.zshrc` or `~/.bashrc`) to persist it.
+
+## Step 4: Optional Configuration
+
+Create `~/.config/opencode/openengineer.json` to customize agent models and categories:
+
+```json
+{
+  "$schema": "https://raw.githubusercontent.com/colygon/openengineer/dev/assets/openengineer.schema.json",
+  "agents": {
+    "architect": {
+      "model": "nebius/Qwen/Qwen3-Coder-480B-A35B-Instruct"
+    }
+  },
+  "categories": {
+    "quick": {
+      "model": "nebius/google/Gemma-3-27b-it"
+    }
+  }
+}
+```
+
+## Step 5: Verify
+
+```bash
+# Check OpenCode version
+opencode --version
+
+# Check plugin is loaded
+opencode debug config | head -20
+
+# Test with a simple prompt
+opencode run "What agents are available to you?"
+```
+
+## Upgrading
+
+```bash
+npm update openengineer
+```
+
+## Migrating from oh-my-openagent
+
+If you're migrating from `oh-my-openagent` or `oh-my-opencode`:
+
+1. Replace the plugin entry in `opencode.json`:
+   ```diff
+   - "plugin": ["oh-my-openagent@latest"]
+   + "plugin": ["openengineer"]
+   ```
+
+2. Rename your config file:
+   ```bash
+   mv ~/.config/opencode/oh-my-openagent.json ~/.config/opencode/openengineer.json
+   ```
+
+3. Open Engineer recognizes legacy config file names automatically during the transition period.
+
+## Telemetry
+
+Anonymous telemetry is enabled by default. Disable it with:
+
+```bash
+export OE_SEND_ANONYMOUS_TELEMETRY=0
+# or
+export OE_DISABLE_POSTHOG=1
+```

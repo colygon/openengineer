@@ -1,0 +1,7 @@
+---
+const { cols = 2 } = Astro.props;
+---
+
+<div class="legacy-card-group" style={`--legacy-card-cols:${cols};`}>
+  <slot />
+</div>
