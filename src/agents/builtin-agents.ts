@@ -6,6 +6,7 @@ import type { BrowserAutomationProvider } from "../config/schema"
 import { createArchitectAgent } from "./architect"
 import { createStrategistAgent, STRATEGIST_PROMPT_METADATA } from "./strategist"
 import { createLibrarianAgent, LIBRARIAN_PROMPT_METADATA } from "./librarian"
+import { createResearcherAgent, RESEARCHER_PROMPT_METADATA } from "./researcher"
 import { createAnalystAgent, ANALYST_PROMPT_METADATA } from "./analyst"
 import { createDesignerAgent, DESIGNER_PROMPT_METADATA } from "./designer"
 import { createConsultantAgent, consultantPromptMetadata } from "./consultant"
@@ -34,6 +35,7 @@ const agentSources: Record<BuiltinAgentName, AgentSource> = {
   engineer: createEngineerAgent,
   strategist: createStrategistAgent,
   librarian: createLibrarianAgent,
+  researcher: createResearcherAgent,
   analyst: createAnalystAgent,
   "designer": createDesignerAgent,
   consultant: createConsultantAgent,
@@ -51,6 +53,7 @@ const agentSources: Record<BuiltinAgentName, AgentSource> = {
 const agentMetadata: Partial<Record<BuiltinAgentName, AgentPromptMetadata>> = {
   strategist: STRATEGIST_PROMPT_METADATA,
   librarian: LIBRARIAN_PROMPT_METADATA,
+  researcher: RESEARCHER_PROMPT_METADATA,
   analyst: ANALYST_PROMPT_METADATA,
   "designer": DESIGNER_PROMPT_METADATA,
   consultant: consultantPromptMetadata,

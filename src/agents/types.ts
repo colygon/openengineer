@@ -119,6 +119,7 @@ export type BuiltinAgentName =
   | "engineer"
   | "strategist"
   | "librarian"
+  | "researcher"
   | "analyst"
   | "designer"
   | "consultant"
