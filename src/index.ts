@@ -21,6 +21,7 @@ import { lspManager } from "./tools/lsp/client"
 import { createPluginPostHog, getPostHogDistinctId } from "./shared/posthog"
 import { initializeMemory } from "./features/session-memory"
 import { createCostTrackingHook } from "./hooks/cost-tracking-hook"
+import { createAgentTrackerHook } from "./hooks/agent-tracker-hook"
 import { getOpenCodeStorageDir } from "./shared/data-path"
 import { join } from "node:path"
 import { mkdirSync } from "node:fs"
@@ -114,10 +115,11 @@ const OpenEngineerPlugin: Plugin = async (ctx) => {
     disposeHooks: hooks.disposeHooks,
   })
 
-  // Initialize cost tracking
+  // Initialize cost tracking + agent tracing
   const oeStorageDir = join(getOpenCodeStorageDir(), "openengineer")
   try { mkdirSync(oeStorageDir, { recursive: true }) } catch {}
   const costHook = createCostTrackingHook(oeStorageDir)
+  const agentTracker = createAgentTrackerHook(oeStorageDir)
 
   // Initialize cross-session memory (non-blocking)
   const memoryConfig = (pluginConfig as Record<string, unknown>).memory as Record<string, unknown> | undefined
@@ -136,11 +138,12 @@ const OpenEngineerPlugin: Plugin = async (ctx) => {
 
   activePluginDispose = dispose
 
-  // Wrap event handler to also feed cost tracker
+  // Wrap event handler to also feed cost tracker + agent tracer
   const originalEvent = pluginInterface.event
   const wrappedEvent = async (input: { event: { type: string; properties?: unknown } }) => {
     await originalEvent?.(input as any)
     await costHook.event(input)
+    await agentTracker.event(input)
   }
 
   return {
